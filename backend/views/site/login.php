@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p> <?= Yii::t("app", "Please fill out the following fields to login") ?></p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -30,6 +30,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
             <?php ActiveForm::end(); ?>
+
+            <?php
+            $languageItems = new cetver\LanguageSelector\items\MenuLanguageItems([
+                'languages' => [
+                    'en' => '<span class="flag-icon flag-icon-us"></span> English',
+                    'fr' => '<span class="flag-icon flag-icon-ru"></span> Français',
+                    'pt' => '<span class="flag-icon flag-icon-de"></span> Português',
+                ],
+                'options' => ['encode' => false],
+            ]);
+
+            echo \yii\widgets\Menu::widget([
+                'options' => ['class' => 'list-inline'],
+                'items' => $languageItems->toArray(),
+            ]);
+            ?>
         </div>
     </div>
 </div>
