@@ -21,6 +21,7 @@ class LanguageSwitcher implements BootstrapInterface
         }
 
         $chosenLanguage = Yii::$app->request->get( 'language' );
+
         if( $chosenLanguage ) {
             if( isset( $this->languages[ $chosenLanguage ] ) ) {
 

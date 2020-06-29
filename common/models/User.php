@@ -1,50 +1,57 @@
 <?php
+
 namespace common\models;
 
 use Yii;
 use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "user".
  *
- * @property integer $id
+ * @property int $id
  * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $verification_token
- * @property string $email
+ * @property string $first_name
+ * @property string $middle_name
+ * @property string $last_name
  * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $password_hash
+ * @property string|null $password_reset_token
+ * @property string $email
+ * @property string|null $phone
+ * @property string|null $address
+ * @property string|null $language
+ * @property int $status
+ * @property string $created_at
+ * @property int $role
+ * @property string $updated_at
+ * @property string|null $verification_token
+ *
+ * @property UserEquipment[] $userEquipments
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
-    const STATUS_ACTIVE = 10;
 
+    const STATUS_ACTIVE = 1;
+
+    const STATUS_INACTIVE = 2;
+
+    const ROLE_ADMIN = 1;
+
+    const ROLE_ADMIN_VIEW = 2;
+
+    const ROLE_FIELD_TECH = 3;
+
+    const ROLE_FIELD_BUYER = 4;
+
+    const ROLE_FIELD_FARMER = 5;
 
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%user}}';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
+        return 'user';
     }
 
     /**
@@ -53,9 +60,77 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [
+                [
+                    'username',
+                    'first_name',
+                    'last_name',
+                    'auth_key',
+                    'password_hash',
+                    'email',
+                    'role',
+                ],
+                'required',
+            ],
+            [['status', 'role'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [
+                [
+                    'username',
+                    'first_name',
+                    'middle_name',
+                    'last_name',
+                    'password_hash',
+                    'password_reset_token',
+                    'email',
+                    'address',
+                    'verification_token',
+                ],
+                'string',
+                'max' => 255,
+            ],
+            [['auth_key'], 'string', 'max' => 32],
+            [['phone', 'language'], 'string', 'max' => 64],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
+            [['password_reset_token'], 'unique'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
+            'first_name' => Yii::t('app', 'First Name'),
+            'middle_name' => Yii::t('app', 'Middle Name'),
+            'last_name' => Yii::t('app', 'Last Name'),
+            'auth_key' => Yii::t('app', 'Auth Key'),
+            'password_hash' => Yii::t('app', 'Password Hash'),
+            'password_reset_token' => Yii::t('app', 'Password Reset Token'),
+            'email' => Yii::t('app', 'Email'),
+            'phone' => Yii::t('app', 'Phone'),
+            'address' => Yii::t('app', 'Address'),
+            'language' => Yii::t('app', 'Language'),
+            'status' => Yii::t('app', 'Status'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'role' => Yii::t('app', 'Role'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'verification_token' => Yii::t('app', 'Verification Token'),
+        ];
+    }
+
+    /**
+     * Gets query for [[UserEquipments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEquipments()
+    {
+        return $this->hasMany(UserEquipment::className(), ['id_user' => 'id']);
     }
 
     /**
@@ -172,6 +247,8 @@ class User extends ActiveRecord implements IdentityInterface
      * Generates password hash from password and sets it to the model
      *
      * @param string $password
+     *
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {
