@@ -7,50 +7,28 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = Yii::t("app", "Login");
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
+     <p> <?= Yii::t("app", "Please fill out the following fields to login") ?></p>
 
-    <div class="panel-body">
 
-        <div class="pad-btm mar-btm">
-            <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => 'auto']]) ?>
+    <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+
+        <?= $form->field($model, 'username')->textInput(['autofocus' => true, "placeholder"=>Yii::t("app", "Username")])->label(false) ?>
+
+        <?= $form->field($model, 'password')->passwordInput(["placeholder"=>Yii::t("app", "password")])->label(false) ?>
+
+        <?= $form->field($model, 'rememberMe')->checkbox() ?>
+
+        <div class="form-group">
+            <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
         </div>
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p> <?= Yii::t("app", "Please fill out the following fields to login") ?></p>
+    <?php ActiveForm::end(); ?>
 
-
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-
-            <?php
-            $languageItems = new cetver\LanguageSelector\items\MenuLanguageItems([
-                'languages' => [
-                    'en' => '<span class="flag-icon flag-icon-us"></span> English',
-                    'fr' => '<span class="flag-icon flag-icon-ru"></span> Français',
-                    'pt' => '<span class="flag-icon flag-icon-de"></span> Português',
-                ],
-                'options' => ['encode' => false],
-            ]);
-
-            echo \yii\widgets\Menu::widget([
-                'options' => ['class' => 'list-inline'],
-                'items' => $languageItems->toArray(),
-            ]);
-            ?>
-
+    <div class="pad-all">
+        <?=Html::a(Yii::t("app", "Forgot your password ? "), ["site/request-password-reset"], ["class"=>"btn-link mar-rgt"])?>
     </div>
 </div>

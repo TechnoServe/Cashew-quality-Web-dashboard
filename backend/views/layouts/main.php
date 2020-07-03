@@ -60,137 +60,10 @@ AppAsset::register($this);
                     <!--End Navigation toogle button-->
 
 
-                    <!--Search-->
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <li>
-                        <div class="custom-search-form">
-                            <label class="btn btn-trans" for="search-input" data-toggle="collapse"
-                                   data-target="#nav-searchbox">
-                                <i class="demo-pli-magnifi-glass"></i>
-                            </label>
-                            <form>
-                                <div class="search-container collapse" id="nav-searchbox">
-                                    <input id="search-input" type="text" class="form-control"
-                                           placeholder="Type for search...">
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <!--End Search-->
 
                 </ul>
+
                 <ul class="nav navbar-top-links">
-
-                    <!--Notification dropdown-->
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                            <i class="demo-pli-bell"></i>
-                            <span class="badge badge-header badge-danger"></span>
-                        </a>
-
-
-                        <!--Notification dropdown menu-->
-                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                            <div class="nano scrollable">
-                                <div class="nano-content">
-                                    <ul class="head-list">
-                                        <li>
-                                            <a href="#" class="media add-tooltip" data-title="Used space : 95%"
-                                               data-container="body" data-placement="bottom">
-                                                <div class="media-left">
-                                                    <i class="demo-pli-data-settings icon-2x text-main"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="text-nowrap text-main text-semibold">HDD is full</p>
-                                                    <div class="progress progress-sm mar-no">
-                                                        <div style="width: 95%;"
-                                                             class="progress-bar progress-bar-danger">
-                                                            <span class="sr-only">95% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="media" href="#">
-                                                <div class="media-left">
-                                                    <i class="demo-pli-file-edit icon-2x"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="mar-no text-nowrap text-main text-semibold">Write a news
-                                                        article</p>
-                                                    <small>Last Update 8 hours ago</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="media" href="#">
-                                                <span class="label label-info pull-right">New</span>
-                                                <div class="media-left">
-                                                    <i class="demo-pli-speech-bubble-7 icon-2x"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="mar-no text-nowrap text-main text-semibold">Comment
-                                                        Sorting</p>
-                                                    <small>Last Update 8 hours ago</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="media" href="#">
-                                                <div class="media-left">
-                                                    <i class="demo-pli-add-user-star icon-2x"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="mar-no text-nowrap text-main text-semibold">New User
-                                                        Registered</p>
-                                                    <small>4 minutes ago</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="media" href="#">
-                                                <div class="media-left">
-                                                    <img class="img-circle img-sm" alt="Profile Picture"
-                                                         src="img/profile-photos/9.png">
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="mar-no text-nowrap text-main text-semibold">Lucy sent you
-                                                        a message</p>
-                                                    <small>30 minutes ago</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="media" href="#">
-                                                <div class="media-left">
-                                                    <img class="img-circle img-sm" alt="Profile Picture"
-                                                         src="img/profile-photos/3.png">
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="mar-no text-nowrap text-main text-semibold">Jackson sent
-                                                        you a message</p>
-                                                    <small>40 minutes ago</small>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <!--Dropdown footer-->
-                            <div class="pad-all bord-top">
-                                <a href="#" class="btn-link text-main box-block">
-                                    <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
-                                </a>
-                            </div>
-                        </div>
-                    </li>
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <!--End notifications dropdown-->
-
 
                     <!--User dropdown-->
                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -229,6 +102,29 @@ AppAsset::register($this);
                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                     <!--End user dropdown-->
 
+
+                    <!--language switcher-->
+                    <li id="dropdown-user" class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                            <span class="ic-user pull-right">
+                                <i class="psi-globe"></i> English
+                            </span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                            <ul class="head-list">
+                                <li>
+                                    <a href="#"><i class="pli-globe icon-lg icon-fw"></i> English</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="pli-globe icon-lg icon-fw"></i> Français</a>                                </li>
+                                <li>
+                                    <a href="#"><i class="pli-globe icon-lg icon-fw"></i> Português</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--language switcher-->
                 </ul>
             </div>
             <!--================================-->
@@ -244,16 +140,6 @@ AppAsset::register($this);
         <!--CONTENT CONTAINER-->
         <!--===================================================-->
         <div id="content-container">
-            <div id="page-head">
-
-                <div class="pad-all text-center">
-                    <h3>Welcome back to the Dashboard.</h3>
-                    <p>Scroll down to see quick links and overviews of your Server, To do list, Order status or get
-                        some Help using Nifty.</p>
-                </div>
-            </div>
-
-
             <!--Page content-->
             <!--===================================================-->
             <div id="page-content">
@@ -305,27 +191,9 @@ AppAsset::register($this);
                                         <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png")?>"
                                              alt="Profile Picture">
                                     </div>
-                                    <a href="#profile-nav" class="box-block" data-toggle="collapse"
-                                       aria-expanded="false">
-                                            <span class="pull-right dropdown-toggle">
-                                                <i class="dropdown-caret"></i>
-                                            </span>
-                                        <p class="mnp-name">Aaron Chavez</p>
-                                        <span class="mnp-desc">aaron.cha@themeon.net</span>
-                                    </a>
-                                </div>
-                                <div id="profile-nav" class="collapse list-group bg-trans">
-                                    <a href="#" class="list-group-item">
-                                        <i class="demo-pli-male icon-lg icon-fw"></i> View Profile
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <i class="demo-pli-gear icon-lg icon-fw"></i> Settings
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <i class="demo-pli-information icon-lg icon-fw"></i> Help
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <i class="demo-pli-unlock icon-lg icon-fw"></i> Logout
+                                    <a href="<?=Url::to(["user/view/", "id"=>Yii::$app->user->getId()])?>" class="box-block">
+                                        <p class="mnp-name"><?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?></p>
+                                        <span class="mnp-desc"><?=Yii::$app->user->identity->email?></span>
                                     </a>
                                 </div>
                             </div>

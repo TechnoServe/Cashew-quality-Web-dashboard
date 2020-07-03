@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use cetver\LanguageSelector\items\MenuLanguageItems;
 use yii\helpers\Html;
 use backend\assets\AppAsset;
 use yii\helpers\Url;
@@ -34,15 +35,48 @@ AppAsset::register($this);
     <!--===================================================-->
     <div class="cls-content">
         <div class="cls-content-sm panel">
-            <?=$content?>
+
+            <div class="panel-body">
+
+                <div class="pad-btm mar-btm">
+                    <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => 'auto']]) ?>
+                </div>
+
+                <?php
+
+                // display all flash messages kept into the current user's session
+                $flashMessages = Yii::$app->session->getAllFlashes();
+
+                if ($flashMessages) {
+                    echo '<div class="flashes text-center" style="list-style-type: none;">';
+                    foreach ($flashMessages as $key => $message) {
+                        echo '<p class="alert alert-' . $key . '">' . $message . " </p>";
+                    }
+                    echo '</div>';
+                }
+                ?>
+
+                <?=$content?>
+
+                <div class="language-selector" style="font-weight: bold; margin-top: 20px;">
+                    <?php
+                    $languageItems = new cetver\LanguageSelector\items\MenuLanguageItems([
+                        'languages' => [
+                            'en' => '<i class="pli-globe"></i> English',
+                            'fr' => '<i class="pli-globe"></i> Français',
+                            'pt' => '<i class="pli-globe"></i> Português',
+                        ],
+                        'options' => ['encode' => false],
+                    ]);
+                    echo \yii\widgets\Menu::widget([
+                        'options' => ['class' => 'list-inline'],
+                        'items' => $languageItems->toArray(),
+                    ]);
+                    ?>
+                </div>
+            </div>
         </div>
     </div>
-    <!--===================================================-->
-
-
-
-
-
 </div>
 
 
