@@ -1,6 +1,5 @@
 <?php
 
-use common\helper\FcasHtmlHelper;
 use common\helpers\CashewAppHtmlHelper;
 use yii\helpers\Url;
 
