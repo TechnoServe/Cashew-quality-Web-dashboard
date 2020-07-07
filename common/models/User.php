@@ -46,6 +46,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     const ROLE_FIELD_FARMER = 5;
 
+    public $pass;
+
     /**
      * {@inheritdoc}
      */
@@ -66,7 +68,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     'first_name',
                     'last_name',
                     'auth_key',
-                    'password_hash',
+                    'pass',
                     'email',
                     'role',
                 ],
@@ -92,8 +94,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['auth_key'], 'string', 'max' => 32],
             [['phone', 'language'], 'string', 'max' => 64],
             [['username'], 'unique'],
+            [['email'], 'trim'],
+            [['email'], 'email'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['pass', 'string', 'min' => 6]
         ];
     }
 
@@ -109,7 +116,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'middle_name' => Yii::t('app', 'Middle Name'),
             'last_name' => Yii::t('app', 'Last Name'),
             'auth_key' => Yii::t('app', 'Auth Key'),
-            'password_hash' => Yii::t('app', 'Password Hash'),
+            'pass' => Yii::t('app', 'Password'),
             'password_reset_token' => Yii::t('app', 'Password Reset Token'),
             'email' => Yii::t('app', 'Email'),
             'phone' => Yii::t('app', 'Phone'),
@@ -184,7 +191,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @param string $token verify email token
      * @return static|null
      */
-    public static function findByVerificationToken($token) {
+    public static function findByVerificationToken($token)
+    {
         return static::findOne([
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE
@@ -285,5 +293,50 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Get User Role
+     */
+    public function getRole()
+    {
+        if ($this->role == $this::ROLE_ADMIN) {
+            return Yii::t('app', 'Admin');
+        } else if ($this->role == $this::ROLE_ADMIN_VIEW) {
+            return Yii::t('app', 'Admin View');
+        } else if ($this->role == $this::ROLE_FIELD_TECH) {
+            return Yii::t('app', 'Field Tech');
+        } else if ($this->role == $this::ROLE_FIELD_BUYER) {
+            return Yii::t('app', 'Buyer');
+        } else if ($this->role == $this::ROLE_FIELD_FARMER) {
+            return Yii::t('app', 'Farmer');
+        } else {
+            return 'Super Admin';
+        }
+    }
+
+    /**
+     * Get User Status
+     */
+    public function getStatus()
+    {
+        $s = Yii::t('app', 'Active');
+        if ($this->status == 1)
+            $s = Yii::t('app', 'Active');
+        else if ($this->status == 2)
+            $s = Yii::t('app', 'Inactive');
+        return $s;
+    }
+
+    /**
+     * Get Full Name
+     */
+    public function getFullName()
+    {
+        if (empty($this->middle_name)) {
+            return $this->first_name . ' ' . $this->last_name;
+        } else {
+            return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
+        }
     }
 }
