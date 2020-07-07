@@ -9,12 +9,15 @@ $this->title = Yii::t('app', 'Create Qar');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Qars'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="qar-create">
+<div class="panel">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <div class="panel-body">
+
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
+
+    </div>
 
 </div>

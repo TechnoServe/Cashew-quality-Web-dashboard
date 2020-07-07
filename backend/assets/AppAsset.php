@@ -20,11 +20,10 @@ class AppAsset extends AssetBundle
         'nifty/css/demo/nifty-demo.css',
         'nifty/css/demo/nifty-demo-icons.css',
         'nifty/css/themes/type-b/theme-navy.min.css',
+        'nifty/css/flag-icon-css/css/flag-icon.css',
     ];
     public $js = [
-        'nifty/js/jquery-1.11.2.min.js',
         'nifty/js/bootstrap.min.js',
-        //'nifty/js/bootstrap-select.min.js',
         'nifty/js/nifty.min.js',
         'nifty/js/pace.min.js',
     ];

@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\User;
 use yii\helpers\Url;
 
 ?>
@@ -48,16 +49,9 @@ use yii\helpers\Url;
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                 <span class="ic-user pull-right">
-                                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                                    <!--You can use an image instead of an icon.-->
-                                    <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
-                                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                                    <i class="demo-pli-male"></i>
+                                    <i class="demo-pli-male icon-fw"></i><?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?>
+
                                 </span>
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <!--You can also display a user name in the navbar.-->
-                        <!--<div class="username hidden-xs">Aaron Chavez</div>-->
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                     </a>
 
 
@@ -85,19 +79,19 @@ use yii\helpers\Url;
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                             <span class="ic-user pull-right">
-                                <i class="psi-globe"></i> English
+                                <i class="flag-icon flag-icon-<?=Yii::$app->language == "en" ? "gb" : Yii::$app->language?> icon-fw"></i> <?= User::getLanguagesDropDownList()[Yii::$app->language] ?>
                             </span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                         <ul class="head-list">
                             <li>
-                                <a href="#"><i class="pli-globe icon-lg icon-fw"></i> English</a>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "en"])?>"><i class="flag-icon flag-icon-gb icon-fw"></i> English </a>
                             </li>
                             <li>
-                                <a href="#"><i class="pli-globe icon-lg icon-fw"></i> Français</a>                                </li>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "fr"])?>"><i class="flag-icon flag-icon-fr pli-globe icon-lg icon-fw"></i> Français</a>                                </li>
                             <li>
-                                <a href="#"><i class="pli-globe icon-lg icon-fw"></i> Português</a>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "pt"])?>"><i class="flag-icon flag-icon-pt pli-globe icon-lg icon-fw"></i> Português</a>
                             </li>
                         </ul>
                     </div>

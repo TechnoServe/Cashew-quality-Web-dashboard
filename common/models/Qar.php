@@ -39,7 +39,7 @@ class Qar extends \yii\db\ActiveRecord
     {
         return [
             [['buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
-            [['initiator', 'site'], 'required'],
+            [['initiator', 'site', 'buyer', 'field_tech'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['audit_quantity'], 'string', 'max' => 255],
             [['buyer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['buyer' => 'id']],
