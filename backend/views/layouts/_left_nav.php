@@ -34,12 +34,11 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
                             <div class="pad-btm">
-                                <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png")?>"
-                                     alt="Profile Picture">
+                                <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
                             </div>
-                            <a href="<?=Url::to(["user/view/", "id"=>Yii::$app->user->getId()])?>" class="box-block">
-                                <p class="mnp-name"><?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?></p>
-                                <span class="mnp-desc"><?=Yii::$app->user->identity->email?></span>
+                            <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
+                                <p class="mnp-name"><?= Yii::$app->user->identity->first_name ?> <?= Yii::$app->user->identity->middle_name ?> <?= Yii::$app->user->identity->last_name ?></p>
+                                <span class="mnp-desc"><?= Yii::$app->user->identity->email ?></span>
                             </a>
                         </div>
                     </div>
@@ -86,13 +85,13 @@ use yii\helpers\Url;
                     <ul id="mainnav-menu" class="list-group">
 
                         <!--Category name-->
-                        <li class="list-header"> <?=Yii::t("app", "Navigation")?> </li>
+                        <li class="list-header"> <?= Yii::t("app", "Navigation") ?> </li>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('HOME', 'pli-home', Yii::t('app', 'Dashboard'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('HOME', 'pli-home', Yii::t('app', 'Dashboard')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR management'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR management')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
 
                         <li class="list-divider"></li>
@@ -110,8 +109,8 @@ use yii\helpers\Url;
 
                             <!--Submenu-->
                             <ul class="collapse">
-                                <li><a href="ui-buttons.html">List</a></li>
-                                <li><a href="ui-panels.html">New User</a></li>
+                                <li><a href="<?= Url::to(["/user"]) ?>">List</a></li>
+                                <li><a href="<?= Url::to(["/user/create"]) ?>">New User</a></li>
                             </ul>
                         </li>
 
