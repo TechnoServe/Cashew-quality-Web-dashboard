@@ -90,7 +90,7 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('HOME', 'pli-home', Yii::t('app', 'Dashboard'))?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR management'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR'))?>
 
                         <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports'))?>
 
@@ -98,7 +98,9 @@ use yii\helpers\Url;
                         <li class="list-divider"></li>
 
                         <!--Category name-->
-                        <li class="list-header">Management</li>
+                        <li class="list-header"><?=Yii::t("app", "Management")?></li>
+
+                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites management'))?>
 
                         <!--Menu list item-->
                         <li>

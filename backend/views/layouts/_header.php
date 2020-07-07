@@ -12,7 +12,7 @@ use yii\helpers\Url;
         <!--Brand logo & name-->
         <!--================================-->
         <div class="navbar-header">
-            <a href="index.html" class="navbar-brand">
+            <a href="<?=Url::to(["site/index"])?>" class="navbar-brand">
                 <img src="<?=Url::to("/nifty/img/logo.png")?>" alt="Nifty Logo" class="brand-icon">
                 <div class="brand-title">
                     <span class="brand-text">TNS</span>
@@ -21,7 +21,6 @@ use yii\helpers\Url;
         </div>
         <!--================================-->
         <!--End brand logo & name-->
-
 
         <!--Navbar Dropdown-->
         <!--================================-->
@@ -58,15 +57,15 @@ use yii\helpers\Url;
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                         <ul class="head-list">
                             <li>
-                                <a href="#"><i class="demo-pli-male icon-lg icon-fw"></i> Profile</a>
+                                <a href="<?=Url::to(["user/view", "id"=>Yii::$app->user->getId()])?>"><i class="demo-pli-male icon-lg icon-fw"></i> <?= Yii::t("app", "Profile") ?></a>
                             </li>
                             <li>
-                                <a href="#"><span class="label label-success pull-right">New</span><i
-                                        class="demo-pli-gear icon-lg icon-fw"></i> Settings</a>
+                                <a href="<?=Url::to(["user/update", "id"=>Yii::$app->user->getId()])?>">
+                                    <i class="demo-pli-gear icon-lg icon-fw"></i> <?= Yii::t("app", "Settings") ?></a>
                             </li>
                             <li>
                                 <a href="<?=Url::to(['/site/logout'])?>" data-method="post"><i class="demo-pli-unlock icon-lg icon-fw"></i>
-                                    Logout</a>
+                                    <?= Yii::t("app", "Logout") ?></a>
                             </li>
                         </ul>
                     </div>
