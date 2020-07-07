@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace api\models;
 
 class User extends \common\models\User
 {

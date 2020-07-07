@@ -1,5 +1,10 @@
 <?php
 
+use backend\models\Site;
+use backend\models\User;
+use common\helpers\CashewAppHtmlHelper;
+use kartik\date\DatePicker;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -18,44 +23,39 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'buyer') ?>
+            <?= $form->field($model, 'created_at_start')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("created_at_start", "date")) ?>
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'field_tech') ?>
+            <?= $form->field($model, 'created_at_end')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("created_at_end", "date")) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'buyer')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'buyer',User::ROLE_FIELD_BUYER, "buyer_id",   Yii::t('app', 'All'))) ?>
+        </div>
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'field_tech')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'field_tech',User::ROLE_FIELD_TECH, "field_tech_id",   Yii::t('app', 'All'))) ?>
         </div>
     </div>
 
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'farmer') ?>
+            <?= $form->field($model, 'farmer')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'farmer',User::ROLE_FIELD_FARMER, "farmer_id",   Yii::t('app', 'All'))) ?>
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'initiator') ?>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-6">
-            <?= $form->field($model, 'site') ?>
-        </div>
-
-        <div class="col-md-6">
-            <?= $form->field($model, 'audit_quantity') ?>
+            <?= $form->field($model, 'initiator')->dropDownList(\backend\models\Qar::getInitiatorDropDownValues(), ["prompt"=>Yii::t("app", "All")]) ?>
         </div>
     </div>
 
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'created_at') ?>
-        </div>
-
-        <div class="col-md-6">
-            <?= $form->field($model, 'created_at') ?>
+            <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site',"site_id",  Yii::t('app', 'All'))) ?>
         </div>
     </div>
 

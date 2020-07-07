@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\form\ResetPasswordForm;
 use backend\models\form\PasswordResetRequestForm;
+use backend\models\User;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
@@ -37,7 +38,11 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => [
+                            'logout',
+                            'index',
+                            'switch-user-language',
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -144,7 +149,8 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved successfully.');
+            Yii::$app->session->setFlash('success',
+                'New password saved successfully.');
 
             return $this->goHome();
         }
@@ -165,5 +171,23 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    /**
+     * Switch user language
+     *
+     * @param $language
+     *
+     * @return \yii\web\Response
+     */
+    public function actionSwitchUserLanguage($language)
+    {
+
+        $allowedLanguages = User::getLanguagesDropDownList();
+        if (isset($allowedLanguages[$language])) {
+            Yii::$app->language = $language;
+        }
+
+        return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
     }
 }

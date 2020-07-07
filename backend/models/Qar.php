@@ -4,8 +4,63 @@
 namespace backend\models;
 
 
+use Yii;
+
 class Qar extends \common\models\Qar
 {
 
+    const INITIATED_BY_FIELD_TECH = 1;
 
+    const INITIATED_BY_BUYER = 2;
+
+    const INITIATED_BY_FARMER = 3;
+
+
+    public function rules()
+    {
+        return array_merge(parent::rules(), [
+            [
+                'farmer',
+                'required',
+                'when' => function ($model) {
+                    return $model->initiator == self::INITIATED_BY_FARMER;
+                },
+                'whenClient' => "function (attribute, value) {
+                    return $('#qar-initiator').val() == 3;
+                }",
+                'skipOnEmpty' => true,
+                'skipOnError' => true
+            ],
+        ]);
+    }
+
+    /**
+     * get qar initiator dropdown values
+     *
+     * @return array
+     */
+    public static function getInitiatorDropDownValues()
+    {
+        return [
+            self::INITIATED_BY_FIELD_TECH => Yii::t("app",
+                "Initiated by Field Tech"),
+            self::INITIATED_BY_BUYER => Yii::t("app", "Initiated by Buyer"),
+            self::INITIATED_BY_FARMER => Yii::t("app", "Initiated by Farmer"),
+        ];
+    }
+
+
+    /**
+     * Get initiator name by index/value
+     *
+     * @param $index
+     *
+     * @return mixed|null
+     */
+    public static function getInitiatorByIndex($index)
+    {
+        $initiatorValues = self::getInitiatorDropDownValues();
+
+        return isset($initiatorValues [$index]) ? $initiatorValues [$index] : null;
+    }
 }

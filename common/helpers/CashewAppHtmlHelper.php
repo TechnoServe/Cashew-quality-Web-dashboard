@@ -53,4 +53,44 @@ class CashewAppHtmlHelper
             ) . "</li>";
 
     }
+
+
+    /**
+     * Construct global datepicker widget values
+     * @param $name
+     * @param $format
+     * @param string $placeholder
+     * @param null $strtotime
+     *
+     * @return array
+     */
+    public static function getDatePickerWidgetValues($name, $format, $placeholder = "", $strtotime = null)
+    {
+        $params = [
+            'name' => $name,
+            'language' => Yii::$app->language,
+            'value' => date('Y/m/d'),
+            'options' => ['placeholder' => $placeholder,],
+            'pluginOptions' => [
+                'format' => 'yyyy/m/dd',
+                'todayHighlight' => true,
+
+            ]
+        ];
+        if ($format == "month") {
+            $params['pluginOptions'] = array_merge($params['pluginOptions'], ['minViewMode' => 'months']);
+            $params['pluginOptions']['format'] = 'yyyy/m';
+        }
+
+        if ($format == "year") {
+            $params['pluginOptions'] = array_merge($params['pluginOptions'], ['minViewMode' => 'years']);
+            $params['pluginOptions']['format'] = 'yyyy';
+        }
+
+        if (!$strtotime) {
+            $params['value'] = date('Y-m-d', strtotime($strtotime));
+        }
+
+        return $params;
+    }
 }

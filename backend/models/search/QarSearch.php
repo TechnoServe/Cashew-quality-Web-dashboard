@@ -11,6 +11,9 @@ use backend\models\Qar;
  */
 class QarSearch extends Qar
 {
+
+    public $created_at_start;
+    public $created_at_end;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +21,7 @@ class QarSearch extends Qar
     {
         return [
             [['id', 'buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
-            [['audit_quantity', 'created_at', 'updated_at'], 'safe'],
+            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end'], 'safe'],
         ];
     }
 
@@ -58,17 +61,31 @@ class QarSearch extends Qar
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'buyer' => $this->buyer,
             'field_tech' => $this->field_tech,
             'farmer' => $this->farmer,
             'initiator' => $this->initiator,
             'site' => $this->site,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'audit_quantity', $this->audit_quantity]);
+
+        if ($this->created_at_start) {
+            $query->andWhere([
+                '>=',
+                'created_at',
+                date("Y/m/d H:i:s",
+                    strtotime($this->created_at_start." 00:00:00")),
+            ]);
+        }
+
+
+        if ($this->created_at_end) {
+            $query->andWhere([
+                '<=',
+                'created_at',
+                date("Y/m/d H:i:s", strtotime($this->created_at_end." 23:59:59")),
+            ]);
+        }
 
         return $dataProvider;
     }
