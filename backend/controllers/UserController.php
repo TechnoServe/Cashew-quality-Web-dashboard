@@ -64,7 +64,10 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new User();
+        
+        $model->scenario = "create";
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -123,9 +126,19 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        // $this->findModel($id)->delete();
 
+        // return $this->redirect(['index']);
+
+        $model = $this->findModel($id);
+        if ($model->status == User::STATUS_ACTIVE) {
+            $model->status = User::STATUS_INACTIVE;
+        } else {
+            $model->status = User::STATUS_ACTIVE;
+        }
+        $model->save(0);
         return $this->redirect(['index']);
+
     }
 
     /**

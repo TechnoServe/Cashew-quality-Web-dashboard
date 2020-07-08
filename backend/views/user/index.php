@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -17,31 +18,38 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <div class="panel-body">
+
         <p class="pull-right">
             <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
-    </div>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            'username',
-            'first_name',
-            'middle_name',
-            'last_name',
-            'address',
-            [
-                'attribute' => Yii::t('app', 'Role'),
-                'value' => function ($model) {
-                    return $model->getRole();
-                }
+                'username',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'address',
+                [
+                    'attribute' => Yii::t('app', 'Status'),
+                    'value' => function ($model) {
+                        return User::getUserStatusByIndex($model->status);
+                    }
+                ],
+                [
+                    'attribute' => Yii::t('app', 'Role'),
+                    'value' => function ($model) {
+                        return User::getUserRoleByIndex($model->role);
+                    }
+                ],
+
+                ['class' => 'yii\grid\ActionColumn'],
             ],
+        ]); ?>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
+    </div>
 
 </div>

@@ -54,11 +54,11 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'language')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'language')->dropDownList(\backend\models\User::getLanguagesDropDownList(), ["prompt" => Yii::t('app', 'Select Preferred Language')]) ?>
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'role')->dropDownList([1 => Yii::t('app', 'Admin'), 2 => Yii::t('app', 'Admin View'), 3 => Yii::t('app', 'Field Tech'), 4 => Yii::t('app', 'Buyer'), 5 => Yii::t('app', 'Farmer')], ['prompt' => Yii::t('app', 'Select Role')]) ?>
+            <?= $form->field($model, 'role')->dropDownList(\backend\models\User::getUserRole(), ["prompt" => Yii::t('app', 'Select Role')]) ?>
         </div>
     </div>
 

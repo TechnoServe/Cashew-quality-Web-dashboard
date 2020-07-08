@@ -89,7 +89,7 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('HOME', 'pli-home', Yii::t('app', 'Dashboard')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR')) ?>
 
                         <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
@@ -97,24 +97,11 @@ use yii\helpers\Url;
                         <li class="list-divider"></li>
 
                         <!--Category name-->
-                        <li class="list-header"><?=Yii::t("app", "Management")?></li>
+                        <li class="list-header"><?= Yii::t("app", "Management") ?></li>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites management'))?>
+                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites management')) ?>
 
-                        <!--Menu list item-->
-                        <li>
-                            <a href="#">
-                                <i class="demo-pli-male"></i>
-                                <span class="menu-title">Users Management</span>
-                                <i class="arrow"></i>
-                            </a>
-
-                            <!--Submenu-->
-                            <ul class="collapse">
-                                <li><a href="<?= Url::to(["/user"]) ?>">List</a></li>
-                                <li><a href="<?= Url::to(["/user/create"]) ?>">New User</a></li>
-                            </ul>
-                        </li>
+                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users management')) ?>
 
                     </ul>
 

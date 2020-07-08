@@ -35,6 +35,16 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'status')->dropDownList(\backend\models\User::getUserStatus(), ["prompt" => Yii::t('app', 'All')]) ?>
+        </div>
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'role')->dropDownList(\backend\models\User::getUserRole(), ["prompt" => Yii::t('app', 'All')]) ?>
+        </div>
+    </div>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>

@@ -68,7 +68,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     'first_name',
                     'last_name',
                     'auth_key',
-                    'pass',
                     'email',
                     'role',
                 ],
@@ -100,7 +99,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
-            ['pass', 'string', 'min' => 6]
+            [['pass'], 'required', 'on' => 'create'],
+            //['pass', 'string', 'min' => 6]
         ];
     }
 
@@ -121,7 +121,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => Yii::t('app', 'Email'),
             'phone' => Yii::t('app', 'Phone'),
             'address' => Yii::t('app', 'Address'),
-            'language' => Yii::t('app', 'Language'),
+            'language' => Yii::t('app', 'Preferred Language'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'role' => Yii::t('app', 'Role'),
@@ -298,34 +298,54 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * Get User Role
      */
-    public function getRole()
+    public static function getUserRole()
     {
-        if ($this->role == $this::ROLE_ADMIN) {
-            return Yii::t('app', 'Admin');
-        } else if ($this->role == $this::ROLE_ADMIN_VIEW) {
-            return Yii::t('app', 'Admin View');
-        } else if ($this->role == $this::ROLE_FIELD_TECH) {
-            return Yii::t('app', 'Field Tech');
-        } else if ($this->role == $this::ROLE_FIELD_BUYER) {
-            return Yii::t('app', 'Buyer');
-        } else if ($this->role == $this::ROLE_FIELD_FARMER) {
-            return Yii::t('app', 'Farmer');
-        } else {
-            return 'Super Admin';
-        }
+        return [
+            self::ROLE_ADMIN => Yii::t('app', 'Admin'),
+            self::ROLE_ADMIN_VIEW => Yii::t('app', 'Admin View'),
+            self::ROLE_FIELD_TECH => Yii::t('app', 'Field Tech'),
+            self::ROLE_FIELD_BUYER => Yii::t('app', 'Buyer'),
+            self::ROLE_FIELD_FARMER => Yii::t('app', 'Farmer'),
+        ];
+    }
+
+    /**
+     * Get user role by index/value
+     *
+     * @param $index
+     *
+     * @return mixed|null
+     */
+    public static function getUserRoleByIndex($index)
+    {
+        $roleValues = self::getUserRole();
+
+        return isset($roleValues[$index]) ? $roleValues[$index] : null;
     }
 
     /**
      * Get User Status
      */
-    public function getStatus()
+    public static function getUserStatus()
     {
-        $s = Yii::t('app', 'Active');
-        if ($this->status == 1)
-            $s = Yii::t('app', 'Active');
-        else if ($this->status == 2)
-            $s = Yii::t('app', 'Inactive');
-        return $s;
+        return [
+            self::STATUS_ACTIVE => Yii::t('app', 'Active'),
+            self::STATUS_INACTIVE => Yii::t('app', 'Inactive'),
+        ];
+    }
+
+    /**
+     * Get user status by index/value
+     *
+     * @param $index
+     *
+     * @return mixed|null
+     */
+    public static function getUserStatusByIndex($index)
+    {
+        $statusValues = self::getUserStatus();
+
+        return isset($statusValues[$index]) ? $statusValues[$index] : null;
     }
 
     /**
@@ -338,5 +358,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         } else {
             return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
         }
+    }
+
+    /**
+     * Get user language
+     */
+    public static function getLanguagesDropDownList()
+    {
+        return [
+            "en" => "English",
+            "fr" => "Français",
+            "pt" => " Português"
+        ];
+    }
+
+    /**
+     * Get preferred language by index/value
+     *
+     * @param $index
+     *
+     * @return mixed|null
+     */
+    public static function getLanguageByIndex($index)
+    {
+        $languageValues = self::getLanguagesDropDownList();
+
+        return isset($languageValues[$index]) ? $languageValues[$index] : null;
     }
 }
