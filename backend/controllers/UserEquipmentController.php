@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\User;
-use backend\models\search\UserSearch;
+use backend\models\UserEquipment;
+use backend\models\search\UserEquipmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * UserEquipmentController implements the CRUD actions for UserEquipment model.
  */
-class UserController extends Controller
+class UserEquipmentController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class UserController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all UserEquipment models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
+        $searchModel = new UserEquipmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class UserController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single UserEquipment model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,38 +58,25 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new UserEquipment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
+        $model = new UserEquipment();
 
-        $model = new User();
-
-        $model->scenario = "create";
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            $model->password_hash = Yii::$app->security->generatePasswordHash($model->pass);
-            $model->generateAuthKey();
-
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing UserEquipment model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,29 +86,17 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
 
-            //$model->pass='not_empty';
-
-            $model->password_hash = Yii::$app->security->generatePasswordHash($model->pass);
-            $model->generateAuthKey();
-
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]); 
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }     
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing UserEquipment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -129,31 +104,21 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        // $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
-        // return $this->redirect(['index']);
-
-        $model = $this->findModel($id);
-        if ($model->status == User::STATUS_ACTIVE) {
-            $model->status = User::STATUS_INACTIVE;
-        } else {
-            $model->status = User::STATUS_ACTIVE;
-        }
-        $model->save(0);
         return $this->redirect(['index']);
-
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the UserEquipment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return UserEquipment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = UserEquipment::findOne($id)) !== null) {
             return $model;
         }
 

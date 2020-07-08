@@ -103,6 +103,8 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users management')) ?>
 
+                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments management')) ?>
+
                     </ul>
 
                 </div>
