@@ -8,6 +8,7 @@ use backend\models\search\UserEquipmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * UserEquipmentController implements the CRUD actions for UserEquipment model.
@@ -66,13 +67,22 @@ class UserEquipmentController extends Controller
     {
         $model = new UserEquipment();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            // get the instance of the uploaded file
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if($model->uploadImage()){ // If image upload is done successfully
+                $model->save(false);
+            };
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+        
     }
 
     /**
@@ -86,7 +96,14 @@ class UserEquipmentController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            // get the instance of the uploaded file
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            if($model->uploadImage()){ // If image upload is done successfully
+                $model->save(false);
+            };
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -104,8 +121,9 @@ class UserEquipmentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model  = $this->findModel($id);
+        $model->deleteAttachments();
+        $model->delete();
         return $this->redirect(['index']);
     }
 

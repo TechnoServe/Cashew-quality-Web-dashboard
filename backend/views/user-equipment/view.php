@@ -37,12 +37,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'brand',
                 'model',
                 'name',
-                'picture',
+                [
+                    'attribute' => 'picture',
+                    'format'=>'raw',
+                    'value' => function($model){
+                        return Html::img($model->getThumbImagePath(),
+                            ['width' => '60px']). "<br  />  " .  Html::a(Yii::t("app", "Click to expand"), [$model->getImagePath()], ["target"=>"_blank", "class"=>"btn-link"]);
+                    }
+                ],
                 'manufacturing_date',
                 'created_at',
             ],
         ]) ?>
-
     </div>
 
 </div>

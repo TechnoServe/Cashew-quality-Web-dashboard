@@ -1,6 +1,7 @@
 <?php
 
 use backend\models\User;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -51,6 +52,32 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]) ?>
+
+    </div>
+
+    <div class="panel-body">
+
+        <h4>Equipments</h4>
+
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+                [
+                    'attribute' => 'id_user',
+                    'value' => function ($model) {
+                        return $model->getUserFullName($model->id_user);
+                    }
+                ],
+                'brand',
+                'model',
+                'name',
+                'manufacturing_date',
+
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?>
 
     </div>
 

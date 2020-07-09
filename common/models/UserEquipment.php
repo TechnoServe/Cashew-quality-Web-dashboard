@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "user_equipment".
@@ -19,7 +20,7 @@ use Yii;
  *
  * @property User $user
  */
-class UserEquipment extends \common\models\User
+class UserEquipment extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -35,9 +36,9 @@ class UserEquipment extends \common\models\User
     public function rules()
     {
         return [
-            [['id_user', 'brand', 'name', 'picture'], 'required'],
+            [['id_user', 'brand', 'name', 'model'], 'required'],
             [['id_user'], 'integer'],
-            [['manufacturing_date', 'created_at', 'updated_at'], 'safe'],
+            [['manufacturing_date', 'created_at', 'updated_at', 'picture'], 'safe'],
             [['brand', 'model', 'name', 'picture'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
@@ -49,15 +50,15 @@ class UserEquipment extends \common\models\User
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_user' => 'Id User',
-            'brand' => 'Brand',
-            'model' => 'Model',
-            'name' => 'Name',
-            'picture' => 'Picture',
-            'manufacturing_date' => 'Manufacturing Date',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('app','ID'),
+            'id_user' => Yii::t('app', 'User'),
+            'brand' => Yii::t('app', 'Brand'),
+            'model' => Yii::t('app', 'Model'),
+            'name' => Yii::t('app', 'Name'),
+            'picture' => Yii::t('app', 'Picture'),
+            'manufacturing_date' => Yii::t('app', 'Manufacturing Date'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
 

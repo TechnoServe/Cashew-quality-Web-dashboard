@@ -29,6 +29,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
 
                 [
+                    'attribute' => 'picture',
+                    'format'=>'raw',
+                    'value' => function($model){
+                        return Html::img($model->getThumbImagePath(),
+                            ['width' => '50px']) . "<br  />  " .  Html::a(Yii::t("app", "Click to expand"), [$model->getImagePath()], ["target"=>"_blank", "class"=>"btn-link text-xs"]);
+                    }
+                ],
+
+                [
                     'attribute' => 'id_user',
                     'value' => function ($model) {
                         return $model->getUserFullName($model->id_user);

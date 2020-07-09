@@ -33,7 +33,8 @@
         "cetver/yii2-language-selector": "^1.0",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-widget-select2": "@dev",
-        "kartik-v/yii2-mpdf": "1.0.1"
+        "kartik-v/yii2-mpdf": "1.0.1",
+        "yiisoft/yii2-imagine": "~2.2.0"
     },
     "config": {
         "process-timeout": 1800,
