@@ -24,6 +24,9 @@ class UserEquipment extends \common\models\UserEquipment
     /**
      * {@inheritdoc}
      */
+
+    public $image;
+     
     public static function tableName()
     {
         return 'user_equipment';
@@ -40,6 +43,7 @@ class UserEquipment extends \common\models\UserEquipment
             [['manufacturing_date', 'created_at', 'updated_at'], 'safe'],
             [['brand', 'model', 'name', 'picture'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, gif'],
         ];
     }
 
@@ -49,15 +53,15 @@ class UserEquipment extends \common\models\UserEquipment
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_user' => 'Id User',
-            'brand' => 'Brand',
-            'model' => 'Model',
-            'name' => 'Name',
-            'picture' => 'Picture',
-            'manufacturing_date' => 'Manufacturing Date',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('app', 'ID'),
+            'id_user' => Yii::t('app', 'User'),
+            'brand' => Yii::t('app', 'Brand'),
+            'model' => Yii::t('app', 'Model'),
+            'name' => Yii::t('app', 'Name'),
+            'image' => Yii::t('app', 'Image'),
+            'manufacturing_date' => Yii::t('app', 'Manufacturing Date'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
 
@@ -82,6 +86,19 @@ class UserEquipment extends \common\models\UserEquipment
             return $user->first_name . ' ' . $user->last_name;
         } else {
             return $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name;
+        }
+    }
+
+    /**
+     * Upload file
+     */
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
+            return true;
+        } else {
+            return false;
         }
     }
 }

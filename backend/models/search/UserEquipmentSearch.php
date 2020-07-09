@@ -2,6 +2,7 @@
 
 namespace backend\models\search;
 
+use backend\models\User;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\UserEquipment;

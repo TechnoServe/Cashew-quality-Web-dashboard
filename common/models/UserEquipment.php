@@ -49,15 +49,15 @@ class UserEquipment extends \common\models\User
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_user' => 'Id User',
-            'brand' => 'Brand',
-            'model' => 'Model',
-            'name' => 'Name',
-            'picture' => 'Picture',
-            'manufacturing_date' => 'Manufacturing Date',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t('app','ID'),
+            'id_user' => Yii::t('app', 'User'),
+            'brand' => Yii::t('app', 'Brand'),
+            'model' => Yii::t('app', 'Model'),
+            'name' => Yii::t('app', 'Name'),
+            'picture' => Yii::t('app', 'Picture'),
+            'manufacturing_date' => Yii::t('app', 'Manufacturing Date'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
 

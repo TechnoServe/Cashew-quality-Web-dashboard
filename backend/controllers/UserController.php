@@ -2,9 +2,12 @@
 
 namespace backend\controllers;
 
+use backend\models\search\UserEquipmentSearch;
 use Yii;
 use backend\models\User;
 use backend\models\search\UserSearch;
+use backend\models\UserEquipment;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -51,10 +54,15 @@ class UserController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
+    {   
+        $searchModel = new UserEquipmentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider,
         ]);
+
     }
 
     /**
@@ -129,9 +137,6 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        // $this->findModel($id)->delete();
-
-        // return $this->redirect(['index']);
 
         $model = $this->findModel($id);
         if ($model->status == User::STATUS_ACTIVE) {

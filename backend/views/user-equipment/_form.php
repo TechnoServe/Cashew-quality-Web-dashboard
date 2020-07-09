@@ -14,11 +14,11 @@ use yii\widgets\ActiveForm;
 
 <div class="user-equipment-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'id_user')->widget(Select2::className(), User::getUsersSelectWidgetValues('id_user', User::ROLE_FIELD_TECH, "user_id",   Yii::t('app', 'Select Field Tech'))) ?>
+            <?= $form->field($model, 'id_user')->widget(Select2::className(), User::getUsersSelectWidgetValues('id_user', User::ROLE_FIELD_TECH, "id_user",   Yii::t('app', 'Select Field Tech'))) ?>
         </div>
 
         <div class="col-md-6">
@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'picture')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
         </div>
 
         <div class="col-md-6">

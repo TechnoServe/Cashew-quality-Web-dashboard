@@ -8,6 +8,7 @@ use backend\models\search\UserEquipmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * UserEquipmentController implements the CRUD actions for UserEquipment model.
@@ -66,13 +67,26 @@ class UserEquipmentController extends Controller
     {
         $model = new UserEquipment();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            // get the instance of the uploaded file
+            $imageName = $model->name;
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            //save the path in the db column
+            $model->picture = 'uploads/' . $imageName . '.' . $model->image->extension;
+            $model->save();
+
+            $model->image->saveAs('uploads/' . $imageName . '.' . $model->image->extension);
+
             return $this->redirect(['view', 'id' => $model->id]);
+
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+        
     }
 
     /**
@@ -86,7 +100,17 @@ class UserEquipmentController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            // get the instance of the uploaded file
+            $imageName = $model->name;
+            $model->image = UploadedFile::getInstance($model, 'image');
+
+            //save the path in the db column
+            $model->picture = 'uploads/' . $imageName . '.' . $model->image->extension;
+            $model->save();
+
+            $model->image->saveAs('uploads/' . $imageName . '.' . $model->image->extension);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

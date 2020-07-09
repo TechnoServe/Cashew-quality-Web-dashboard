@@ -48,8 +48,6 @@ class User extends \common\models\User
 
     }
 
-
-
     public static function getLanguagesDropDownList()
     {
         return [
@@ -57,5 +55,15 @@ class User extends \common\models\User
             "fr" => "Français",
             "pt" => " Português"
         ];
+    }
+
+    /**
+     * Gets query for [[UserEquipments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserEquipments()
+    {
+        return $this->hasMany(UserEquipment::className(), ['id_user' => 'id']);
     }
 }

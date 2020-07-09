@@ -38,6 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'model',
                 'name',
                 'picture',
+                // [
+                //     'attribute' => 'picture',
+                //     'value' => $model->picture,
+                //     'format' => ['image', ['width'=>100, 'height'=>100]],
+                // ],
                 'manufacturing_date',
                 'created_at',
             ],
