@@ -70,17 +70,13 @@ class UserEquipmentController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             // get the instance of the uploaded file
-            $imageName = $model->name;
             $model->image = UploadedFile::getInstance($model, 'image');
 
-            //save the path in the db column
-            $model->picture = 'uploads/' . $imageName . '.' . $model->image->extension;
-            $model->save();
-
-            $model->image->saveAs('uploads/' . $imageName . '.' . $model->image->extension);
+            if($model->uploadImage()){ // If image upload is done successfully
+                $model->save(false);
+            };
 
             return $this->redirect(['view', 'id' => $model->id]);
-
         }
 
         return $this->render('create', [
@@ -102,14 +98,11 @@ class UserEquipmentController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             // get the instance of the uploaded file
-            $imageName = $model->name;
             $model->image = UploadedFile::getInstance($model, 'image');
 
-            //save the path in the db column
-            $model->picture = 'uploads/' . $imageName . '.' . $model->image->extension;
-            $model->save();
-
-            $model->image->saveAs('uploads/' . $imageName . '.' . $model->image->extension);
+            if($model->uploadImage()){ // If image upload is done successfully
+                $model->save(false);
+            };
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -128,8 +121,9 @@ class UserEquipmentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model  = $this->findModel($id);
+        $model->deleteAttachments();
+        $model->delete();
         return $this->redirect(['index']);
     }
 

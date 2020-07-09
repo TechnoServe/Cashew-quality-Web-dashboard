@@ -38,11 +38,13 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
-        </div>
-
-        <div class="col-md-6">
             <?= $form->field($model, 'manufacturing_date')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("manufacturing_date", "date")) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'image')->fileInput(['maxlength' => true, 'accept' => 'image/*']) ?>
         </div>
     </div>
 
