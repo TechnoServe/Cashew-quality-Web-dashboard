@@ -47,24 +47,23 @@ use yii\helpers\Url;
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                                <span class="ic-user pull-right">
-                                    <i class="demo-pli-male icon-fw"></i><?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?>
-
-                                </span>
+                        <span class="ic-user pull-right">
+                            <?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?> <i class="demo-pli-male icon-fw"></i>
+                        </span>
                     </a>
 
 
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                         <ul class="head-list">
                             <li>
-                                <a href="<?=Url::to(["user/view", "id"=>Yii::$app->user->getId()])?>"><i class="demo-pli-male icon-lg icon-fw"></i> <?= Yii::t("app", "Profile") ?></a>
+                                <a href="<?=Url::to(["user/view", "id"=>Yii::$app->user->getId()])?>"><i class="demo-pli-male icon-fw"></i> <?= Yii::t("app", "Profile") ?></a>
                             </li>
                             <li>
                                 <a href="<?=Url::to(["user/update", "id"=>Yii::$app->user->getId()])?>">
-                                    <i class="demo-pli-gear icon-lg icon-fw"></i> <?= Yii::t("app", "Settings") ?></a>
+                                    <i class="demo-pli-gear icon-fw"></i> <?= Yii::t("app", "Settings") ?></a>
                             </li>
                             <li>
-                                <a href="<?=Url::to(['/site/logout'])?>" data-method="post"><i class="demo-pli-unlock icon-lg icon-fw"></i>
+                                <a href="<?=Url::to(['/site/logout'])?>" data-method="post"><i class="demo-pli-unlock icon-fw"></i>
                                     <?= Yii::t("app", "Logout") ?></a>
                             </li>
                         </ul>
@@ -78,7 +77,7 @@ use yii\helpers\Url;
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                             <span class="ic-user pull-right">
-                                <i class="flag-icon flag-icon-<?=Yii::$app->language == "en" ? "gb" : Yii::$app->language?> icon-fw"></i> <?= User::getLanguagesDropDownList()[Yii::$app->language] ?>
+                              <?= User::getLanguagesDropDownList()[Yii::$app->language] ?>   <i class="flag-icon flag-icon-<?=Yii::$app->language == "en" ? "gb" : Yii::$app->language?> icon-fw"></i>
                             </span>
                     </a>
 
@@ -88,9 +87,9 @@ use yii\helpers\Url;
                                 <a href="<?=Url::to(["site/switch-user-language", "language" => "en"])?>"><i class="flag-icon flag-icon-gb icon-fw"></i> English </a>
                             </li>
                             <li>
-                                <a href="<?=Url::to(["site/switch-user-language", "language" => "fr"])?>"><i class="flag-icon flag-icon-fr pli-globe icon-lg icon-fw"></i> Français</a>                                </li>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "fr"])?>"><i class="flag-icon flag-icon-fr pli-globe icon-fw"></i> Français</a>                                </li>
                             <li>
-                                <a href="<?=Url::to(["site/switch-user-language", "language" => "pt"])?>"><i class="flag-icon flag-icon-pt pli-globe icon-lg icon-fw"></i> Português</a>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "pt"])?>"><i class="flag-icon flag-icon-pt pli-globe icon-fw"></i> Português</a>
                             </li>
                         </ul>
                     </div>
