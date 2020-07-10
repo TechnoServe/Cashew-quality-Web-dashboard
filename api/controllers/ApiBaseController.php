@@ -4,12 +4,6 @@ namespace api\controllers;
 
 use yii\rest\Controller;
 
-/**
- * @author     SJ <imsonujangra@gmail.com>
- * @package    Base Controller API
- * @created    30-Aug-2016
- * @version    1.0
- */
 class ApiBaseController extends Controller
 {
 
