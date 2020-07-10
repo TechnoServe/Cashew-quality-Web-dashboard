@@ -54,12 +54,14 @@ class UserController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {   
+    {
+        $model = $this->findModel($id);
         $searchModel = new UserEquipmentSearch();
+        $searchModel->id_user = $model->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'dataProvider' => $dataProvider,
         ]);
 
@@ -108,11 +110,10 @@ class UserController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-
-            //$model->pass='not_empty';
-
-            $model->password_hash = Yii::$app->security->generatePasswordHash($model->pass);
-            $model->generateAuthKey();
+            
+            if(!empty($model->pass)){
+                $model->setPassword($model->pass);
+            }
 
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]); 
