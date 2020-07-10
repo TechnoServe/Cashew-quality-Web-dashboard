@@ -6,7 +6,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\filters\auth\QueryParamAuth;
 
-class QarController extends ActiveController
+class SiteController extends ActiveController
 {
     public function behaviors()
     {
@@ -22,7 +22,7 @@ class QarController extends ActiveController
         ];
         return $behaviors;
     }
-    public $modelClass = 'common\models\Qar';
+    public $modelClass = 'common\models\Site';
 
     public function actions()
     {
