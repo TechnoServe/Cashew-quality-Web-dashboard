@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\User;
 use common\helpers\CashewAppHtmlHelper;
 use yii\helpers\Url;
 
@@ -39,6 +40,7 @@ use yii\helpers\Url;
                             <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
                                 <p class="mnp-name"><?= Yii::$app->user->identity->first_name ?> <?= Yii::$app->user->identity->middle_name ?> <?= Yii::$app->user->identity->last_name ?></p>
                                 <span class="mnp-desc"><?= Yii::$app->user->identity->email ?></span>
+                                <p class="box-bock text-bold"><?= User::getUserRole()[Yii::$app->user->identity->role] ?></p>
                             </a>
                         </div>
                     </div>
