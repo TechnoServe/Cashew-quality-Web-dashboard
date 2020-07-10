@@ -43,7 +43,7 @@ return [
     'Field Tech' => '',
     'First Name' => '',
     'Forgot password ?' => '',
-    'Forgot your password ? ' => '',
+    'Forgot your password ?' => '',
     'ID' => '',
     'Image' => '',
     'Inactive' => '',
@@ -108,4 +108,5 @@ return [
     'Users management' => '',
     'Verification Token' => '',
     'password' => '',
+    'Forgot your password ? ' => '@@@@',
 ];

@@ -17,8 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Please fill out the following fields to login' => 'Por favor, preencha os seguintes campos para acessar',
     'Account Login' => 'Connexion au compte',
+    'Please fill out the following fields to login' => 'Por favor, preencha os seguintes campos para acessar',
     'Active' => '',
     'Address' => '',
     'Admin' => '',
@@ -44,7 +44,7 @@ return [
     'Field Tech' => '',
     'First Name' => '',
     'Forgot password ?' => '',
-    'Forgot your password ? ' => '',
+    'Forgot your password ?' => '',
     'ID' => '',
     'Image' => '',
     'Inactive' => '',
@@ -108,4 +108,5 @@ return [
     'Users management' => '',
     'Verification Token' => '',
     'password' => '',
+    'Forgot your password ? ' => '@@@@',
 ];
