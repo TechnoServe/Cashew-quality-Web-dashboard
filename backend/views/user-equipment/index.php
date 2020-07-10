@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-body">
 
         <p class="pull-right">
-            <?= Html::a('Create User Equipment', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t('app', 'Create User Equipment'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?= GridView::widget([
