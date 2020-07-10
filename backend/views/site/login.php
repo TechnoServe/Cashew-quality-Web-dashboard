@@ -23,12 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+            <?= Html::submitButton(Yii::t("app", "Login"), ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
         </div>
 
     <?php ActiveForm::end(); ?>
 
     <div class="pad-all">
-        <?=Html::a(Yii::t("app", "Forgot your password ? "), ["site/request-password-reset"], ["class"=>"btn-link mar-rgt"])?>
+        <?=Html::a(Yii::t("app", "Forgot your password ?"), ["site/request-password-reset"], ["class"=>"btn-link mar-rgt"])?>
     </div>
 </div>

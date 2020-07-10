@@ -18,7 +18,7 @@
  */
 return [
     'Please fill out the following fields to login' => 'Por favor, preencha os seguintes campos para acessar',
-    'Account Login' => '',
+    'Account Login' => 'Connexion au compte',
     'Active' => '',
     'Address' => '',
     'Admin' => '',
