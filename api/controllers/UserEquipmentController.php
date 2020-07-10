@@ -2,11 +2,11 @@
 namespace api\controllers;
 
 use common\models\User;
-use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\filters\auth\QueryParamAuth;
+use yii\filters\auth\HttpBasicAuth;
 
-class SiteController extends ActiveController
+class UserEquipmentController extends ActiveController
 {
     public function behaviors()
     {
@@ -22,7 +22,8 @@ class SiteController extends ActiveController
         ];
         return $behaviors;
     }
-    public $modelClass = 'common\models\Site';
+
+    public $modelClass = 'common\models\UserEquipment';
 
     public function actions()
     {

@@ -74,7 +74,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 'required',
             ],
             [['status', 'role'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'pass'], 'safe'],
             [
                 [
                     'username',
