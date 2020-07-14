@@ -91,7 +91,7 @@ class CompanyController extends Controller
             $model->logoUploaded = UploadedFile::getInstance($model, 'logoUploaded');
 
             if($model->uploadLogo()) {
-                $model->save();
+                $model->save(false);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
