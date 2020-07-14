@@ -19,7 +19,7 @@ class UserEquipmentSearch extends UserEquipment
     {
         return [
             [['id', 'id_user'], 'integer'],
-            [['brand', 'model', 'name', 'picture', 'manufacturing_date', 'created_at', 'updated_at'], 'safe'],
+            [['brand', 'model', 'name', 'picture', 'manufacturing_date', 'created_at', 'updated_at', 'company_id'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class UserEquipmentSearch extends UserEquipment
      */
     public function search($params)
     {
-        $query = UserEquipment::find();
+        $query = UserEquipment::queryByCompany();
 
         // add conditions that should always apply here
 
@@ -59,11 +59,8 @@ class UserEquipmentSearch extends UserEquipment
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'id_user' => $this->id_user,
-            'manufacturing_date' => $this->manufacturing_date,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'company_id' => $this->company_id,
         ]);
 
         $query->andFilterWhere(['like', 'brand', $this->brand])

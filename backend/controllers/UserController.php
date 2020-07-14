@@ -6,8 +6,6 @@ use backend\models\search\UserEquipmentSearch;
 use Yii;
 use backend\models\User;
 use backend\models\search\UserSearch;
-use backend\models\UserEquipment;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -29,8 +27,20 @@ class UserController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['view'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW, User::ROLE_INSTITUTION_ADMIN, User::ROLE_INSTITUTION_ADMIN_VIEW],
+                    ],
+
+                    [
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN, User::ROLE_INSTITUTION_ADMIN],
                     ],
                 ],
             ],
@@ -94,20 +104,21 @@ class UserController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->password_hash = Yii::$app->security->generatePasswordHash($model->pass);
+
             $model->generateAuthKey();
 
-            if ($model->save()) {
+            $model->purifyInput();
+
+            if ($model->validate() && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
@@ -127,18 +138,18 @@ class UserController extends Controller
                 $model->setPassword($model->pass);
             }
 
-            if ($model->save()) {
+            $model->purifyInput();
+
+            if ($model->validate() && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]); 
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
             }
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }     
+
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
@@ -171,7 +182,7 @@ class UserController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = User::queryByCompany()->andWhere(["id" => $id])->one()) !== null) {
             return $model;
         }
 

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\User;
 use Yii;
 use backend\models\UserEquipment;
 use backend\models\search\UserEquipmentSearch;
@@ -27,8 +28,14 @@ class UserEquipmentController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['index','view'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+
+                    [
+                        'allow' => true,
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN],
                     ],
                 ],
             ],
@@ -85,10 +92,13 @@ class UserEquipmentController extends Controller
             $model->image = UploadedFile::getInstance($model, 'image');
 
             if($model->uploadImage()){ // If image upload is done successfully
-                $model->save(false);
-            };
 
-            return $this->redirect(['view', 'id' => $model->id]);
+                $model->purifyInput();
+
+                if($model->save(false))
+                    return $this->redirect(['view', 'id' => $model->id]);
+
+            };
         }
 
         return $this->render('create', [
@@ -113,10 +123,12 @@ class UserEquipmentController extends Controller
             $model->image = UploadedFile::getInstance($model, 'image');
 
             if($model->uploadImage()){ // If image upload is done successfully
-                $model->save(false);
-            };
 
-            return $this->redirect(['view', 'id' => $model->id]);
+                $model->purifyInput();
+
+                if( $model->save(false))
+                    return $this->redirect(['view', 'id' => $model->id]);
+            };
         }
 
         return $this->render('update', [
@@ -148,10 +160,9 @@ class UserEquipmentController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = UserEquipment::findOne($id)) !== null) {
+        if (($model = UserEquipment::queryByCompany()->andWhere(["id" => $id])->one()) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

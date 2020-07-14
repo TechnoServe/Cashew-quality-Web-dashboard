@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\Qar;
 use backend\models\Site;
 use backend\models\User;
@@ -30,6 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
+                    }
+                ],
                 [
                     'attribute' => 'buyer',
                     'value' => function ($model) {

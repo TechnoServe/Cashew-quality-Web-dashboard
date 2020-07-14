@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -27,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
+                    }
+                ],
                 'username',
                 'first_name',
                 'middle_name',
@@ -42,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => Yii::t('app', 'Role'),
                     'value' => function ($model) {
-                        return User::getUserRoleByIndex($model->role);
+                        return User::getUserRole()[$model->role];
                     }
                 ],
 

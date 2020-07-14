@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -33,6 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return "#".$model->id;
                 },
+            ],
+            [
+                'attribute' => 'company_id',
+                'value' => function($model){
+                    $company = Company::findOne($model->company_id);
+                    return $company ?  $company->name : null;
+                }
             ],
             'site_name',
             'site_location:ntext',

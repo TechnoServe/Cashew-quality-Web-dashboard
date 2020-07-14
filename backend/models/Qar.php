@@ -16,6 +16,20 @@ class Qar extends \common\models\Qar
     const INITIATED_BY_FARMER = 3;
 
 
+    /**
+     * Query users by company
+     * @return \yii\db\ActiveQuery
+     */
+    public static function queryByCompany(){
+        $loggedInUser = Yii::$app->user->identity;
+
+        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
+            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+
+        return self::find();
+    }
+
+
     public function rules()
     {
         return array_merge(parent::rules(), [
@@ -62,5 +76,36 @@ class Qar extends \common\models\Qar
         $initiatorValues = self::getInitiatorDropDownValues();
 
         return isset($initiatorValues [$index]) ? $initiatorValues [$index] : null;
+    }
+
+
+
+    /**
+     * Clean input data to ensure data validation
+     */
+    public function purifyInput(){
+
+        $currentUser = Yii::$app->user->identity;
+
+        //validate buyer
+        if(!User::queryByCompany()->andWhere(["id"=>$this->buyer, "role"=>User::ROLE_FIELD_BUYER])->exists())
+            $this->buyer = null;
+
+
+        //validate fieldtech
+        if(!User::queryByCompany()->andWhere(["id"=>$this->field_tech, "role"=>User::ROLE_FIELD_TECH])->exists())
+            $this->field_tech = null;
+
+
+        //validate farmer
+        if(!User::queryByCompany()->andWhere(["id"=>$this->farmer, "role"=>User::ROLE_FIELD_FARMER])->exists())
+            $this->farmer = null;
+
+
+        //validate site
+        if(!Site::queryByCompany()->andWhere(["id"=>$this->site])->exists())
+            $this->site = null;
+
+        $this->company_id = $currentUser->company_id;
     }
 }

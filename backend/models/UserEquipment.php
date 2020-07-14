@@ -19,6 +19,21 @@ class UserEquipment extends \common\models\UserEquipment
     public $image;
 
 
+
+    /**
+     * Query users by company
+     * @return \yii\db\ActiveQuery
+     */
+    public static function queryByCompany(){
+        $loggedInUser = Yii::$app->user->identity;
+        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
+            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+
+        return self::find();
+    }
+
+
+
     /**
      * {@inheritdoc}
      */
@@ -140,9 +155,22 @@ class UserEquipment extends \common\models\UserEquipment
      * Delete previous files
      */
     public function deleteAttachments(){
-        if(!$this->isNewRecord){
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->picture);
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->picture);
+        if(!$this->isNewRecord && $this->picture){
+            try {
+                unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->picture);
+                unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->picture);
+            } catch (\Exception $e){
+                Yii::error("File does not exist");
+            }
         }
+    }
+
+    /**
+     * Clean input data to ensure data validation
+     */
+    public function purifyInput(){
+        $loggedInUser = Yii::$app->user->identity;
+        //Set company id
+        $this->company_id = $loggedInUser->company_id;
     }
 }

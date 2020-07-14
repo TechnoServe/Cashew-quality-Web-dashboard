@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -33,6 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'id_user',
                     'value' => $model->getUserFullName($model->id_user),
+                ],
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
+                    }
                 ],
                 'brand',
                 'model',

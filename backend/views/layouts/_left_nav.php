@@ -1,13 +1,15 @@
 <?php
 
+use backend\models\Company;
 use backend\models\User;
 use common\helpers\CashewAppHtmlHelper;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
 <!--MAIN NAVIGATION-->
 <!--===================================================-->
-<nav id="mainnav-container">
+<nav id="mainnav-container" style="margin-top: -60px; z-index:999999999">
     <div id="mainnav">
 
 
@@ -35,12 +37,18 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
                             <div class="pad-btm">
-                                <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
+                                <?php if(Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
+                                    <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
+                                <?php else: ?>
+                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id) ?>
+                                    <?=Html::img($company->getThumbLogoPath(), ['width' => '50px']) ?>
+                                <?php endif; ?>
                             </div>
                             <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
-                                <p class="mnp-name"><?= Yii::$app->user->identity->first_name ?> <?= Yii::$app->user->identity->middle_name ?> <?= Yii::$app->user->identity->last_name ?></p>
-                                <span class="mnp-desc"><?= Yii::$app->user->identity->email ?></span>
-                                <p class="box-bock text-bold"><?= User::getUserRole()[Yii::$app->user->identity->role] ?></p>
+                                <?php if(Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW): ?>
+                                    <h4> <strong> <?= $company->name ?> </strong></h4>
+                                <?php endif; ?>
+                                <p class="box-bock text-bold"> <span class="badge badge-success"> <?= User::getUserRole()[Yii::$app->user->identity->role] ?> </span></p>
                             </a>
                         </div>
                     </div>
@@ -96,6 +104,16 @@ use yii\helpers\Url;
                         <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
 
+                        <?php if(Yii::$app->user->getIdentity()->role != \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
+
+
+                            <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
+
+                            <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
+
+                        <?php endif; ?>
+
+
                         <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
 
                         <li class="list-divider"></li>
@@ -113,7 +131,7 @@ use yii\helpers\Url;
                         <?php endif; ?>
 
 
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN): ?>
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW): ?>
 
                         <li class="list-divider"></li>
 
@@ -127,6 +145,18 @@ use yii\helpers\Url;
                         <?php endif; ?>
 
                     </ul>
+
+
+                    <div id="mainnav-profile" class="mainnav-profile">
+                        <div class="profile-wrap text-center">
+                            <div class="pad-btm">
+                                <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => "120px", "height"=>"auto"]]) ?>
+                            </div>
+                            <a target="_blank" href="<?= Url::to("http://tns.org/") ?>" class="box-block">
+                                <span class="mnp-desc"> <?=Yii::t("app", "Powered by TechnoServe")?></span>
+                            </a>
+                        </div>
+                    </div>
 
                 </div>
             </div>

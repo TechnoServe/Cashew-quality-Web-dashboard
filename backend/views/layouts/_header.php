@@ -11,14 +11,7 @@ use yii\helpers\Url;
 
         <!--Brand logo & name-->
         <!--================================-->
-        <div class="navbar-header">
-            <a href="<?=Url::to(["site/index"])?>" class="navbar-brand">
-                <img src="<?=Url::to("/nifty/img/logo.png")?>" alt="Nifty Logo" class="brand-icon">
-                <div class="brand-title">
-                    <span class="brand-text">TNS</span>
-                </div>
-            </a>
-        </div>
+
         <!--================================-->
         <!--End brand logo & name-->
 
@@ -47,9 +40,7 @@ use yii\helpers\Url;
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                        <span class="ic-user pull-right">
-                            <?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?> <i class="demo-pli-male icon-fw"></i>
-                        </span>
+                        <?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?> <i class="demo-pli-male icon-fw"></i>
                     </a>
 
 
@@ -76,9 +67,7 @@ use yii\helpers\Url;
                 <!--language switcher-->
                 <li id="dropdown-user" class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                            <span class="ic-user pull-right">
-                              <?= User::getLanguagesDropDownList()[Yii::$app->language] ?>   <i class="flag-icon flag-icon-<?=Yii::$app->language == "en" ? "gb" : Yii::$app->language?> icon-fw"></i>
-                            </span>
+                        <?= User::getLanguagesDropDownList()[Yii::$app->language] ?>   <i class="flag-icon flag-icon-<?=Yii::$app->language == "en" ? "gb" : Yii::$app->language?> icon-fw"></i>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">

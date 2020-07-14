@@ -2,9 +2,11 @@
 
 namespace backend\controllers;
 
+use backend\models\User;
 use Yii;
 use backend\models\Company;
 use backend\models\search\CompanySearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,22 @@ class CompanyController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN ,  User::ROLE_ADMIN_VIEW],
+                    ],
+
+                    [
+                        //'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -114,14 +132,19 @@ class CompanyController extends Controller
     /**
      * Deletes an existing Company model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
+     *
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     * @throws \yii\web\NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->deleteAttachments();
+        $model->delete();
         return $this->redirect(['index']);
     }
 

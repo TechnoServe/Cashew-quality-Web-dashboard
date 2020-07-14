@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\User;
 use Yii;
 use backend\models\Qar;
 use backend\models\search\QarSearch;
@@ -24,10 +25,18 @@ class QarController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
+
                     [
+                        'actions' => ['index','view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+
+                    [
+                        'allow' => true,
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN],
+                    ],
+
                 ],
             ],
             'verbs' => [
@@ -76,8 +85,11 @@ class QarController extends Controller
     {
         $model = new Qar();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->purifyInput();
+
+            if($model->validate() &&  $model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -96,8 +108,12 @@ class QarController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->purifyInput();
+
+            if($model->validate() &&  $model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -115,7 +131,6 @@ class QarController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -128,7 +143,7 @@ class QarController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Qar::findOne($id)) !== null) {
+        if (($model = Qar::queryByCompany()->andWhere(["id"=>$id])->one()) !== null) {
             return $model;
         }
 

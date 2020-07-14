@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -26,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
+                    }
+                ],
                 'site_name',
                 'site_location:ntext',
                 'created_at',

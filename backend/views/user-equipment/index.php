@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -33,7 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format'=>'raw',
                     'value' => function($model){
                         return Html::img($model->getThumbImagePath(),
-                            ['width' => '50px']) . "<br  />  " .  Html::a(Yii::t("app", "Click to expand"), [$model->getImagePath()], ["target"=>"_blank", "class"=>"btn-link text-xs"]);
+                            ['width' => '50px']);
+                    }
+                ],
+
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
                     }
                 ],
 

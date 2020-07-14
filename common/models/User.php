@@ -77,7 +77,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 ],
                 'required',
             ],
-            [['status', 'role'], 'integer'],
+            [['status', 'role', 'company_id'], 'integer'],
             [['created_at', 'updated_at', 'pass'], 'safe'],
             [
                 [
@@ -131,6 +131,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'role' => Yii::t('app', 'Role'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'verification_token' => Yii::t('app', 'Verification Token'),
+            'company_id' => Yii::t('app', 'Company'),
         ];
     }
 

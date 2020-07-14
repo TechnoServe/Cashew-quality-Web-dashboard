@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\User;
 use Yii;
 use backend\models\Site;
 use backend\models\search\SiteSearch;
@@ -25,8 +26,14 @@ class SitesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['index','view'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+
+                    [
+                        'allow' => true,
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN],
                     ],
                 ],
             ],
@@ -76,8 +83,12 @@ class SitesController extends Controller
     {
         $model = new Site();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->purifyInput();
+
+            if($model->validate() && $model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -96,8 +107,11 @@ class SitesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->purifyInput();
+
+            if($model->validate() && $model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -128,7 +142,8 @@ class SitesController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Site::findOne($id)) !== null) {
+        $model = Site::queryByCompany()->andWhere(["id" => $id])->one();
+        if ($model !== null) {
             return $model;
         }
 

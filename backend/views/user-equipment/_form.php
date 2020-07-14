@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'image')->fileInput(['maxlength' => true, 'accept' => 'image/*']) ?>
+            <?= $form->field($model, 'image')->fileInput(['maxlength' => true, 'accept' => 'image/*'])->hint(Yii::t("app", "Please upload image with same width and height, Otherwise your image will be croped"), ["class"=>"text-warning"]) ?>
         </div>
     </div>
 

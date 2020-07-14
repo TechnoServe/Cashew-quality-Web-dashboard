@@ -31,7 +31,7 @@ class Site extends \yii\db\ActiveRecord
         return [
             [['site_name', 'site_location'], 'required'],
             [['site_location'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'company_id'], 'safe'],
             [['site_name'], 'string', 'max' => 255],
         ];
     }
@@ -47,6 +47,7 @@ class Site extends \yii\db\ActiveRecord
             'site_location' => Yii::t('app', 'Site Location'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
+            'company_id' => Yii::t('app', 'Company'),
         ];
     }
 }

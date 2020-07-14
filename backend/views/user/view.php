@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -17,14 +18,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-body">
 
         <p>
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                    'method' => 'post',
-                ],
-            ]) ?>
+            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id],
+                ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
+                [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => Yii::t('app',
+                            'Are you sure you want to delete this item?'),
+                        'method' => 'post',
+                    ],
+                ]) ?>
         </p>
 
         <?= DetailView::widget([
@@ -36,19 +40,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 'last_name',
                 'email:email',
                 'phone',
+                [
+                    'attribute' => 'company_id',
+                    'value' => function($model){
+                        $company = Company::findOne($model->company_id);
+                        return $company ?  $company->name : null;
+                    }
+                ],
+                'phone',
                 'address',
                 [
-                    'attribute' => Yii::t('app', 'Preferred Language'),
+                    'attribute' => 'language',
                     'value' => $model->getLanguageByIndex($model->language),
                 ],
                 [
-                    'attribute' => Yii::t('app', 'Status'),
+                    'attribute' => 'status',
                     'value' => $model->getUserStatusByIndex($model->status),
                 ],
                 'created_at',
                 [
-                    'attribute' => Yii::t('app', 'Role'),
-                    'value' => $model->getUserRoleByIndex($model->role),
+                    'attribute' => 'role',
+                    'value' => function ($model) {
+                        return User::getUserRole()[$model->role];
+                    },
                 ],
             ],
         ]) ?>
@@ -69,16 +83,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         return Html::img(
-                            $model->getThumbImagePath(),
-                            ['width' => '60px']
-                        ) . "<br  />  " .  Html::a(Yii::t("app", "Click to expand"), [$model->getImagePath()], ["target" => "_blank", "class" => "btn-link"]);
-                    }
+                                $model->getThumbImagePath(),
+                                ['width' => '60px']
+                            )."<br  />  ".Html::a(Yii::t("app",
+                                "Click to expand"), [$model->getImagePath()],
+                                ["target" => "_blank", "class" => "btn-link"]);
+                    },
                 ],
                 [
                     'attribute' => 'id_user',
                     'value' => function ($model) {
                         return $model->getUserFullName($model->id_user);
-                    }
+                    },
                 ],
                 'brand',
                 'model',

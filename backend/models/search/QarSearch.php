@@ -43,7 +43,7 @@ class QarSearch extends Qar
      */
     public function search($params)
     {
-        $query = Qar::find();
+        $query = Qar::queryByCompany();
 
         // add conditions that should always apply here
 
@@ -66,6 +66,7 @@ class QarSearch extends Qar
             'farmer' => $this->farmer,
             'initiator' => $this->initiator,
             'site' => $this->site,
+            'company_id' => $this->company_id,
         ]);
 
 

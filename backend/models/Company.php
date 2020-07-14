@@ -12,6 +12,7 @@ class Company extends \common\models\Company
 {
 
     const STATUS_ACTIVE = 1;
+
     const STATUS_INACTIVE = 2;
 
 
@@ -24,7 +25,7 @@ class Company extends \common\models\Company
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-           "logoUploaded" => Yii::t("app", "Upload logo")
+            "logoUploaded" => Yii::t("app", "Upload logo"),
         ]);
     }
 
@@ -41,10 +42,11 @@ class Company extends \common\models\Company
         ]);
     }
 
-    public static function getStatusDropdownValues(){
+    public static function getStatusDropdownValues()
+    {
         return [
             self::STATUS_ACTIVE => \Yii::t("app", "Active"),
-            self::STATUS_INACTIVE => \Yii::t("app", "Inactive")
+            self::STATUS_INACTIVE => \Yii::t("app", "Inactive"),
         ];
     }
 
@@ -58,10 +60,13 @@ class Company extends \common\models\Company
 
         if ( ! empty($image)) { // if file passed is not an empty file
 
-            $this->deleteAttachments();
+            if ($this->getOldAttribute("logo")) {
+                $this->deleteAttachments();
+            }
 
             //generate random file name
-            $fileRandomBaseName = uniqid('company_logo_').'_'.date('Y_m_d-H_i_s', time());
+            $fileRandomBaseName = uniqid('company_logo_').'_'.date('Y_m_d-H_i_s',
+                    time());
 
             // generate A unique filename
             $filename = $fileRandomBaseName.'.'.$image->extension;
@@ -80,7 +85,8 @@ class Company extends \common\models\Company
             try {
                 $imageSaved = $image->saveAs($path);
 
-                Image::thumbnail($path, 200, 200)->save($thumb_path, ['quality' => 80]);
+                Image::thumbnail($path, 200, 200)
+                    ->save($thumb_path, ['quality' => 80]);
 
                 if ($imageSaved) {
 
@@ -97,7 +103,7 @@ class Company extends \common\models\Company
 
         }
 
-        if (!$this->isNewRecord && empty($image)) {
+        if ( ! $this->isNewRecord && empty($image)) {
             $this->logo = $this->getOldAttribute("logo");
         }
 
@@ -129,10 +135,42 @@ class Company extends \common\models\Company
     /**
      * Delete previous files
      */
-    public function deleteAttachments(){
-        if(!$this->isNewRecord && $this->getOldAttribute("logo")){
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo);
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo);
+    public function deleteAttachments()
+    {
+        if ( ! $this->isNewRecord && $this->logo) {
+            unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo);
+            unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo);
         }
+    }
+
+
+    /**
+     * Site dropdown values for select2
+     *
+     * @param $attribute
+     * @param $html_id
+     * @param $placeholder
+     *
+     * @return array
+     */
+    public static function getCompaniesSelectWidgetValues($attribute, $html_id, $placeholder) {
+
+        $companies = self::find()->where(["status"=>self::STATUS_ACTIVE])->all();
+
+        $data = [];
+
+        foreach ($companies as $company) {
+            $data[$company->id] = $company->name;
+        }
+
+        return [
+            'data' => $data,
+            'attribute' => $attribute,
+            'language' => Yii::$app->language,
+            'options' => ['id' => $html_id, 'placeholder' => $placeholder],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+        ];
     }
 }

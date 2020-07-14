@@ -18,7 +18,7 @@ class SiteSearch extends Site
     {
         return [
             [['id'], 'integer'],
-            [['site_name', 'site_location', 'created_at', 'updated_at'], 'safe'],
+            [['site_name', 'site_location', 'created_at', 'updated_at', 'company_id'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class SiteSearch extends Site
      */
     public function search($params)
     {
-        $query = Site::find();
+        $query = Site::queryByCompany();
 
         // add conditions that should always apply here
 
@@ -55,6 +55,11 @@ class SiteSearch extends Site
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'company_id' => $this->company_id,
+        ]);
 
         $query->andFilterWhere(['like', 'site_name', $this->site_name])
             ->andFilterWhere(['like', 'site_location', $this->site_location]);

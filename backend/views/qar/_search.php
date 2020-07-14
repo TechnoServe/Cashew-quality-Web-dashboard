@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Company;
 use backend\models\Site;
 use backend\models\User;
 use common\helpers\CashewAppHtmlHelper;
@@ -57,6 +58,12 @@ use yii\widgets\ActiveForm;
         <div class="col-md-6">
             <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site',"site_id",  Yii::t('app', 'All'))) ?>
         </div>
+
+        <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
+        <div class="col-md-6">
+            <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company',"company_id",  Yii::t('app', 'Select Company'))) ?>
+        </div>
+        <?php endif; ?>
     </div>
 
     <div class="form-group">

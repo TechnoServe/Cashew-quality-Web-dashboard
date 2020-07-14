@@ -59,6 +59,7 @@ class UserEquipment extends ActiveRecord
             'manufacturing_date' => Yii::t('app', 'Manufacturing Date'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
+            'company_id' => Yii::t('app', 'Company'),
         ];
     }
 

@@ -9,6 +9,25 @@ use Yii;
 
 class Site extends baseSite
 {
+    private $loggedInUser;
+
+    public function init()
+    {
+
+        parent::init();
+    }
+
+    /**
+     * Query users by company
+     * @return \yii\db\ActiveQuery
+     */
+    public static function queryByCompany(){
+        $loggedInUser = Yii::$app->user->identity;
+
+        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
+            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+        return self::find();
+    }
 
 
     /**
@@ -21,7 +40,7 @@ class Site extends baseSite
      */
     public static function getSiteSelectWidgetValues($attribute , $html_id, $placeholder)
     {
-       $allSites = self::find()->all();
+       $allSites = self::queryByCompany()->all();
 
         $data = [];
 
@@ -38,5 +57,15 @@ class Site extends baseSite
                 'allowClear' => true
             ],
         ];
+    }
+
+    /**
+     * Clean input data to ensure data validation
+     */
+    public function purifyInput(){
+        $loggedInUser = Yii::$app->user->identity;
+
+        //Set company id
+        $this->company_id = $loggedInUser->company_id;
     }
 }
