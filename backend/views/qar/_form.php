@@ -1,6 +1,8 @@
 <?php
 
 use backend\models\Site;
+use common\helpers\CashewAppHtmlHelper;
+use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -44,6 +46,12 @@ use backend\models\User;
 
         <div class="col-md-6">
             <?= $form->field($model, 'audit_quantity')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date")) ?>
         </div>
     </div>
 

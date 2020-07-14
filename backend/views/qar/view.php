@@ -100,6 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 'audit_quantity',
+                'deadline',
                 'created_at',
                 'updated_at',
             ],
