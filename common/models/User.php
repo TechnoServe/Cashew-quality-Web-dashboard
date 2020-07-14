@@ -40,11 +40,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     const ROLE_ADMIN_VIEW = 2;
 
-    const ROLE_FIELD_TECH = 3;
+    const ROLE_INSTITUTION_ADMIN = 3;
 
-    const ROLE_FIELD_BUYER = 4;
+    const ROLE_INSTITUTION_ADMIN_VIEW = 4;
 
-    const ROLE_FIELD_FARMER = 5;
+    const ROLE_FIELD_TECH = 5;
+
+    const ROLE_FIELD_BUYER = 6;
+
+    const ROLE_FIELD_FARMER = 7;
 
     public $pass;
 

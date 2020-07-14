@@ -1,32 +1,39 @@
 <?php
 
+
 namespace backend\models;
+
 
 use common\helpers\CashewAppHelper;
 use Yii;
 use yii\imagine\Image;
 
-
-class UserEquipment extends \common\models\UserEquipment
+class Company extends \common\models\Company
 {
 
-    /**
-     * {@inheritdoc}
-     */
-
-    const STORAGE_DIRECTORY = "uploads/equipments/";
-
-    public $image;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
 
 
-    /**
-     * {@inheritdoc}
-     */
+    const STORAGE_DIRECTORY = "uploads/company/";
+
+
+    public $logoUploaded;
+
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+           "logoUploaded" => Yii::t("app", "Upload logo")
+        ]);
+    }
+
+
     public function rules()
     {
-        return array_merge(Parent::rules(), [
+        return array_merge(parent::rules(), [
             [
-                ['image'],
+                ['logoUploaded'],
                 'file',
                 'skipOnEmpty' => true,
                 'extensions' => 'png, jpg, gif',
@@ -34,45 +41,27 @@ class UserEquipment extends \common\models\UserEquipment
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return array_merge(Parent::attributeLabels(), [
-            'image' => Yii::t('app', 'Image'),
-        ]);
-    }
-
-    /**
-     * Get User Full Name
-     */
-
-    public function getUserFullName()
-    {
-        $user = User::findOne($this->id_user);
-        if (empty($user->middle_name)) {
-            return $user->first_name.' '.$user->last_name;
-        } else {
-            return $user->first_name.' '.$user->middle_name.' '.$user->last_name;
-        }
+    public static function getStatusDropdownValues(){
+        return [
+            self::STATUS_ACTIVE => \Yii::t("app", "Active"),
+            self::STATUS_INACTIVE => \Yii::t("app", "Inactive")
+        ];
     }
 
     /**
      * Upload file
      */
-    public function uploadImage()
+    public function uploadLogo()
     {
 
-        $image = $this->image;
+        $image = $this->logoUploaded;
 
-        if ( ! empty($this->image)) { // if file passed is not an empty file
+        if ( ! empty($image)) { // if file passed is not an empty file
 
             $this->deleteAttachments();
 
-
             //generate random file name
-            $fileRandomBaseName = uniqid('equipment_').'_'.date('Y_m_d-H_i_s', time());
+            $fileRandomBaseName = uniqid('company_logo_').'_'.date('Y_m_d-H_i_s', time());
 
             // generate A unique filename
             $filename = $fileRandomBaseName.'.'.$image->extension;
@@ -90,11 +79,12 @@ class UserEquipment extends \common\models\UserEquipment
 
             try {
                 $imageSaved = $image->saveAs($path);
+
                 Image::thumbnail($path, 200, 200)->save($thumb_path, ['quality' => 80]);
 
                 if ($imageSaved) {
 
-                    $this->picture = $filename;
+                    $this->logo = $filename;
 
                     return true;
 
@@ -108,7 +98,7 @@ class UserEquipment extends \common\models\UserEquipment
         }
 
         if (!$this->isNewRecord && empty($image)) {
-            $this->picture = $this->getOldAttribute("picture");
+            $this->logo = $this->getOldAttribute("logo");
         }
 
         return true;
@@ -120,9 +110,9 @@ class UserEquipment extends \common\models\UserEquipment
      *
      * @return string
      */
-    public function getImagePath()
+    public function getLogoPath()
     {
-        return ! empty($this->picture) ? Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->picture : "";
+        return ! empty($this->logo) ? Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo : "";
     }
 
 
@@ -131,18 +121,18 @@ class UserEquipment extends \common\models\UserEquipment
      *
      * @return string
      */
-    public function getThumbImagePath()
+    public function getThumbLogoPath()
     {
-        return ! empty($this->picture) ? Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->picture : "";
+        return ! empty($this->logo) ? Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo : "";
     }
 
     /**
      * Delete previous files
      */
     public function deleteAttachments(){
-        if(!$this->isNewRecord){
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->picture);
-            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->picture);
+        if(!$this->isNewRecord && $this->getOldAttribute("logo")){
+            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo);
+            unlink( getcwd(). Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo);
         }
     }
 }

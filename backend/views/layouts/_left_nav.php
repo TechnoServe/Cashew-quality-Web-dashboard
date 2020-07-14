@@ -96,16 +96,35 @@ use yii\helpers\Url;
                         <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
 
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
+
+                        <li class="list-divider"></li>
+
+
+                        <li class="list-header"><?= Yii::t("app", "Company Administration") ?></li>
+
+
+                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
+
+                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
+
+                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
+
+                        <?php endif; ?>
+
+
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN): ?>
+
                         <li class="list-divider"></li>
 
                         <!--Category name-->
-                        <li class="list-header"><?= Yii::t("app", "Management") ?></li>
+                        <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites management')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users management')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments management')) ?>
+                        <?php endif; ?>
 
                     </ul>
 
