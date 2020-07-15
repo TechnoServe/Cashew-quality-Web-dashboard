@@ -24,32 +24,36 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('app', 'Create Company'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
 
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'attribute' => 'logo',
-                    'format'=>'raw',
-                    'value' => function($model){
-                        return Html::img($model->getThumbLogoPath(),
-                                ['width' => '50px']);
-                    }
-                ],
-                'name',
-                'city',
-                'address',
-                'primary_contact',
-                'fax_number',
-                [
-                    'attribute' => 'status',
-                    'value' => function ($model) {
-                        return Company::getStatusDropdownValues()[$model->status];
-                    },
-                ],
-                'created_at',
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]); ?>
+        <div class="table-responsive" style="width: 100%">
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'logo',
+                            'format'=>'raw',
+                            'value' => function($model){
+                                return Html::img($model->getThumbLogoPath(),
+                                        ['width' => '50px']);
+                            }
+                        ],
+                        'name',
+                        'city',
+                        'address',
+                        'primary_contact',
+                        'fax_number',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($model) {
+                                return Company::getStatusDropdownValues()[$model->status];
+                            },
+                        ],
+                        'created_at',
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]); ?>
+            </div>
+
     </div>
 </div>

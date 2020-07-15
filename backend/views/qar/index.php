@@ -27,8 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'btn btn-success']) ?>
         </p>
 
+        <div class="table-responsive" style="width: 100%">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
@@ -92,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\ActionColumn'],
             ],
         ]); ?>
+        </div>
     </div>
 
 </div>

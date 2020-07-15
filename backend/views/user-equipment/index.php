@@ -24,42 +24,45 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('app', 'Create User Equipment'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
 
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+        <div class="table-responsive" style="width: 100%">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-                [
-                    'attribute' => 'picture',
-                    'format'=>'raw',
-                    'value' => function($model){
-                        return Html::img($model->getThumbImagePath(),
-                            ['width' => '50px']);
-                    }
+                    [
+                        'attribute' => 'picture',
+                        'format'=>'raw',
+                        'value' => function($model){
+                            return Html::img($model->getThumbImagePath(),
+                                ['width' => '50px']);
+                        }
+                    ],
+
+                    [
+                        'attribute' => 'company_id',
+                        'value' => function($model){
+                            $company = Company::findOne($model->company_id);
+                            return $company ?  $company->name : null;
+                        }
+                    ],
+
+                    [
+                        'attribute' => 'id_user',
+                        'value' => function ($model) {
+                            return $model->getUserFullName($model->id_user);
+                        }
+                    ],
+                    'brand',
+                    'model',
+                    'name',
+                    'manufacturing_date',
+
+                    ['class' => 'yii\grid\ActionColumn'],
                 ],
-
-                [
-                    'attribute' => 'company_id',
-                    'value' => function($model){
-                        $company = Company::findOne($model->company_id);
-                        return $company ?  $company->name : null;
-                    }
-                ],
-
-                [
-                    'attribute' => 'id_user',
-                    'value' => function ($model) {
-                        return $model->getUserFullName($model->id_user);
-                    }
-                ],
-                'brand',
-                'model',
-                'name',
-                'manufacturing_date',
-
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]); ?>
+            ]); ?>
+        </div>
 
     </div>
 

@@ -9,9 +9,25 @@ use yii\helpers\Url;
 ?>
 <!--MAIN NAVIGATION-->
 <!--===================================================-->
-<nav id="mainnav-container" style="margin-top: -60px; z-index:999999999">
+
+<style>
+
+    @media only screen and (max-width: 770px) {
+        .mainnav-container {
+            margin-top: -5px !important;
+        }
+    }
+
+</style>
+
+
+<nav id="mainnav-container" style="margin-top: -60px; z-index:999999999; position: fixed">
+
     <div id="mainnav">
 
+        <div class="visible-xs" style="height: 50px">
+
+        </div>
 
         <!--OPTIONAL : ADD YOUR LOGO TO THE NAVIGATION-->
         <!--It will only appear on small screen devices.-->
