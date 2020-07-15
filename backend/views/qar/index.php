@@ -14,6 +14,15 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Qars');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?= $this->render('_mini_stat', [
+            'qarsInProgress' => $qarsInProgress,
+            'qarsToBeDone' => $qarsToBeDone,
+            'qarsCompleted' => $qarsCompleted,
+            'qarsCanceled' => $qarsCanceled
+    ]); ?>
+
+
 <div class="panel">
 
     <div class="panel-body">

@@ -15,6 +15,13 @@ class Qar extends \common\models\Qar
 
     const INITIATED_BY_FARMER = 3;
 
+    const STATUS_TOBE_DONE = 1;
+
+    const STATUS_IN_PROGRESS = 2;
+
+    const STATUS_COMPLETED = 3;
+
+    const STATUS_CANCELED = 4;
 
     /**
      * Query users by company
@@ -60,6 +67,19 @@ class Qar extends \common\models\Qar
                 "Initiated by Field Tech"),
             self::INITIATED_BY_BUYER => Yii::t("app", "Initiated by Buyer"),
             self::INITIATED_BY_FARMER => Yii::t("app", "Initiated by Farmer"),
+        ];
+    }
+
+
+
+
+    public static function getStatusDropDownValues()
+    {
+        return [
+            self::STATUS_TOBE_DONE => Yii::t("app", "To be done"),
+            self::STATUS_IN_PROGRESS => Yii::t("app", "In Progress"),
+            self::STATUS_COMPLETED => Yii::t("app", "Completed"),
+            self::STATUS_CANCELED => Yii::t("app", "Canceled"),
         ];
     }
 

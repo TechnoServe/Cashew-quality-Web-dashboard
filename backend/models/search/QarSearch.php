@@ -21,7 +21,7 @@ class QarSearch extends Qar
     {
         return [
             [['id', 'buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
-            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end'], 'safe'],
+            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end', 'status'], 'safe'],
         ];
     }
 
@@ -67,6 +67,7 @@ class QarSearch extends Qar
             'initiator' => $this->initiator,
             'site' => $this->site,
             'company_id' => $this->company_id,
+            'status' => $this->status,
         ]);
 
 

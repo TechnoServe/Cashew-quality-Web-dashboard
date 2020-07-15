@@ -54,12 +54,23 @@ class QarController extends Controller
      */
     public function actionIndex()
     {
+
+
+        $qarsInProgress = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_IN_PROGRESS])->count();
+        $qarsToBeDone = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_TOBE_DONE])->count();
+        $qarsCompleted = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_COMPLETED])->count();
+        $qarsCanceled = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_CANCELED])->count();
+
         $searchModel = new QarSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'qarsInProgress' => $qarsInProgress,
+            'qarsToBeDone' => $qarsToBeDone,
+            'qarsCompleted' => $qarsCompleted,
+            'qarsCanceled' => $qarsCanceled,
         ]);
     }
 
