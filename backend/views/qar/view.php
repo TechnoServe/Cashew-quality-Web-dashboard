@@ -2,7 +2,6 @@
 
 use backend\models\Company;
 use backend\models\Qar;
-use backend\models\Site;
 use backend\models\User;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -18,6 +17,35 @@ $this->params['breadcrumbs'][] = [
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel">
+
+    <div class="panel-heading bg-primary">
+
+        <h3 class="panel-title">
+
+            <?= Yii::t("app", "QAR")."#".$model->id . " " .Yii::t("app", "Request Details")?>
+
+            &nbsp;
+
+            <?php if($model->status == Qar::STATUS_TOBE_DONE): ?>
+            <span class="badge badge-warning"> <?=Qar::getStatusDropDownValues()[$model->status]?> </span>
+            <?php endif;  ?>
+
+            <?php if($model->status == Qar::STATUS_IN_PROGRESS): ?>
+                <span class="badge badge-info"> <?=Qar::getStatusDropDownValues()[$model->status]?> </span>
+            <?php endif;  ?>
+
+
+            <?php if($model->status == Qar::STATUS_COMPLETED): ?>
+                <span class="badge badge-mint"> <?=Qar::getStatusDropDownValues()[$model->status]?> </span>
+            <?php endif;  ?>
+
+
+            <?php if($model->status == Qar::STATUS_CANCELED): ?>
+                <span class="badge badge-danger"> <?=Qar::getStatusDropDownValues()[$model->status]?> </span>
+            <?php endif;  ?>
+
+        </h3>
+    </div>
 
     <div class="panel-body">
 
@@ -91,19 +119,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
 
-                [
-                    'attribute' => 'site',
-                    'value' => function ($model) {
-                        $site = Site::findOne($model->site);
-
-                        return $site->site_name." ".$site->site_location;
-                    },
-                ],
                 'audit_quantity',
                 'deadline',
                 'created_at',
                 'updated_at',
             ],
         ]) ?>
+    </div>
+
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <?php $site = \backend\models\Site::findOne($model->site)?>
+            <?=Html::a(Yii::t("app", "Site details"), ["sites/view", "id"=>$site->id], ["class"=>'btn-link'])?>
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <?= $this->render('../sites/_view_site', ['model' => $site]); ?>
     </div>
 </div>

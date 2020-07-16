@@ -80,8 +80,6 @@ class Company extends \common\models\Company
             // Create directory if not exists
             CashewAppHelper::createFolderIfNotExist(self::STORAGE_DIRECTORY);
 
-            var_dump($thumb_path);
-
             try {
                 $imageSaved = $image->saveAs($path);
 
@@ -138,8 +136,13 @@ class Company extends \common\models\Company
     public function deleteAttachments()
     {
         if ( ! $this->isNewRecord && $this->logo) {
-            unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo);
-            unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo);
+            try {
+                unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY."thumb_".$this->logo);
+                unlink(getcwd().Yii::getAlias("@web")."/".self::STORAGE_DIRECTORY.$this->logo);
+
+            } catch (\Exception $e) {
+                Yii::error("File does not exist");
+            }
         }
     }
 
