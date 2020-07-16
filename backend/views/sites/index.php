@@ -11,17 +11,35 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Sites');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?= $this->render('_mini_stat',
+    [
+       'totalSites'=>$totalSites,
+       'totalSitesWithoutImages'=>$totalSitesWithoutImages,
+       'totalSitesWithoutSiteLocation'=>$totalSitesWithoutSiteLocation,
+    ]); ?>
+
 <div class="panel">
+
+    <div class="panel-heading bg-primary">
+       <h3 class="panel-title"><?=Yii::t("app", "Search form")?></h3>
+    </div>
 
     <div class="panel-body">
         <?= $this->render('_search', ['model' => $searchModel]); ?>
 
     </div>
 
-    <div class="panel-body">
-        <p class="pull-right">
+    <hr>
+
+    <div class="panel-heading">
+        <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create Site'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
+        <h3 class="panel-title"><?=Yii::t("app", "Search results")?></h3>
+    </div>
+
+    <div class="panel-body">
         <div class="table-responsive" style="width: 100%">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -33,6 +51,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => function($model){
                             $company = Company::findOne($model->company_id);
                             return $company ?  $company->name : null;
+                        }
+                    ],
+                    [
+                        'attribute' => 'image',
+                        'format'=>'raw',
+                        'value' => function($model){
+                            return Html::img($model->getThumbImagePath(),
+                                ['width' => '50px']);
                         }
                     ],
                     'site_name',

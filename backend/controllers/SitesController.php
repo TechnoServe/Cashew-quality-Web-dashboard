@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\search\QarSearch;
 use backend\models\User;
 use Yii;
 use backend\models\Site;
@@ -10,6 +11,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * SitesController implements the CRUD actions for Site model.
@@ -55,9 +57,17 @@ class SitesController extends Controller
         $searchModel = new SiteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+
+        $totalSites =  Site::queryByCompany()->count();
+        $totalSitesWithoutImages =  Site::queryByCompany()->andWhere([ "or", ["image"=> ""],["image"=> null]])->count();
+        $totalSitesWithoutSiteLocation =  Site::queryByCompany()->andWhere([ "or", ["map_location"=> ""],["map_location"=> null]])->count();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'totalSites'=>$totalSites,
+            'totalSitesWithoutImages'=>$totalSitesWithoutImages,
+            'totalSitesWithoutSiteLocation'=>$totalSitesWithoutSiteLocation
         ]);
     }
 
@@ -69,8 +79,18 @@ class SitesController extends Controller
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+
+        $model->getLatitudeAndLongitudeFromMapLocation();
+
+        $searchModel = new QarSearch();
+        $searchModel->site = $model->id;
+        $qarListDataProvider = $searchModel->search(Yii::$app->request->queryParams, 20, false);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'qarListDataProvider' => $qarListDataProvider
         ]);
     }
 
@@ -85,10 +105,18 @@ class SitesController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+            // get the instance of the uploaded file
+            $model->siteImage = UploadedFile::getInstance($model, 'siteImage');
+
             $model->purifyInput();
 
-            if($model->validate() && $model->save())
+            if($model->validate() && $model->uploadImage()){
+                $model->save(false);
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                var_dump($model->getErrors());
+                die();
+            }
         }
 
         return $this->render('create', [
@@ -108,10 +136,16 @@ class SitesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+
+            // get the instance of the uploaded file
+            $model->siteImage = UploadedFile::getInstance($model, 'siteImage');
+
             $model->purifyInput();
 
-            if($model->validate() && $model->save())
+            if($model->validate() && $model->uploadImage()) {
+                $model->save(false);
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
@@ -122,14 +156,19 @@ class SitesController extends Controller
     /**
      * Deletes an existing Site model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
+     *
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     * @throws \yii\web\NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->deleteAttachments();
+        $model->delete();
         return $this->redirect(['index']);
     }
 

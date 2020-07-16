@@ -12,13 +12,19 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.6.0",
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "light/yii2-swagger": "^2.0@dev"
+        "light/yii2-swagger": "^2.0@dev",
+        "cetver/yii2-language-selector": "^1.0",
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "kartik-v/yii2-mpdf": "1.0.1",
+        "yiisoft/yii2-imagine": "~2.2.0",
+        "voime/yii2-google-maps": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -30,12 +36,7 @@
         "codeception/module-filesystem": "^1.0",
         "codeception/verify": "~0.5.0 || ~1.1.0",
         "symfony/browser-kit": ">=2.7 <=4.2.4",
-        "cetver/yii2-language-selector": "^1.0",
-        "kartik-v/yii2-widget-datepicker": "@dev",
-        "kartik-v/yii2-widget-select2": "@dev",
-        "kartik-v/yii2-mpdf": "1.0.1",
-        "yiisoft/yii2-imagine": "~2.2.0",
-        "yii2mod/yii2-google-maps-markers":"*"
+        "deployer/recipes": "^4.0"
     },
     "config": {
         "process-timeout": 1800,

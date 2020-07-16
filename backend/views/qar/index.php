@@ -25,84 +25,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="panel">
 
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?=Yii::t("app", "Search form")?></h3>
+    </div>
+
     <div class="panel-body">
         <?= $this->render('_search', ['model' => $searchModel]); ?>
     </div>
 
-    <div class="panel-body">
+    <hr>
 
-        <p class="pull-right">
+    <div class="panel-heading">
+        <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create Qar'), ['create'],
                 ['class' => 'btn btn-success']) ?>
         </p>
+        <h3 class="panel-title"><?=Yii::t("app", "Search results")?></h3>
+    </div>
 
+    <div class="panel-body">
         <div class="table-responsive" style="width: 100%">
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'attribute' => 'company_id',
-                    'value' => function($model){
-                        $company = Company::findOne($model->company_id);
-                        return $company ?  $company->name : null;
-                    }
-                ],
-                [
-                    'attribute' => 'buyer',
-                    'value' => function ($model) {
-                        $buyer = User::findOne($model->buyer);
-                        if ($buyer) {
-                            return $buyer->first_name." ".$buyer->middle_name." ".$buyer->last_name;
-                        }
-
-                        return null;
-                    },
-                ],
-                [
-                    'attribute' => 'field_tech',
-                    'value' => function ($model) {
-                        $field_tech = User::findOne($model->field_tech);
-                        if ($field_tech) {
-                            return $field_tech->first_name." ".$field_tech->middle_name." ".$field_tech->last_name;
-                        }
-
-                        return null;
-                    },
-                ],
-                [
-                    'attribute' => 'farmer',
-                    'value' => function ($model) {
-                        $farmer = User::findOne($model->farmer);
-                        if ($farmer) {
-                            return $farmer->first_name." ".$farmer->middle_name." ".$farmer->last_name;
-                        }
-
-                        return null;
-                    },
-                ],
-                [
-                    'attribute' => 'initiator',
-                    'value' => function ($model) {
-                        return Qar::getInitiatorByIndex($model->initiator);
-                    },
-                ],
-
-                [
-                    'attribute' => 'site',
-                    'value' => function ($model) {
-                        $site = Site::findOne($model->site);
-
-                        return $site->site_name." ".$site->site_location;
-                    },
-                ],
-                'audit_quantity',
-                'created_at',
-
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]); ?>
+            <?= $this->render('_grid_view', ['dataProvider' => $dataProvider]); ?>
         </div>
     </div>
 

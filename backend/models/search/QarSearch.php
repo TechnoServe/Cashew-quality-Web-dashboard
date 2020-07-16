@@ -41,7 +41,7 @@ class QarSearch extends Qar
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $limit = 0, $paginate = true)
     {
         $query = Qar::queryByCompany();
 
@@ -49,6 +49,8 @@ class QarSearch extends Qar
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => $paginate ? [] : false,
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
 
         $this->load($params);
@@ -87,6 +89,11 @@ class QarSearch extends Qar
                 'created_at',
                 date("Y/m/d H:i:s", strtotime($this->created_at_end." 23:59:59")),
             ]);
+        }
+
+        // If limit was passed
+        if ($limit > 0) {
+            $query->limit($limit);
         }
 
         return $dataProvider;

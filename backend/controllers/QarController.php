@@ -52,7 +52,7 @@ class QarController extends Controller
      * Lists all Qar models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($site = null)
     {
 
 
@@ -62,6 +62,10 @@ class QarController extends Controller
         $qarsCanceled = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_CANCELED])->count();
 
         $searchModel = new QarSearch();
+
+        if($site)
+            $searchModel->site = $site;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
