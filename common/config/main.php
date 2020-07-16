@@ -14,7 +14,7 @@ return [
 
     'bootstrap' =>
         [
-            ['class' => 'common\helpers\languageSwitcher'],
+            ['class' => 'common\helpers\LanguageSwitcher'],
         ],
 
     'components' => [
