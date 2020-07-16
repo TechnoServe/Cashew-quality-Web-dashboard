@@ -34,6 +34,7 @@ class SiteController extends Controller
                             'error',
                             'request-password-reset',
                             'reset-password',
+                            'verify-email',
                         ],
                         'allow' => true,
                     ],
@@ -189,5 +190,36 @@ class SiteController extends Controller
         }
 
         return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+    }
+
+    /**
+     * Set new password.
+     *
+     * @param string $token
+     *
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionVerifyEmail($token)
+    {
+        $this->layout = "login";
+    
+        $model = User::findOne(["verification_token" => $token, "status"=> User::STATUS_WAITING_FOR_ACTIVATION]);
+
+        if(!$model){
+            Yii::$app->session->setFlash("danger", Yii::t("app", "Invalid verification link"));
+            return $this->redirect(["site/login"]);
+        }
+        
+        $model->status = User::STATUS_ACTIVE;
+        $model->verification_token = null;
+
+        if($model->save(false)){
+            Yii::$app->session->setFlash("success", Yii::t("app", "Account activated successfully, Please consider changing your password!"));
+        } else {
+            Yii::$app->session->setFlash("success", Yii::t("app", "Could not activate account"));
+        }
+
+        return $this->redirect(["site/login"]);
     }
 }

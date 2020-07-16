@@ -36,6 +36,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     const STATUS_INACTIVE = 2;
 
+    const STATUS_WAITING_FOR_ACTIVATION = -1;
+
     const ROLE_ADMIN = 1;
 
     const ROLE_ADMIN_VIEW = 2;
@@ -101,8 +103,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'email'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['status', 'default', 'value' => self::STATUS_WAITING_FOR_ACTIVATION],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_WAITING_FOR_ACTIVATION]],
             [['pass'], 'required', 'on' => 'create'],
             //['pass', 'string', 'min' => 6]
         ];
@@ -308,6 +310,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             self::ROLE_ADMIN => Yii::t('app', 'Admin'),
             self::ROLE_ADMIN_VIEW => Yii::t('app', 'Admin View'),
+            self::ROLE_INSTITUTION_ADMIN => Yii::t('app', 'Institution Admin'),
+            self::ROLE_INSTITUTION_ADMIN_VIEW => Yii::t('app', 'Institution Admin View'),
             self::ROLE_FIELD_TECH => Yii::t('app', 'Field Tech'),
             self::ROLE_FIELD_BUYER => Yii::t('app', 'Buyer'),
             self::ROLE_FIELD_FARMER => Yii::t('app', 'Farmer'),
@@ -336,6 +340,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             self::STATUS_ACTIVE => Yii::t('app', 'Active'),
             self::STATUS_INACTIVE => Yii::t('app', 'Inactive'),
+            self::STATUS_WAITING_FOR_ACTIVATION => Yii::t('app', 'Waiting for activation'),
         ];
     }
 

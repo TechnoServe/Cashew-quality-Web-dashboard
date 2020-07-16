@@ -4,6 +4,7 @@ use backend\models\Company;
 use backend\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -101,7 +102,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'name',
                 'manufacturing_date',
 
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == "view") {
+                            return Url::to(['user-equipment/view', 'id' => $key]);
+                        }
+                    }
+                ],
             ],
         ]); ?>
 

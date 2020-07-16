@@ -6,10 +6,12 @@ use backend\models\search\UserEquipmentSearch;
 use Yii;
 use backend\models\User;
 use backend\models\search\UserSearch;
+use InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -110,7 +112,15 @@ class UserController extends Controller
             $model->purifyInput();
 
             if ($model->validate() && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                if ($model->sendEmail()) {
+                    Yii::$app->session->setFlash('success',
+                        'Email sent to newly created user.');
+
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('danger',
+                        'Sorry, we are unable to send an email to the newly created user.');
+                }
             }
 
         }

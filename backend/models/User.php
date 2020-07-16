@@ -66,6 +66,8 @@ class User extends \common\models\User
             return [
                 self::ROLE_INSTITUTION_ADMIN => Yii::t('app', 'Institution Admin'),
                 self::ROLE_INSTITUTION_ADMIN_VIEW => Yii::t('app', 'Institution Admin View'),
+                self::ROLE_INSTITUTION_ADMIN => Yii::t('app', 'Institution Admin'),
+                self::ROLE_INSTITUTION_ADMIN_VIEW => Yii::t('app', 'Institution Admin View'),
                 self::ROLE_FIELD_TECH => Yii::t('app', 'Field Tech'),
                 self::ROLE_FIELD_BUYER => Yii::t('app', 'Buyer'),
                 self::ROLE_FIELD_FARMER => Yii::t('app', 'Farmer'),
@@ -154,5 +156,41 @@ class User extends \common\models\User
 
         if($currentUser->role != User::ROLE_ADMIN && $currentUser->role != User::ROLE_ADMIN_VIEW)
             $this->company_id = $currentUser->company_id;
+    }
+
+    /**
+     * Sends an email with a link, for account verification.
+     *
+     * @return bool whether the email was send
+     */
+    public function sendEmail()
+    {
+        /* @var $user User */
+        $user = User::findOne([
+            'status' => User::STATUS_WAITING_FOR_ACTIVATION,
+            'email' => $this->email,
+        ]);
+
+        if (!$user) {
+            return false;
+        }
+
+        if (!User::findByVerificationToken($user->verification_token)) {
+            $user->generateEmailVerificationToken();
+            if (!$user->save()) {
+                return false;
+            }
+        }
+
+        return Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
+                ['user' => $user]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setTo($this->email)
+            ->setSubject('Account activation for ' . $user->username)
+            ->send();
     }
 }
