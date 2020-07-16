@@ -30,17 +30,18 @@ class SiteController extends Controller
                 'rules' => [
                     [
                         'actions' => [
-                            'login',
-                            'error',
+                            'login',                            
                             'request-password-reset',
                             'reset-password',
                             'verify-email',
                         ],
                         'allow' => true,
+                        'roles' => ['?'],
                     ],
                     [
                         'actions' => [
                             'logout',
+                            'error',
                             'index',
                             'switch-user-language',
                         ],

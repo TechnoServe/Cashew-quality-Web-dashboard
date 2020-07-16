@@ -163,7 +163,7 @@ class User extends \common\models\User
      *
      * @return bool whether the email was send
      */
-    public function sendEmail()
+    public function sendEmail($pass)
     {
         /* @var $user User */
         $user = User::findOne([
@@ -186,7 +186,9 @@ class User extends \common\models\User
             ->mailer
             ->compose(
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
+                ['user' => $user,
+                 'pass' => $pass,
+                 ]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->setTo($this->email)
