@@ -52,14 +52,18 @@ use yii\helpers\Url;
                     <!--================================-->
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
-                            <div class="pad-btm">
+
                                 <?php if(Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
                                     <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
                                 <?php else: ?>
-                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id) ?>
-                                    <?=Html::img($company->getThumbLogoPath(), ['width' => '50px']) ?>
+                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id);  $logoUrl = $company->getThumbLogoPath();?>
+
+                                    <?=!empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?>
+
                                 <?php endif; ?>
-                            </div>
+
+
+
                             <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
                                 <?php if(Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW): ?>
                                     <h4> <strong> <?= $company->name ?> </strong></h4>
