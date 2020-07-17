@@ -6,6 +6,7 @@ namespace common\helpers;
 
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 class CashewAppHtmlHelper
 {
@@ -49,7 +50,7 @@ class CashewAppHtmlHelper
         return $li .
             Html::a(Html::tag('i', '', ['class' => $icon_class]) .
                 Html::tag('span', '<strong>' . $text . '</strong>', ['class' => 'menu-title'])
-                , '/' . $url
+                , Url::to([$url])
             ) . "</li>";
 
     }

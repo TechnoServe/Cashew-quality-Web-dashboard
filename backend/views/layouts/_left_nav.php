@@ -115,17 +115,17 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('HOME', 'pli-home', Yii::t('app', 'Dashboard')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('qar/index', 'pli-receipt-4', Yii::t('app', 'QAR')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('report/index', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
 
                         <?php if(Yii::$app->user->getIdentity()->role != \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
 
 
-                            <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
+                            <?= CashewAppHtmlHelper::showMenuContent('sites/index', 'pli-map', Yii::t('app', 'Sites')) ?>
 
-                            <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
+                            <?= CashewAppHtmlHelper::showMenuContent('user-equipment/index', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
 
                         <?php endif; ?>
 
@@ -138,11 +138,11 @@ use yii\helpers\Url;
                         <li class="list-header"><?= Yii::t("app", "Company Administration") ?></li>
 
 
-                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('sites/index', 'pli-map', Yii::t('app', 'Sites')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('user/index', 'pli-male', Yii::t('app', 'Users')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment/index', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
 
                         <?php endif; ?>
 
@@ -154,9 +154,9 @@ use yii\helpers\Url;
                         <!--Category name-->
                         <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('company/index', 'pli-building', Yii::t('app', 'Companies')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('user/index', 'pli-male', Yii::t('app', 'Users')) ?>
 
                         <?php endif; ?>
 
