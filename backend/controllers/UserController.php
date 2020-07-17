@@ -111,8 +111,10 @@ class UserController extends Controller
 
             $model->purifyInput();
 
+            $plain_pass = $model->pass;
+
             if ($model->validate() && $model->save()) {
-                if ($model->sendEmail()) {
+                if ($model->sendEmail($plain_pass)) {
                     Yii::$app->session->setFlash('success',
                         'Email sent to newly created user.');
 

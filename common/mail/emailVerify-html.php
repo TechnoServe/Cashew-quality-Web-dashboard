@@ -16,8 +16,13 @@ $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'to
                         <tr>
                             <td class="o_bg-dark o_px-md o_py-xl o_xs-py-md o_sans o_text-md o_text-white" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 19px;line-height: 28px;color: #000000;padding-left: 24px;padding-right: 24px;padding-top: 64px;padding-bottom: 64px;">
                                 <h2 class="o_heading o_mb-xxs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 4px;font-size: 20px;line-height: 39px;">
-                                    Hello <?= Html::encode($user->username) ?>,
+                                    Hello <?= Html::encode($user->fullName) ?>,
                                 </h2>
+                                <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;margin-top: 24px;">
+                                    Here is your credentials:
+                                    <br> Username: <?= Html::encode($user->username) ?> 
+                                    <br> Password: <?= Html::encode($pass) ?>
+                                </p>
                                 <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">
                                     Follow the link below to verify your email:
                                 </p>
