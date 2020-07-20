@@ -193,6 +193,7 @@ class User extends \common\models\User
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->setTo($this->email)
             ->setSubject('Account activation for ' . $user->username)
+            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->send();
     }
 }

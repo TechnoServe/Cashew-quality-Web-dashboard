@@ -63,6 +63,7 @@ class PasswordResetRequestForm extends Model
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->setTo($this->email)
             ->setSubject('Password reset for ' . $user->username)
+            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->send();
     }
 }

@@ -113,18 +113,22 @@ class UserController extends Controller
 
             $plain_pass = $model->pass;
 
+            $transaction = Yii::$app->db->beginTransaction();
+
             if ($model->validate() && $model->save()) {
                 if ($model->sendEmail($plain_pass)) {
-                    Yii::$app->session->setFlash('success',
-                        'Email sent to newly created user.');
+                    Yii::$app->session->setFlash('success', 'Email sent to newly created user.');
+
+                    $transaction ->commit();
 
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
+                    $transaction ->rollBack();
                     Yii::$app->session->setFlash('danger',
                         'Sorry, we are unable to send an email to the newly created user.');
                 }
             }
-
+            $transaction ->rollBack();
         }
 
         return $this->render('create', [
