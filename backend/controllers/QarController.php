@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\User;
+use common\helpers\CashewAppHtmlHelper;
 use Yii;
 use backend\models\Qar;
 use backend\models\search\QarSearch;
@@ -34,7 +35,7 @@ class QarController extends Controller
 
                     [
                         'allow' => true,
-                        'roles' => [User::ROLE_INSTITUTION_ADMIN],
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
                     ],
 
                 ],
@@ -109,6 +110,9 @@ class QarController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
+            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER,
+            'showFarmerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_FARMER,
         ]);
     }
 
@@ -133,6 +137,9 @@ class QarController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
+            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER,
+            'showFarmerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_FARMER,
         ]);
     }
 

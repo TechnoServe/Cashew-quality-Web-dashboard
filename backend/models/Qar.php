@@ -30,8 +30,23 @@ class Qar extends \common\models\Qar
     public static function queryByCompany(){
         $loggedInUser = Yii::$app->user->identity;
 
-        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
-            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
+
+            if($loggedInUser->role == User::ROLE_INSTITUTION_ADMIN || $loggedInUser->role == User::ROLE_INSTITUTION_ADMIN_VIEW)
+                return self::find()->where(["company_id" => $loggedInUser->company_id]);
+
+            if($loggedInUser->role == User::ROLE_FIELD_TECH)
+                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["field_tech"=>$loggedInUser->id]);
+
+
+            if($loggedInUser->role == User::ROLE_FIELD_BUYER)
+                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
+
+
+            if($loggedInUser->role == User::ROLE_FIELD_FARMER)
+                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
+
+        }
 
         return self::find();
     }
@@ -125,6 +140,22 @@ class Qar extends \common\models\Qar
         //validate site
         if(!Site::queryByCompany()->andWhere(["id"=>$this->site])->exists())
             $this->site = null;
+
+        // If user is not an institution admin
+        if ($currentUser->role != User::ROLE_ADMIN && $currentUser->role != User::ROLE_ADMIN_VIEW) {
+
+            if ($currentUser->role == User::ROLE_FIELD_TECH) {
+                $this->field_tech = $currentUser->id;
+            }
+
+            if ($currentUser->role == User::ROLE_FIELD_BUYER) {
+                $this->buyer = $currentUser->id;
+            }
+
+            if ($currentUser->role == User::ROLE_FIELD_FARMER) {
+                $this->farmer = $currentUser->id;
+            }
+        }
 
         $this->company_id = $currentUser->company_id;
     }

@@ -4,6 +4,7 @@
 namespace common\helpers;
 
 
+use backend\models\User;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -50,7 +51,7 @@ class CashewAppHtmlHelper
         return $li .
             Html::a(Html::tag('i', '', ['class' => $icon_class]) .
                 Html::tag('span', '<strong>' . $text . '</strong>', ['class' => 'menu-title'])
-                , Url::to([$url])
+                , '/' . $url
             ) . "</li>";
 
     }
@@ -93,5 +94,30 @@ class CashewAppHtmlHelper
         }
 
         return $params;
+    }
+
+    /**
+     * Function helps to show/hide forms
+     *
+     * @param $role
+     *
+     * @return bool
+     */
+    public static function showFieldTechSelectorOnForm($role)
+    {
+        return $role != User::ROLE_FIELD_BUYER;
+    }
+
+
+    /**
+     * Function helps to show/hide forms
+     *
+     * @param $role
+     *
+     * @return bool
+     */
+    public static function showBuyerSelectorOnForm($role)
+    {
+        return $role != User::ROLE_FIELD_BUYER;
     }
 }

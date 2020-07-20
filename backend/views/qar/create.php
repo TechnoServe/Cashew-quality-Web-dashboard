@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\User;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -8,6 +9,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Qar');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Qars'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="panel">
 
@@ -16,6 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $this->render('_form', [
             'model' => $model,
+            'showFieldTechSelectorOnForm' => $showFieldTechSelectorOnForm,
+            'showBuyerSelectorOnForm' => $showBuyerSelectorOnForm,
+            'showFarmerSelectorOnForm' => $showFarmerSelectorOnForm,
         ]) ?>
 
     </div>
