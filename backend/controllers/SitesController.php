@@ -30,7 +30,7 @@ class SitesController extends Controller
                     [
                         'actions' => ['index','view'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],
 
                     [
