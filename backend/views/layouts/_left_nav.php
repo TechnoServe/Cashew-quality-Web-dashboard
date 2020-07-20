@@ -121,7 +121,11 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                        ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
+                        ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Free version data')) ?>
+                        <?php endif; ?>
 
                         <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
                         || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
