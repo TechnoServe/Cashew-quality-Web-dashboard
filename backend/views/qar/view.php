@@ -119,7 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
 
-                'audit_quantity',
+                'number_of_bags',
+                'volume_of_stock',
                 'deadline',
                 'created_at',
                 'updated_at',

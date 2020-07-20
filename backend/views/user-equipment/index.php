@@ -14,15 +14,23 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel">
 
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?=Yii::t("app", "Search form")?></h3>
+    </div>
+
     <div class="panel-body">
         <?= $this->render('_search', ['model' => $searchModel]); ?>
     </div>
 
-    <div class="panel-body">
 
-        <p class="pull-right">
+    <div class="panel-heading">
+        <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create User Equipment'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
+        <h3 class="panel-title"><?=Yii::t("app", "Search results")?></h3>
+    </div>
+
+    <div class="panel-body">
 
         <div class="table-responsive" style="width: 100%">
             <?= GridView::widget([

@@ -11,6 +11,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel">
 
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?=Yii::t("app", "Equipment")?>  • <?=Yii::t("app", "Create form")?></h3>
+    </div>
+
     <div class="panel-body">
 
         <?= $this->render('_form', [

@@ -39,9 +39,9 @@ class Qar extends \yii\db\ActiveRecord
     {
         return [
             [['buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
-            [['initiator', 'site', 'buyer', 'field_tech'], 'required'],
-            [['created_at', 'updated_at', 'company_id', 'deadline', 'status'], 'safe'],
-            [['audit_quantity'], 'string', 'max' => 255],
+            [['number_of_bags','volume_of_stock'], 'number'],
+            [['initiator', 'site', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
+            [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags'], 'safe'],
             [['buyer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['buyer' => 'id']],
             [['farmer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['farmer' => 'id']],
             [['field_tech'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['field_tech' => 'id']],
@@ -60,11 +60,12 @@ class Qar extends \yii\db\ActiveRecord
             'farmer' => Yii::t('app', 'Farmer'),
             'initiator' => Yii::t('app', 'Initiator'),
             'site' => Yii::t('app', 'Site'),
-            'audit_quantity' => Yii::t('app', 'Estimated Audit Quantity'),
+            'volume_of_stock' => Yii::t('app', 'Estimated Volume of Stock (KG)'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'company_id' => Yii::t('app', 'Company'),
             'deadline' => Yii::t('app', 'Deadline'),
+            'number_of_bags' => Yii::t('app', 'Estimated number of bags'),
         ];
     }
 

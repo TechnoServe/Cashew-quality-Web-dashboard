@@ -52,11 +52,16 @@ use backend\models\User;
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'audit_quantity')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'number_of_bags')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 
     <div class="row">
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'volume_of_stock')->textInput(['maxlength' => true]) ?>
+        </div>
+
         <div class="col-md-6">
             <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date")) ?>
         </div>

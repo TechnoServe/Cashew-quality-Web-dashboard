@@ -16,6 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel">
 
+
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?=Yii::t("app", "User details")?></h3>
+    </div>
+
     <div class="panel-body">
 
         <p>
@@ -70,9 +75,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 
-    <div class="panel-body">
+</div>
 
-        <h4>Equipments</h4>
+
+<div class="panel">
+
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?=Yii::t("app", "User Equipments")?></h3>
+    </div>
+
+    <div class="panel-body">
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

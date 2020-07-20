@@ -68,7 +68,7 @@ use yii\grid\GridView;
                 return $site->site_name." ".$site->site_location;
             },
         ],
-        'audit_quantity',
+        'number_of_bags',
         'created_at',
 
         ['class' => 'yii\grid\ActionColumn'],
