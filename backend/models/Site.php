@@ -25,7 +25,7 @@ class Site extends baseSite
             [
                 ['siteImage'],
                 'file',
-                'skipOnEmpty' => true,
+                'skipOnEmpty' => !$this->isNewRecord,
                 'extensions' => 'png, jpg, gif',
             ],
         ]);

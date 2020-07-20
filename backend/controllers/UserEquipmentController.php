@@ -30,12 +30,12 @@ class UserEquipmentController extends Controller
                     [
                         'actions' => ['index','view'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],
 
                     [
                         'allow' => true,
-                        'roles' => [User::ROLE_INSTITUTION_ADMIN],
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH],
                     ],
                 ],
             ],
@@ -103,6 +103,7 @@ class UserEquipmentController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
         ]);
         
     }
@@ -133,6 +134,7 @@ class UserEquipmentController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
         ]);
     }
 

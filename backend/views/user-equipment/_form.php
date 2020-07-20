@@ -17,9 +17,12 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="row">
+
+        <?php if($showFieldTechSelectorOnForm): ?>
         <div class="col-md-6">
             <?= $form->field($model, 'id_user')->widget(Select2::className(), User::getUsersSelectWidgetValues('id_user', User::ROLE_FIELD_TECH, "id_user",   Yii::t('app', 'Select Field Tech'))) ?>
         </div>
+        <?php endif; ?>
 
         <div class="col-md-6">
             <?= $form->field($model, 'brand')->textInput(['maxlength' => true]) ?>

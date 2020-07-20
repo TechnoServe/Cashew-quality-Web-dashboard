@@ -123,49 +123,49 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Reports')) ?>
 
-
-                        <?php if(Yii::$app->user->getIdentity()->role != \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
-
-
-                            <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
-
-                            <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
-
-                        <?php endif; ?>
-
-
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN): ?>
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
+                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_FIELD_TECH
+                        ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
+                        ?>
 
                         <li class="list-divider"></li>
 
+                        <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
 
-                        <li class="list-header"><?= Yii::t("app", "Company Administration") ?></li>
+                        <?php endif; ?>
 
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                                || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
+                                || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                                ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
+                        ?>
 
                         <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
 
                         <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'User-Equipments')) ?>
+                        <?php endif; ?>
+
+                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_FIELD_TECH
+                            ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
+                            ?>
+
+                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'Equipments')) ?>
 
                         <?php endif; ?>
 
-
                         <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW): ?>
 
-                        <li class="list-divider"></li>
-
-                        <!--Category name-->
-                        <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
-
                         <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
-
-                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
 
                         <?php endif; ?>
 
                     </ul>
-
 
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">

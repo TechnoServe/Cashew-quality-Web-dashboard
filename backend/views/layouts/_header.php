@@ -43,15 +43,10 @@ use yii\helpers\Url;
                         <?=Yii::$app->user->identity->first_name?> <?=Yii::$app->user->identity->middle_name?> <?=Yii::$app->user->identity->last_name?> <i class="demo-pli-male icon-fw"></i>
                     </a>
 
-
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                         <ul class="head-list">
                             <li>
                                 <a href="<?=Url::to(["user/view", "id"=>Yii::$app->user->getId()])?>"><i class="demo-pli-male icon-fw"></i> <?= Yii::t("app", "Profile") ?></a>
-                            </li>
-                            <li>
-                                <a href="<?=Url::to(["user/update", "id"=>Yii::$app->user->getId()])?>">
-                                    <i class="demo-pli-gear icon-fw"></i> <?= Yii::t("app", "Settings") ?></a>
                             </li>
                             <li>
                                 <a href="<?=Url::to(['/site/logout'])?>" data-method="post"><i class="demo-pli-unlock icon-fw"></i>

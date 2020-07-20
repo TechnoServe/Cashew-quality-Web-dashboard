@@ -26,8 +26,13 @@ class UserEquipment extends \common\models\UserEquipment
      */
     public static function queryByCompany(){
         $loggedInUser = Yii::$app->user->identity;
-        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
-            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+        if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
+
+            if($loggedInUser->role == User::ROLE_FIELD_TECH)
+                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["id_user"=>$loggedInUser->id]);
+
+            return self::find()->where(["company_id" => $loggedInUser->company_id]);
+        }
 
         return self::find();
     }
@@ -43,7 +48,7 @@ class UserEquipment extends \common\models\UserEquipment
             [
                 ['image'],
                 'file',
-                'skipOnEmpty' => true,
+                'skipOnEmpty' => !$this->isNewRecord,
                 'extensions' => 'png, jpg, gif',
             ],
         ]);
@@ -170,6 +175,15 @@ class UserEquipment extends \common\models\UserEquipment
      */
     public function purifyInput(){
         $loggedInUser = Yii::$app->user->identity;
+
+
+        // If user is not an institution admin
+        if ($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
+            if ($loggedInUser->role == User::ROLE_FIELD_TECH) {
+                $this->id_user = $loggedInUser->id;
+            }
+        }
+
         //Set company id
         $this->company_id = $loggedInUser->company_id;
     }

@@ -63,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'site_name',
                     'site_location:ntext',
+                    'map_location',
                     'created_at',
                     'updated_at',
 
