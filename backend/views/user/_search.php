@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'status')->dropDownList(\backend\models\User::getUserStatus(), ["prompt" => Yii::t('app', 'All')]) ?>
+            <?= $form->field($model, 'status')->dropDownList( array_merge([0 => Yii::t('app', 'All')], \backend\models\User::getUserStatus())) ?>
         </div>
 
         <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>

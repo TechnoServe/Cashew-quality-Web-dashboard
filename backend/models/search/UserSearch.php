@@ -56,8 +56,13 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        if(empty($this->status))
+
+        if($this->status == null)
             $this->status = User::STATUS_ACTIVE;
+
+        else if ($this->status == 0 )
+            $this->status = null;
+
 
         // grid filtering conditions
         $query->andFilterWhere([
