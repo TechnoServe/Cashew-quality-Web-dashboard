@@ -82,7 +82,7 @@ class UserController extends Controller
         $model = $this->findModel($id);
         $searchModel = new UserEquipmentSearch();
         $searchModel->id_user = $model->id;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 30, false);
         
         return $this->render('view', [
             'model' => $model,

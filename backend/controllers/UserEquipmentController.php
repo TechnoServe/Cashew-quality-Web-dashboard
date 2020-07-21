@@ -53,9 +53,13 @@ class UserEquipmentController extends Controller
      * Lists all UserEquipment models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($user_id)
     {
         $searchModel = new UserEquipmentSearch();
+
+        if(!empty($user_id))
+            $searchModel->id_user = $user_id;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

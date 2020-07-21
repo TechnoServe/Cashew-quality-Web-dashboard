@@ -39,7 +39,7 @@ class UserEquipmentSearch extends UserEquipment
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $limit = 0, $paginate = true)
     {
         $query = UserEquipment::queryByCompany();
 
@@ -47,6 +47,7 @@ class UserEquipmentSearch extends UserEquipment
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => $paginate ? [] : false,
         ]);
 
         $this->load($params);
@@ -67,6 +68,12 @@ class UserEquipmentSearch extends UserEquipment
             ->andFilterWhere(['like', 'model', $this->model])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'picture', $this->picture]);
+
+
+        // If limit was passed
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
 
         return $dataProvider;
     }
