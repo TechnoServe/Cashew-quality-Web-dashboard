@@ -50,6 +50,13 @@ class Company extends \common\models\Company
         ];
     }
 
+    public static function getCompanyStatusByIndex($index)
+    {
+        $statusValues = self::getStatusDropdownValues();
+
+        return isset($statusValues[$index]) ? $statusValues[$index] : null;
+    }
+
     /**
      * Upload file
      */

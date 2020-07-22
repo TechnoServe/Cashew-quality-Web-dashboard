@@ -98,6 +98,20 @@ class Qar extends \common\models\Qar
         ];
     }
 
+    /**
+     * Get qar status by index/value
+     *
+     * @param $index
+     *
+     * @return mixed|null
+     */
+    public static function getQarStatusByIndex($index)
+    {
+        $statusValues = self::getStatusDropDownValues();
+
+        return isset($statusValues[$index]) ? $statusValues[$index] : null;
+    }
+
 
     /**
      * Get initiator name by index/value

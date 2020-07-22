@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Company;
 use backend\models\search\QarSearch;
 use backend\models\User;
 use Yii;
@@ -28,7 +29,7 @@ class SitesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view', 'export-csv'],
                         'allow' => true,
                         'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],
@@ -187,5 +188,44 @@ class SitesController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Export Data to CSV
+     */
+    public function actionExportCsv()
+    {
+        $query = Site::find();
+        $filter = Yii::$app->request->post();
+
+        $filter['site_name'] ? $query->andFilterWhere(['site_name' => $filter['site_name']]) : null;
+        $filter['site_location'] ? $query->andWhere(['site_location' => $filter['site_location']]) : null;
+        $filter['company_id'] ? $query->andWhere(['company_id' => $filter['company_id']]) : null;
+
+        $data = $query->asArray()->all();
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=sites' . date('Y/m/d h:m:s') . '.csv');
+
+        $output = fopen("php://output", "w");
+        fputcsv($output, [
+            Yii::t('app', 'Company'),
+            Yii::t('app', 'Site Name'),
+            Yii::t('app', 'Site Location'),
+            Yii::t('app', 'Map Coordinates'),
+            Yii::t('app', 'Created At')
+        ]);
+
+        foreach ($data as $row) {
+            fputcsv($output, [
+                $row['company_id'] ? Company::findOne($row['company_id'])->name : '',
+                $row['site_name'],
+                $row['site_location'],
+                $row['map_location'],
+                $row['created_at']
+            ]);
+        }
+        fclose($output);
+        exit();
     }
 }

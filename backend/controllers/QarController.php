@@ -2,11 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\Company;
 use backend\models\User;
 use common\helpers\CashewAppHtmlHelper;
 use Yii;
 use backend\models\Qar;
 use backend\models\search\QarSearch;
+use backend\models\Site;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -170,5 +172,61 @@ class QarController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Export Data to CSV
+     */
+    public function actionExportCsv()
+    {
+        $query = Qar::find();
+        $filter = Yii::$app->request->post();
+
+        //$filter['created_at_start'] ? $query->andFilterWhere(['created_at_start' => $filter['created_at_start']]) : null;
+        //$filter['created_at_end'] ? $query->andWhere(['created_at_end' => $filter['created_at_end']]) : null;
+        $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
+        $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
+        $filter['farmer'] ? $query->andWhere(['farmer' => $filter['farmer']]) : null;
+        $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
+        $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
+        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+
+        $data = $query->asArray()->all();
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=qars' . date('Y/m/d h:m:s') . '.csv');
+
+        $output = fopen("php://output", "w");
+        fputcsv($output, [
+            Yii::t('app', 'Company'),
+            Yii::t('app', 'Buyer'),
+            Yii::t('app', 'Field Tech'),
+            Yii::t('app', 'Farmer'),
+            Yii::t('app', 'Initiator'),
+            Yii::t('app', 'Site'),
+            Yii::t('app', 'Estimated Volume of bags'),
+            Yii::t('app', 'Estimated Volume of Stock (KG)'),
+            Yii::t('app', 'Deadline'),
+            Yii::t('app', 'Status'),
+            Yii::t('app', 'Created At')
+        ]);
+
+        foreach ($data as $row) {
+            fputcsv($output, [
+                $row['company_id'] ? Company::findOne($row['company_id'])->name : '',
+                $row['buyer'] ? User::findOne($row['buyer'])->getFullName() : '',
+                $row['field_tech'] ? User::findOne($row['field_tech'])->getFullName() : '',
+                $row['farmer'] ? User::findOne($row['farmer'])->getFullName() : '',
+                $row['initiator'] ? Qar::getInitiatorByIndex($row['initiator']) : '',
+                $row['site'] ? Site::findOne($row['site'])->site_name : '',
+                $row['number_of_bags'],
+                $row['volume_of_stock'],
+                $row['deadline'],
+                $row['status'] ? Qar::getQarStatusByIndex($row['status']) : '',
+                $row['created_at']
+            ]);
+        }
+        fclose($output);
+        exit();
     }
 }

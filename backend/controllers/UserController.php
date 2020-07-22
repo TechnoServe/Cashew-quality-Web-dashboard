@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Company;
 use backend\models\search\UserEquipmentSearch;
 use Yii;
 use backend\models\User;
@@ -29,13 +30,13 @@ class UserController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view'],
+                        'actions' => ['view', 'export-csv'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
 
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'export-csv'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW, User::ROLE_INSTITUTION_ADMIN, User::ROLE_INSTITUTION_ADMIN_VIEW],
                     ],
@@ -203,5 +204,61 @@ class UserController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Export Data to CSV
+     */
+    public function actionExportCsv()
+    {
+        $query = User::find();
+        $filter = Yii::$app->request->post();
+
+        $filter['username'] ? $query->andFilterWhere(['username' => $filter['username']]) : null;
+        $filter['first_name'] ? $query->andWhere(['first_name' => $filter['first_name']]) : null;
+        $filter['last_name'] ? $query->andWhere(['last_name' => $filter['last_name']]) : null;
+        $filter['role'] ? $query->andWhere(['role' => $filter['role']]) : null;
+        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+
+        $data = $query->asArray()->all();
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=users'.date('Y/m/d h:m:s').'.csv');
+
+        $output = fopen("php://output", "w");
+        fputcsv($output, [
+            Yii::t('app', 'Username'),
+            Yii::t('app', 'First Name'),
+            Yii::t('app', 'Middle Name'),
+            Yii::t('app', 'Last Name'),
+            Yii::t('app', 'Company'),
+            Yii::t('app', 'Email'),
+            Yii::t('app', 'Phone'),
+            Yii::t('app', 'Address'),
+            Yii::t('app', 'Preferred Language'),
+            Yii::t('app', 'Role'),
+            Yii::t('app', 'Status'),
+            Yii::t('app', 'Created At')
+        ]);
+
+        foreach($data as $row)
+        {
+            fputcsv($output, [
+                $row['username'],
+                $row['first_name'],
+                $row['middle_name'],
+                $row['last_name'],
+                $row['company_id'] ? Company::findOne($row['company_id'])->name : '',
+                $row['email'],
+                $row['phone'],
+                $row['address'],
+                $row['language'] ? User::getLanguageByIndex($row['language']) : '',
+                $row['role'] ? User::getUserRoleByIndex($row['role']) : '',
+                $row['status'] ? User::getUserStatusByIndex($row['status']) : '',
+                $row['created_at']
+            ]);
+        }
+        fclose($output);
+        exit();
     }
 }

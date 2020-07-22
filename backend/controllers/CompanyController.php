@@ -27,7 +27,7 @@ class CompanyController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => ['index', 'view', 'export-csv'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN ,  User::ROLE_ADMIN_VIEW],
                     ],
@@ -162,5 +162,56 @@ class CompanyController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Export Data to CSV
+     */
+    public function actionExportCsv()
+    {
+        $query = Company::find();
+        $filter = Yii::$app->request->post();
+
+        $filter['name'] ? $query->andFilterWhere(['name' => $filter['name']]) : null;
+        $filter['city'] ? $query->andWhere(['city' => $filter['city']]) : null;
+        $filter['address'] ? $query->andWhere(['address' => $filter['address']]) : null;
+        $filter['primary_contact'] ? $query->andWhere(['primary_contact' => $filter['primary_contact']]) : null;
+        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+
+        $data = $query->asArray()->all();
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=companies' . date('Y/m/d h:m:s') . '.csv');
+
+        $output = fopen("php://output", "w");
+        fputcsv($output, [
+            Yii::t('app', 'Name'),
+            Yii::t('app', 'City'),
+            Yii::t('app', 'Address'),
+            Yii::t('app', 'Primary Contact'),
+            Yii::t('app', 'Primary Phone'),
+            Yii::t('app', 'Primary Email'),
+            Yii::t('app', 'Fax Number'),
+            Yii::t('app', 'Status'),
+            Yii::t('app', 'Description'),
+            Yii::t('app', 'Created At')
+        ]);
+
+        foreach ($data as $row) {
+            fputcsv($output, [
+                $row['name'],
+                $row['city'],
+                $row['address'],
+                $row['primary_contact'],
+                $row['primary_phone'],
+                $row['primary_email'],
+                $row['fax_number'],
+                $row['status'] ? Company::getCompanyStatusByIndex($row['status']) : '',
+                $row['description'],
+                $row['created_at']
+            ]);
+        }
+        fclose($output);
+        exit();
     }
 }

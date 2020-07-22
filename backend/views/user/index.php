@@ -4,6 +4,7 @@ use backend\models\Company;
 use backend\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\UserSearch */
@@ -15,19 +16,41 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel">
 
     <div class="panel-heading bg-primary">
-        <h3 class="panel-title"><?=Yii::t("app", "Search form")?></h3>
+        <h3 class="panel-title"><?= Yii::t("app", "Search form") ?></h3>
     </div>
 
     <div class="panel-body">
         <?= $this->render('_search', ['model' => $searchModel]); ?>
     </div>
 
+    <hr>
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
-        <h3 class="panel-title"><?=Yii::t("app", "Search results")?></h3>
+        <p class="pull-right pad-all">
+            <?php
+            
+                echo Html::a(
+                    Yii::t('app', 'Export to CSV'), ['export-csv'],
+                    [
+                        'data' => [
+                            'method' => 'post',
+                            'params' => [
+                                'username' => $searchModel['username'],
+                                'first_name' => $searchModel['first_name'],
+                                'last_name' => $searchModel['last_name'],
+                                'role' => $searchModel['role'],
+                                'status' => $searchModel['status']
+                            ],
+                        ],
+                        'class' => 'btn btn-mint'
+                    ]
+                );
+            ?>
+        </p>
+        <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>
 
     <div class="panel-body">
@@ -40,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
                     [
                         'attribute' => 'company_id',
-                        'value' => function($model){
+                        'value' => function ($model) {
                             $company = Company::findOne($model->company_id);
                             return $company ?  $company->name : null;
                         }
@@ -51,13 +74,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'last_name',
                     'address',
                     [
-                        'attribute' => Yii::t('app', 'Status'),
+                        'attribute' => 'status',
                         'value' => function ($model) {
                             return User::getUserStatusByIndex($model->status);
                         }
                     ],
                     [
-                        'attribute' => Yii::t('app', 'Role'),
+                        'attribute' => 'role',
                         'value' => function ($model) {
                             return User::getUserRole()[$model->role];
                         }

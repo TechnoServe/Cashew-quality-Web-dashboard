@@ -44,15 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'first_name',
                 'middle_name',
                 'last_name',
-                'email:email',
-                'phone',
                 [
                     'attribute' => 'company_id',
-                    'value' => function($model){
+                    'value' => function ($model) {
                         $company = Company::findOne($model->company_id);
                         return $company ?  $company->name : null;
                     }
                 ],
+                'email:email',
                 'phone',
                 'address',
                 [
