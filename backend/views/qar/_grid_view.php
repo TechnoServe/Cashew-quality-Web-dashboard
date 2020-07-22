@@ -53,12 +53,6 @@ use yii\grid\GridView;
                 return null;
             },
         ],
-        [
-            'attribute' => 'initiator',
-            'value' => function ($model) {
-                return Qar::getInitiatorByIndex($model->initiator);
-            },
-        ],
 
         [
             'attribute' => 'site',
@@ -70,6 +64,14 @@ use yii\grid\GridView;
         ],
         'number_of_bags',
         'created_at',
+
+        [
+            'attribute' => 'status',
+            'format' => 'raw',
+            'value' => function ($model) {
+                return "<strong>" . Qar::getStatusDropDownValues()[$model->status] ."</strong>";
+            },
+        ],
 
         ['class' => 'yii\grid\ActionColumn'],
     ],

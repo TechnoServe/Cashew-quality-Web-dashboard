@@ -24,6 +24,73 @@ class Qar extends \common\models\Qar
     const STATUS_CANCELED = 4;
 
     /**
+     *
+     */
+    const FIELD_NUMBER_OF_BAGS_SAMPLED = 'number_bag_sampled';
+    const FIELD_TOTAL_NUMBER_OF_BAGS = 'number_total_bags';
+    const FIELD_VOLUME_TOTAL_STOCK = 'volume_total_stock';
+    const FIELD_NUT_WEIGHT = 'nut_weight';
+    const FIELD_NUT_COUNT = 'nut_count';
+    const FIELD_MOISTURE_CONTENT = 'moisture_content';
+    const FIELD_FOREIGN_MATERIAL = 'foreign_materials';
+    const FIELD_GOOD_KERNEL = 'good_kernel';
+    const FIELD_SPOTTED_KERNEL = 'spotted_kernel';
+    const FIELD_IMMATURE_KERNEL = 'immature_kernel';
+    const FIELD_OILY_KERNEL = 'oily_kernel';
+    const FIELD_BAD_KERNEL = 'bad_kernel';
+    const FIELD_VOID_KERNEL = 'void_kernel';
+    /**
+     *
+     */
+
+    /**
+     *
+     */
+    const RESULT_KOR = 'kor';
+    const RESULT_DEFECTIVE_RATE = 'defective_rate';
+    const RESULT_FOREIGN_MATERIAL_RATE = 'foreign_material_rate';
+    const RESULT_MOISTURE_CONTENT = 'moisture_content';
+    const RESULT_NUT_COUNT = 'nut_count';
+    const RESULT_USEFUL_KERNEL = 'useful_kernel';
+
+    /**
+     * Labels for qar measurements
+     * @return array
+     */
+    public static function qarMeasurementFieldLabels(){
+        return [
+            self::FIELD_NUMBER_OF_BAGS_SAMPLED => Yii::t("app", "Number of bags sampled"),
+            self::FIELD_TOTAL_NUMBER_OF_BAGS => Yii::t("app", "Total number of bags"),
+            self::FIELD_VOLUME_TOTAL_STOCK => Yii::t("app", "Total volume of stock"),
+            self::FIELD_NUT_WEIGHT => Yii::t("app", "Nut weight"),
+            self::FIELD_NUT_COUNT => Yii::t("app", "Nut count"),
+            self::FIELD_MOISTURE_CONTENT => Yii::t("app", "Moistrue content"),
+            self::FIELD_FOREIGN_MATERIAL => Yii::t("app", "Foreign material"),
+            self::FIELD_GOOD_KERNEL => Yii::t("app", "Good kernel"),
+            self::FIELD_SPOTTED_KERNEL => Yii::t("app", "Spotted kernel"),
+            self::FIELD_IMMATURE_KERNEL => Yii::t("app", "Immature kernel"),
+            self::FIELD_OILY_KERNEL => Yii::t("app", "Oily kernel"),
+            self::FIELD_BAD_KERNEL => Yii::t("app", "Bad kernel"),
+            self::FIELD_VOID_KERNEL => Yii::t("app", "Void kernel"),
+        ];
+    }
+
+    /**
+     * Labels for qar results
+     * @return array
+     */
+    public static function qarResultLabels(){
+        return [
+            self::RESULT_KOR => Yii::t("app", "KOR"),
+            self::RESULT_DEFECTIVE_RATE => Yii::t("app", "Defective rate"),
+            self::RESULT_FOREIGN_MATERIAL_RATE => Yii::t("app", "Foreign material rate"),
+            self::RESULT_MOISTURE_CONTENT => Yii::t("app", "Moisture content rate"),
+            self::RESULT_NUT_COUNT => Yii::t("app", "Nut count"),
+            self::RESULT_USEFUL_KERNEL => Yii::t("app", "Useful kernel"),
+        ];
+    }
+
+    /**
      * Query users by company
      * @return \yii\db\ActiveQuery
      */

@@ -53,7 +53,7 @@ class UserEquipmentController extends Controller
      * Lists all UserEquipment models.
      * @return mixed
      */
-    public function actionIndex($user_id)
+    public function actionIndex($user_id = null)
     {
         $searchModel = new UserEquipmentSearch();
 
