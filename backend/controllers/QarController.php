@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\QarDetail;
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use common\helpers\CashewAppHtmlHelper;
 use Yii;
 use backend\models\Qar;
@@ -87,8 +89,16 @@ class QarController extends Controller
      */
     public function actionView($id)
     {
+
+        // Find Qar to be displayed
+        $model = $this->findModel($id);
+
+        // Find QAR measurements
+        $measurements = QarDetail::findQarDetailsAsArray($model->id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'measurements' => CashewAppHelper::groupAssArrayBy($measurements, "sample_number")
         ]);
     }
 

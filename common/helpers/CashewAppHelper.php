@@ -12,4 +12,23 @@ class CashewAppHelper
             mkdir($path, 0777, true);
         }
     }
+
+
+    public static function groupAssArrayBy($array, $key) {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return;
+    }
+
+
+   public static function searchForValueInArray($key, $array) {
+        foreach ($array as $measurement) {
+            if ($measurement["key"] == $key) {
+                return $measurement;
+            }
+        }
+        return null;
+    }
 }
