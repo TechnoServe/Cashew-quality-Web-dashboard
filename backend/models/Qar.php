@@ -39,6 +39,9 @@ class Qar extends \common\models\Qar
     const FIELD_OILY_KERNEL = 'oily_kernel';
     const FIELD_BAD_KERNEL = 'bad_kernel';
     const FIELD_VOID_KERNEL = 'void_kernel';
+    const FIELD_LOT_INFO='lot_info';
+    const FIELD_REQUEST_ID= 'request_id';
+    const FIELD_CREATED_AT= 'created_at';
     /**
      *
      */
