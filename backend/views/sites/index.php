@@ -42,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
 
             echo Html::a(
-                Yii::t('app', 'Export to CSV'), ['export-csv'],
+                Yii::t('app', 'Export to CSV'),
+                ['export-csv'],
                 [
                     'data' => [
                         'method' => 'post',
@@ -56,6 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             );
             ?>
+        </p>
+        <p class="pull-right pad-all">
+            <?= Html::a(Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
         </p>
         <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>
