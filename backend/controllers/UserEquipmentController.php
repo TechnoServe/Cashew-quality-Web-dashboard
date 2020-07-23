@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Company;
 use backend\models\User;
 use Yii;
 use backend\models\UserEquipment;
@@ -28,7 +29,7 @@ class UserEquipmentController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view', 'export-csv'],
                         'allow' => true,
                         'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],
@@ -53,7 +54,7 @@ class UserEquipmentController extends Controller
      * Lists all UserEquipment models.
      * @return mixed
      */
-    public function actionIndex($user_id)
+    public function actionIndex($user_id = null)
     {
         $searchModel = new UserEquipmentSearch();
 
@@ -170,5 +171,49 @@ class UserEquipmentController extends Controller
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * Export Data to CSV
+     */
+    public function actionExportCsv()
+    {
+        $query = UserEquipment::find();
+        $filter = Yii::$app->request->post();
+
+        $filter['id_user'] ? $query->andFilterWhere(['id_user' => $filter['id_user']]) : null;
+        $filter['brand'] ? $query->andWhere(['brand' => $filter['brand']]) : null;
+        $filter['model'] ? $query->andWhere(['model' => $filter['model']]) : null;
+        $filter['name'] ? $query->andWhere(['name' => $filter['name']]) : null;
+
+        $data = $query->asArray()->all();
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=user-equipments' . date('Y/m/d h:m:s') . '.csv');
+
+        $output = fopen("php://output", "w");
+        fputcsv($output, [
+            Yii::t('app', 'User'),
+            Yii::t('app', 'Company'),
+            Yii::t('app', 'Brand'),
+            Yii::t('app', 'Model'),
+            Yii::t('app', 'Name'),
+            Yii::t('app', 'Manufacturing Date'),
+            Yii::t('app', 'Created At')
+        ]);
+
+        foreach ($data as $row) {
+            fputcsv($output, [
+                $row['id_user'] ? User::findOne($row['id_user'])->getFullName() : '',
+                $row['company_id'] ? Company::findOne($row['company_id'])->name : '',
+                $row['brand'],
+                $row['model'],
+                $row['name'],
+                $row['manufacturing_date'],
+                $row['created_at']
+            ]);
+        }
+        fclose($output);
+        exit();
     }
 }

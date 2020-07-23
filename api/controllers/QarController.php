@@ -1,7 +1,8 @@
 <?php
+
 namespace api\controllers;
 
-use api\models\Qar;
+use backend\models\Qar;
 use common\models\QarDetail;
 use common\models\User;
 use Yii;
@@ -43,68 +44,86 @@ class QarController extends ActiveController
         $qar = Qar::findOne($id);
         $data = [
             Qar::FIELD_LOT_INFO => [
-                Qar::FIELD_NUMBER_BAG_SAMPLED => $qar->number_of_bags,
-                Qar::FIELD_NUMBER_TOTAL_BAGS => $qar->number_of_bags,
+                Qar::FIELD_NUMBER_OF_BAGS_SAMPLED => $qar->number_of_bags,
+                Qar::FIELD_TOTAL_NUMBER_OF_BAGS => $qar->number_of_bags,
                 Qar::FIELD_VOLUME_TOTAL_STOCK => $qar->volume_of_stock
             ],
-            Qar::FIELD_REQUEST_ID=> $qar->id
+            Qar::FIELD_REQUEST_ID => $qar->id
         ];
 
         foreach ($qar->qarDetails as $detail) {
             $data[$detail->key] = [
                 'value' => $detail->value,
                 'picture' => $detail->picture,
-                'value_with_shell'=>$detail->value_with_shell,
-                'value_without_shell'=>$detail->value_without_shell,
+                'value_with_shell' => $detail->value_with_shell,
+                'value_without_shell' => $detail->value_without_shell,
             ];
         }
         return $data;
 
     }
 
-    public function actionSave(){
+    public function actionSave()
+    {
 
-        $data=Yii::$app->request->post();
+        $data = Yii::$app->request->post();
 
-        $qar=new Qar();
+        $data_keys = [
+            Qar::FIELD_NUT_WEIGHT,
+            Qar::FIELD_NUT_COUNT,
+            Qar::FIELD_MOISTURE_CONTENT,
+            Qar::FIELD_FOREIGN_MATERIAL,
+            Qar::FIELD_GOOD_KERNEL,
+            Qar::FIELD_SPOTTED_KERNEL,
+            Qar::FIELD_IMMATURE_KERNEL,
+            Qar::FIELD_OILY_KERNEL,
+            Qar::FIELD_BAD_KERNEL,
+            Qar::FIELD_VOID_KERNEL
+        ];
+        $result_keys = [
+            Qar::RESULT_DEFECTIVE_RATE,
+            Qar::RESULT_FOREIGN_MATERIAL_RATE,
+            Qar::RESULT_KOR,
+            Qar::RESULT_MOISTURE_CONTENT,
+            Qar::RESULT_NUT_COUNT,
+            Qar::RESULT_USEFUL_KERNEL
+        ];
 
-        foreach($data as $key => $value){
-            switch ($key) {
+        $qar = new Qar();
 
-                case 'buyer':
-                    $qar->buyer=$value;
-                    break;
-                case 'field_tech':
-                    $qar->field_tech=$value;
-                    break;
-                case 'site':
-                    $qar->site=$value;
-                    break;
-                case 'initiator':
-                    $qar->initiator=$value;
-                    break;
-                case Qar::FIELD_LOT_INFO:
-                    $qar->number_of_bags=$value[Qar::FIELD_NUMBER_TOTAL_BAGS];
-                    $qar->volume_of_stock=$value[Qar::FIELD_VOLUME_TOTAL_STOCK];
-                    $qar->save();
-                    $qar->refresh();
-                    break;
-                default:
-                    $qar_detail=new QarDetail();
-                    $qar_detail->key= $key;
-                    $qar_detail->value=$value['value']??NULL;
-                    $qar_detail->value_with_shell=$value['value_with_shell'];
-                    $qar_detail->value_without_shell=$value['value_with_shell'];
-                    $qar_detail->picture=$value['picture']??NULL;
-                    $qar_detail->id_qar=$qar->id;
-                    $qar_detail->save();
-                    var_dump($qar->id);
-                    die();
+        $qar->buyer = $data['buyer'];
+        $qar->field_tech = $data['field_tech'];
+        $qar->site = $data['site'];
+        $qar->initiator = $data['initiator'];
+        $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
+        $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
+        $qar->save();
+        $qar->refresh();
+
+        foreach ($data as $key => $value) {
+            if (in_array($key, $data_keys)) {
+                $qar_detail = new QarDetail();
+                $qar_detail->key = $key;
+                $qar_detail->value = $value['value'];
+                $qar_detail->value_with_shell = $value['value_with_shell'];
+                $qar_detail->value_without_shell = $value['value_with_shell'];
+                $qar_detail->picture = $value['picture'];
+                $qar_detail->id_qar = $qar->id;
+                $qar_detail->result = 0;
+                $qar_detail->save();
+            } elseif (in_array($key, $result_keys)) {
+                $qar_detail = new QarDetail();
+                $qar_detail->key = $key;
+                $qar_detail->value = $value['value'];
+                $qar_detail->value_with_shell = $value['value_with_shell'];
+                $qar_detail->value_without_shell = $value['value_with_shell'];
+                $qar_detail->picture = $value['picture'];
+                $qar_detail->id_qar = $qar->id;
+                $qar_detail->result = 1;
+                $qar_detail->save();
             }
         }
-
         return $qar;
-
     }
 
 

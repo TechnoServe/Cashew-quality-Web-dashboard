@@ -48,7 +48,7 @@ class Site extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'company_id' => Yii::t('app', 'Company'),
-            'map_location' => Yii::t('app', 'Map Cordinates'),
+            'map_location' => Yii::t('app', 'Map Coordinates'),
         ];
     }
 }

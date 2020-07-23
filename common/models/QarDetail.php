@@ -10,10 +10,11 @@ use Yii;
  * @property int $id
  * @property int $id_qar
  * @property string $key
- * @property string $value
- * @property string|null $value_with_shell
- * @property string|null $value_without_shell
- * @property string $picture
+ * @property float|null $value
+ * @property int|null $result
+ * @property float|null $value_with_shell
+ * @property float|null $value_without_shell
+ * @property string|null $picture
  * @property int|null $sample_number
  * @property string $created_at
  * @property string $updated_at
@@ -36,11 +37,11 @@ class QarDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_qar', 'key', 'value', 'picture'], 'required'],
-            [['id_qar', 'sample_number'], 'integer'],
-            [['value'], 'string'],
+            [['id_qar', 'key'], 'required'],
+            [['id_qar', 'result', 'sample_number'], 'integer'],
+            [['value', 'value_with_shell', 'value_without_shell'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['key', 'value_with_shell', 'value_without_shell', 'picture'], 'string', 'max' => 255],
+            [['key', 'picture'], 'string', 'max' => 255],
             [['id_qar'], 'exist', 'skipOnError' => true, 'targetClass' => Qar::className(), 'targetAttribute' => ['id_qar' => 'id']],
         ];
     }
@@ -55,6 +56,7 @@ class QarDetail extends \yii\db\ActiveRecord
             'id_qar' => Yii::t('app', 'Id Qar'),
             'key' => Yii::t('app', 'Key'),
             'value' => Yii::t('app', 'Value'),
+            'result' => Yii::t('app', 'Result'),
             'value_with_shell' => Yii::t('app', 'Value With Shell'),
             'value_without_shell' => Yii::t('app', 'Value Without Shell'),
             'picture' => Yii::t('app', 'Picture'),

@@ -12,17 +12,19 @@ $this->title = Yii::t('app', 'Sites');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?= $this->render('_mini_stat',
+<?= $this->render(
+    '_mini_stat',
     [
-       'totalSites'=>$totalSites,
-       'totalSitesWithoutImages'=>$totalSitesWithoutImages,
-       'totalSitesWithoutSiteLocation'=>$totalSitesWithoutSiteLocation,
-    ]); ?>
+        'totalSites' => $totalSites,
+        'totalSitesWithoutImages' => $totalSitesWithoutImages,
+        'totalSitesWithoutSiteLocation' => $totalSitesWithoutSiteLocation,
+    ]
+); ?>
 
 <div class="panel">
 
     <div class="panel-heading bg-primary">
-       <h3 class="panel-title"><?=Yii::t("app", "Search form")?></h3>
+        <h3 class="panel-title"><?= Yii::t("app", "Search form") ?></h3>
     </div>
 
     <div class="panel-body">
@@ -36,7 +38,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create Site'), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
-        <h3 class="panel-title"><?=Yii::t("app", "Search results")?></h3>
+        <p class="pull-right pad-all">
+            <?php
+
+            echo Html::a(
+                Yii::t('app', 'Export to CSV'), ['export-csv'],
+                [
+                    'data' => [
+                        'method' => 'post',
+                        'params' => [
+                            'site_name' => $searchModel['site_name'],
+                            'site_location' => $searchModel['site_location'],
+                            'company_id' => $searchModel['company_id']
+                        ],
+                    ],
+                    'class' => 'btn btn-mint'
+                ]
+            );
+            ?>
+        </p>
+        <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>
 
     <div class="panel-body">
@@ -48,17 +69,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\SerialColumn'],
                     [
                         'attribute' => 'company_id',
-                        'value' => function($model){
+                        'value' => function ($model) {
                             $company = Company::findOne($model->company_id);
                             return $company ?  $company->name : null;
                         }
                     ],
                     [
                         'attribute' => 'image',
-                        'format'=>'raw',
-                        'value' => function($model){
-                            return Html::img($model->getThumbImagePath(),
-                                ['width' => '50px']);
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Html::img(
+                                $model->getThumbImagePath(),
+                                ['width' => '50px']
+                            );
                         }
                     ],
                     'site_name',
