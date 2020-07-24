@@ -32,7 +32,7 @@ class QarController extends Controller
                 'rules' => [
 
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view', 'export-csv', 'export-pdf'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -189,7 +189,7 @@ class QarController extends Controller
      */
     public function actionExportCsv()
     {
-        $query = Qar::find();
+        $query = Qar::queryByCompany();
         $filter = Yii::$app->request->post();
 
         //$filter['created_at_start'] ? $query->andFilterWhere(['created_at_start' => $filter['created_at_start']]) : null;

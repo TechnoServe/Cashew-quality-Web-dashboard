@@ -29,7 +29,7 @@ class SitesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view', 'export-csv'],
+                        'actions' => ['index','view', 'export-csv', 'export-pdf'],
                         'allow' => true,
                         'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],

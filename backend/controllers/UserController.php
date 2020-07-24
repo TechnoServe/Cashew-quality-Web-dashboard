@@ -30,13 +30,13 @@ class UserController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'export-csv'],
+                        'actions' => ['view', 'export-csv', 'export-pdf'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
 
                     [
-                        'actions' => ['index', 'export-csv'],
+                        'actions' => ['index', 'export-csv', 'export-pdf'],
                         'allow' => true,
                         'roles' => [User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW, User::ROLE_INSTITUTION_ADMIN, User::ROLE_INSTITUTION_ADMIN_VIEW],
                     ],

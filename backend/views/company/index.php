@@ -15,10 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-body">
         <?= $this->render('_search', ['model' => $searchModel]); ?>
-
     </div>
 
-    <div class="panel-body">
+    <hr>
+
+    <div class="panel-heading">
 
         <p class="pull-right pad-all">
             <?= Html::a(Yii::t('app', 'Create Company'), ['create'], ['class' => 'btn btn-success']) ?>
@@ -28,7 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
 
             echo Html::a(
-                Yii::t('app', 'Export to CSV'), ['export-csv'],
+                Yii::t('app', 'Export to CSV'),
+                ['export-csv'],
                 [
                     'data' => [
                         'method' => 'post',
@@ -44,39 +46,47 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             );
             ?>
+        </p>
+        <p class="pull-right pad-all">
+            <?= Html::a(Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+        </p>
+        <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
+    </div>
 
-            <div class="table-responsive" style="width: 100%">
-                <?= GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-                        [
-                            'attribute' => 'logo',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::img(
-                                    $model->getThumbLogoPath(),
-                                    ['width' => '50px']
-                                );
-                            }
-                        ],
-                        'name',
-                        'city',
-                        'address',
-                        'primary_contact',
-                        'fax_number',
-                        [
-                            'attribute' => 'status',
-                            'value' => function ($model) {
-                                return Company::getStatusDropdownValues()[$model->status];
-                            },
-                        ],
-                        'created_at',
-                        ['class' => 'yii\grid\ActionColumn'],
+    <div class="panel-body">
+
+        <div class="table-responsive" style="width: 100%">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'tableOptions' => ['class' => 'table table-bordered table-striped table-vcenter'],
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'attribute' => 'logo',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Html::img(
+                                $model->getThumbLogoPath(),
+                                ['width' => '50px']
+                            );
+                        }
                     ],
-                ]); ?>
-            </div>
+                    'name',
+                    'city',
+                    'address',
+                    'primary_contact',
+                    'fax_number',
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($model) {
+                            return Company::getStatusDropdownValues()[$model->status];
+                        },
+                    ],
+                    'created_at',
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+        </div>
 
     </div>
 </div>
