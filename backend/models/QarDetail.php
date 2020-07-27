@@ -11,7 +11,7 @@ class QarDetail extends \common\models\QarDetail
 
 
     public static function findQarDetailsAsArray($id_qar){
-        return  self::find()->where(["id_qar"=>$id_qar])->select(['key','value','result','picture','sample_number', 'created_at', 'updated_at'])->asArray()->all();
+        return  self::find()->where(["id_qar"=>$id_qar])->select(['key','value', 'value_without_shell', 'value_with_shell', 'result','picture','sample_number', 'created_at', 'updated_at'])->asArray()->all();
     }
 
     public static function findOneMeasurementFromQarDetailsArray($measurement, $data){
