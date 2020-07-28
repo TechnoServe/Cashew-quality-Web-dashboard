@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p class="mar-no"><?=Yii::t("app", "Users")?></p>
                     </div>
                 </div>
-                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all users"), ["free/pull-fire-store"], ["class" => "btn btn-info btn-block"]) ?>
+                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all users"), ["free/export-users-csv"], ["class" => "btn btn-info btn-block"]) ?>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-primary panel-colorful media middle pad-all">
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p class="mar-no"><?=Yii::t("app", "QR(s)")?></p>
                     </div>
                 </div>
-                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' . Yii::t("app", "Download all QAR requests"), ["free/pull-fire-store"], ["class" =>"btn btn-primary btn-block"]) ?>
+                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' . Yii::t("app", "Download all QAR requests"), ["free/export-qar-csv"], ["class" =>"btn btn-primary btn-block"]) ?>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-mint panel-colorful media middle pad-all">
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p class="mar-no"><?=Yii::t("app", "Sites")?></p>
                     </div>
                 </div>
-                <?= Html::a( '<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all Sites"), ["free/pull-fire-store"], ["class" => "btn btn-mint btn-block"]) ?>
+                <?= Html::a( '<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all Sites"), ["free/export-sites-csv"], ["class" => "btn btn-mint btn-block"]) ?>
             </div>
         </div>
     </div>

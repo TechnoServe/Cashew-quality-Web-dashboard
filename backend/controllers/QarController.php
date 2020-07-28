@@ -6,7 +6,6 @@ use backend\models\Company;
 use backend\models\QarDetail;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
-use common\helpers\CashewAppHtmlHelper;
 use Yii;
 use backend\models\Qar;
 use backend\models\search\QarSearch;
