@@ -40,6 +40,20 @@ AppAsset::register($this);
             <!--===================================================-->
             <div id="page-content">
 
+                <?php
+
+                // display all flash messages kept into the current user's session
+                $flashMessages = Yii::$app->session->getAllFlashes();
+
+                if ($flashMessages) {
+                    echo '<div class="flashes" style="list-style-type: none;">';
+                    foreach ($flashMessages as $key => $message) {
+                        echo '<p class="alert alert-' . $key . '">' . $message . " </p>";
+                    }
+                    echo '</div>';
+                }
+                ?>
+
                 <?=$content?>
 
 
