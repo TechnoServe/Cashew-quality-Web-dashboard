@@ -22,7 +22,7 @@
         "cetver/yii2-language-selector": "^1.0",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-widget-select2": "@dev",
-        "kartik-v/yii2-mpdf": "1.0.1",
+        "kartik-v/yii2-mpdf": "*",
         "yiisoft/yii2-imagine": "~2.2.0",
         "voime/yii2-google-maps": "*",
         "2amigos/yii2-highcharts-widget" : "~1.0"

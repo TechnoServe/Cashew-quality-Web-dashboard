@@ -5,7 +5,10 @@ namespace backend\controllers;
 use backend\models\User;
 use Yii;
 use backend\models\Company;
+use backend\models\Qar;
 use backend\models\search\CompanySearch;
+use backend\models\Site;
+use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -193,6 +196,18 @@ class CompanyController extends Controller
             Yii::t('app', 'Primary Email'),
             Yii::t('app', 'Fax Number'),
             Yii::t('app', 'Status'),
+            Yii::t('app', 'Top Admin Users'),
+            Yii::t('app', 'Top Admin View Users'),
+            Yii::t('app', 'Institution Admin Users'),
+            Yii::t('app', 'Institution Admin View Users'),
+            Yii::t('app', 'Field Tech Users'),
+            Yii::t('app', 'Buyer Users'),
+            Yii::t('app', 'Farmer Users'),
+            Yii::t('app', 'Qars To be Done'),
+            Yii::t('app', 'Qars In Progress'),
+            Yii::t('app', 'Qars Completed'),
+            Yii::t('app', 'Qars Canceled'),
+            Yii::t('app', 'Sites'),
             Yii::t('app', 'Description'),
             Yii::t('app', 'Created At')
         ]);
@@ -207,6 +222,18 @@ class CompanyController extends Controller
                 $row['primary_email'],
                 $row['fax_number'],
                 $row['status'] ? Company::getCompanyStatusByIndex($row['status']) : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role"=>User::ROLE_ADMIN])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_ADMIN_VIEW])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_INSTITUTION_ADMIN])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_INSTITUTION_ADMIN_VIEW])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_TECH])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_BUYER])->count() : '',
+                $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_FARMER])->count() : '',                
+                $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status"=> Qar::STATUS_TOBE_DONE])->count() : '',
+                $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status" => Qar::STATUS_IN_PROGRESS])->count() : '',
+                $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status"=> Qar::STATUS_COMPLETED])->count() : '',
+                $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status"=> Qar::STATUS_CANCELED])->count() : '',
+                $row['id'] ? Site::find()->andWhere(["company_id" => $row['id']])->count() : '',
                 $row['description'],
                 $row['created_at']
             ]);
@@ -222,12 +249,21 @@ class CompanyController extends Controller
     {
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $html = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $mpdf = new \mPDF('c', 'A4', '', '', 0, 0, 0, 0, 0, 0);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->list_indent_first_level = 0;  // 1 or 0 - whether to indent the first level of a list
-        $mpdf->WriteHTML($html);
-        $mpdf->Output();
-        exit;
+        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'cssFile' => '@backend/web/css/pdf.css',
+            'cssInline' => '.kv-heading-1{font-size:18px}',
+            'options' => ['title' => 'Companies Report Title'],
+            'methods' => [
+                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
+                'SetFooter' => ['{PAGENO}'],
+            ],
+        ]);
+        return $pdf->render();
     }
 }

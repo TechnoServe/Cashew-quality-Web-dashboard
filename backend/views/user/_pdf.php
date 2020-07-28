@@ -1,34 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Users</title>
-    <style>
-        .page {
-            padding: 2cm;
-        }
-
-        table {
-            border-spacing: 0;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        table td,
-        table th {
-            border: 1px solid #ccc;
-        }
-
-        table th {
-            background-color: whitesmoke;
-        }
-    </style>
-</head>
-
 <body>
-    <div class="page">
-        <h1>List of Users</h1>
-        <table border="0">
+    <div class="panel-body">
+        <h3>List of Users</h3>
+        <table class="table-bordered">
             <tr>
                 <th>Username</th>
                 <th>First Name</th>
@@ -45,10 +21,10 @@
             </tr>
             <?php
 
-use backend\models\Company;
-use backend\models\User;
+            use backend\models\Company;
+            use backend\models\User;
 
-$no = 1;
+            $no = 1;
             foreach ($dataProvider->getModels() as $row) {
             ?>
                 <tr>

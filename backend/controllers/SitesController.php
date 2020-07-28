@@ -8,6 +8,7 @@ use backend\models\User;
 use Yii;
 use backend\models\Site;
 use backend\models\search\SiteSearch;
+use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -236,12 +237,21 @@ class SitesController extends Controller
     {
         $searchModel = new SiteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $html = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $mpdf = new \mPDF('c', 'A4', '', '', 0, 0, 0, 0, 0, 0);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->list_indent_first_level = 0;  // 1 or 0 - whether to indent the first level of a list
-        $mpdf->WriteHTML($html);
-        $mpdf->Output();
-        exit;
+        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'cssFile' => '@backend/web/css/pdf.css',
+            'cssInline' => '.kv-heading-1{font-size:18px}',
+            'options' => ['title' => 'Sites Report Title'],
+            'methods' => [
+                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
+                'SetFooter' => ['{PAGENO}'],
+            ],
+        ]);
+        return $pdf->render();
     }
 }

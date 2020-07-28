@@ -1,34 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Sites</title>
-    <style>
-        .page {
-            padding: 2cm;
-        }
-
-        table {
-            border-spacing: 0;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        table td,
-        table th {
-            border: 1px solid #ccc;
-        }
-
-        table th {
-            background-color: whitesmoke;
-        }
-    </style>
-</head>
-
 <body>
-    <div class="page">
-        <h1>List of Sites</h1>
-        <table border="0">
+    <div class="panel-body">
+        <h3>List of Sites</h3>
+        <table class="table-bordered">
             <tr>
                 <th>Company</th>
                 <th>Site Name</th>
