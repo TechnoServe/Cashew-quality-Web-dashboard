@@ -124,7 +124,7 @@ use yii\helpers\Url;
                         <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
                         ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
                         ?>
-                        <?= CashewAppHtmlHelper::showMenuContent('report', 'pli-bar-chart', Yii::t('app', 'Free version data')) ?>
+                        <?= CashewAppHtmlHelper::showMenuContent('free', 'pli-bar-chart', Yii::t('app', 'Free version data')) ?>
                         <?php endif; ?>
 
                         <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN

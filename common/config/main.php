@@ -6,6 +6,8 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)).'/vendor',
 
+    'timeZone' => 'Africa/Kigali',
+
     // Default language
     'language' => 'en',
 

@@ -2,11 +2,15 @@
 
 namespace backend\controllers;
 
+use backend\helpers\FirestoreHelper;
 use backend\models\form\ResetPasswordForm;
 use backend\models\form\PasswordResetRequestForm;
 use backend\models\User;
+use MrShan0\PHPFirestore\FirestoreClient;
+use Wead\Firestore\WeadFirestoreClient;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -80,6 +84,7 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
+
 
     /**
      * Login action.
