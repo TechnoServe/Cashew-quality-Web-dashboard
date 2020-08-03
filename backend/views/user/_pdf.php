@@ -19,7 +19,7 @@ use backend\models\User;
             </tr>
             <?php
             $no = 1;
-            foreach ($dataProvider->getModels() as $row) {?>
+            foreach ($models as $row) {?>
                 <tr>
                     <?php if($showCompany): ?>
                         <td><?= $row['username'] ?> <br>  <?= $row['company_id'] ? '<strong>'. Company::findOne($row['company_id'])->name .'</strong>' : '' ?></td>

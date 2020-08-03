@@ -25,7 +25,7 @@
             use backend\models\User;
 
             $no = 1;
-            foreach ($dataProvider->getModels() as $row) {
+            foreach ($models as $row) {
             ?>
                 <tr>
                     <?php if($showCompany): ?>

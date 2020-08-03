@@ -3,21 +3,18 @@
 <div class="panel-body">
     <table class="table-bordered">
         <tr>
-            <th>User</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Name</th>
-            <th>Manufacturing Date</th>
-            <th>Created At</th>
+            <th><?=Yii::t("app", "User")?></th>
+            <th><?=Yii::t("app", "Brand")?></th>
+            <th><?=Yii::t("app", "Model")?></th>
+            <th><?=Yii::t("app", "Name")?></th>
+            <th><?=Yii::t("app", "Manufacturing date")?></th>
+            <th><?=Yii::t("app", "Created At")?></th>
         </tr>
         <?php
-
         use backend\models\Company;
         use backend\models\User;
-        use yii\helpers\Html;
-
         $no = 1;
-        foreach ($dataProvider->getModels() as $row) {
+        foreach ($models as $row) {
         ?>
             <tr>
                 <?php if($showCompany): ?>

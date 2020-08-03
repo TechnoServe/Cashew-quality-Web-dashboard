@@ -174,13 +174,13 @@ class CompanyController extends Controller
     public function actionExportCsv()
     {
         $query = Company::find();
-        $filter = Yii::$app->request->post();
+        $filter = Yii::$app->request->getQueryParams();
 
-        $filter['name'] ? $query->andFilterWhere(['name' => $filter['name']]) : null;
-        $filter['city'] ? $query->andWhere(['city' => $filter['city']]) : null;
-        $filter['address'] ? $query->andWhere(['address' => $filter['address']]) : null;
-        $filter['primary_contact'] ? $query->andWhere(['primary_contact' => $filter['primary_contact']]) : null;
-        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+        $filter['name'] ? $query->andFilterWhere(['like', 'name' , $filter['name']]) : null;
+        $filter['city'] ? $query->andFilterWhere(['like', 'city' ,  $filter['city']]) : null;
+        $filter['address'] ? $query->andFilterWhere(['like', 'address' ,  $filter['address']]) : null;
+        $filter['primary_contact'] ? $query->andFilterWhere(['like', 'primary_contact' , $filter['primary_contact']]) : null;
+        $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
 
         $data = $query->asArray()->all();
 
@@ -248,8 +248,15 @@ class CompanyController extends Controller
      */
     public function actionExportPdf()
     {
-        $searchModel = new CompanySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['dataProvider' => $dataProvider]), Pdf::FORMAT_A4, Pdf::ORIENT_LANDSCAPE, '.kv-heading-1{font-size:18px}', ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "companies_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
+        $query = Company::find();
+        $filter = Yii::$app->request->getQueryParams();
+
+        $filter['name'] ? $query->andFilterWhere(['name' => $filter['name']]) : null;
+        $filter['city'] ? $query->andWhere(['city' => $filter['city']]) : null;
+        $filter['address'] ? $query->andWhere(['address' => $filter['address']]) : null;
+        $filter['primary_contact'] ? $query->andWhere(['primary_contact' => $filter['primary_contact']]) : null;
+        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+
+        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all()]), Pdf::FORMAT_A4, Pdf::ORIENT_LANDSCAPE, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "companies_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

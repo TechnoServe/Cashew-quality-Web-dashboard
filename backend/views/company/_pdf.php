@@ -34,7 +34,7 @@
         use backend\models\User;
 
         $no = 1;
-        foreach ($dataProvider->getModels() as $row) {
+        foreach ($models as $row) {
         ?>
             <tr>
                 <td><?= $row['name'] ?></td>

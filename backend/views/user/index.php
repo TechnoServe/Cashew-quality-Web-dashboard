@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     Yii::t('app', 'Export to CSV'), ['export-csv'],
                     [
                         'data' => [
-                            'method' => 'post',
+                            'method' => 'get',
                             'params' => [
                                 'username' => $searchModel['username'],
                                 'first_name' => $searchModel['first_name'],
@@ -45,9 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 );
             ?>
 
-            <?= Html::a('<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+            <?= Html::a('<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['data' => [
+                'method' => 'get',
+                'params' => [
+                    'username' => $searchModel['username'],
+                    'first_name' => $searchModel['first_name'],
+                    'last_name' => $searchModel['last_name'],
+                    'role' => $searchModel['role'],
+                    'status' => $searchModel['status'],
+                    'company_id' => $searchModel['company_id']
+                ],
+            ], 'class' => 'btn btn-warning']); ?>
 
-            <?= Html::a('<i class="pli-add icon-fw"></i>' . Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('<i class="pli-add icon-fw"></i>' . Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-primary']) ?>
 
 
         </p>

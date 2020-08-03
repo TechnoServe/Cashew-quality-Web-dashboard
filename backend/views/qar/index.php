@@ -37,14 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?php
-
-            echo Html::a( '<i class="pli-file-csv icon-fw"></i>' .
+            <?=  Html::a( '<i class="pli-file-csv icon-fw"></i>' .
                 Yii::t('app', 'Export to CSV'),
                 ['export-csv'],
                 [
                     'data' => [
-                        'method' => 'post',
+                        'method' => 'get',
                         'params' => [
                             'create_at_start' => $searchModel['created_at_start'],
                             'created_at_end' => $searchModel['created_at_end'],
@@ -53,7 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'farmer' => $searchModel['farmer'],
                             'initiator' => $searchModel['initiator'],
                             'site' => $searchModel['site'],
-                            'status' => $searchModel['status']
+                            'status' => $searchModel['status'],
+                            'company_id' => $searchModel['company_id']
                         ],
                     ],
                     'class' => 'btn btn-mint'
@@ -61,12 +60,33 @@ $this->params['breadcrumbs'][] = $this->title;
             );
             ?>
 
-            <?= Html::a( '<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+
+            <?=  Html::a( '<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'),
+                ['export-pdf'],
+                [
+                    'data' => [
+                        'method' => 'get',
+                        'params' => [
+                            'create_at_start' => $searchModel['created_at_start'],
+                            'created_at_end' => $searchModel['created_at_end'],
+                            'buyer' => $searchModel['buyer'],
+                            'field_tech' => $searchModel['field_tech'],
+                            'farmer' => $searchModel['farmer'],
+                            'initiator' => $searchModel['initiator'],
+                            'site' => $searchModel['site'],
+                            'status' => $searchModel['status'],
+                            'company_id' => $searchModel['company_id']
+                        ],
+                    ],
+                    'class' => 'btn btn-warning'
+                ]
+            );
+            ?>
 
             <?= Html::a( '<i class="pli-add icon-fw"></i>' .
                 Yii::t('app', 'Create Qar'),
                 ['create'],
-                ['class' => 'btn btn-success']
+                ['class' => 'btn btn-primary']
             ) ?>
 
         </p>
