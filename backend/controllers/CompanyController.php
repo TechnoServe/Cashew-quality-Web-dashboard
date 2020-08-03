@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use Yii;
 use backend\models\Company;
 use backend\models\Qar;
@@ -249,21 +250,6 @@ class CompanyController extends Controller
     {
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@backend/web/css/pdf.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}',
-            'options' => ['title' => 'Companies Report Title'],
-            'methods' => [
-                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
-                'SetFooter' => ['{PAGENO}'],
-            ],
-        ]);
-        return $pdf->render();
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['dataProvider' => $dataProvider]), Pdf::FORMAT_A4, Pdf::ORIENT_LANDSCAPE, '.kv-heading-1{font-size:18px}', ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "companies_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

@@ -1,42 +1,35 @@
-<!DOCTYPE html>
-<html>
+<?php
+use backend\models\Company;
+use backend\models\User;
+?>
 
-<body>
-    <div class="panel-body">
-        <h3>List of Users</h3>
+<?= $this->render("../shared/_pdf_list_header", ["title"=>Yii::t("app", "List of users")])?>
+
+<div class="panel-body">
         <table class="table-bordered">
             <tr>
-                <th>Username</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>Company</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Preferred Language</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Created At</th>
+                <th><?=Yii::t("app", "Username")?></th>
+                <th><?=Yii::t("app", "Name")?></th>
+                <th><?=Yii::t("app", "Email")?></th>
+                <th><?=Yii::t("app", "Phone")?></th>
+                <th><?=Yii::t("app", "Address")?></th>
+                <th><?=Yii::t("app", "Role")?></th>
+                <th><?=Yii::t("app", "Status")?></th>
+                <th><?=Yii::t("app", "Created At")?></th>
             </tr>
             <?php
-
-            use backend\models\Company;
-            use backend\models\User;
-
             $no = 1;
-            foreach ($dataProvider->getModels() as $row) {
-            ?>
+            foreach ($dataProvider->getModels() as $row) {?>
                 <tr>
-                    <td><?= $row['username'] ?></td>
-                    <td><?= $row['first_name'] ?></td>
-                    <td><?= $row['middle_name'] ?></td>
-                    <td><?= $row['last_name'] ?></td>
-                    <td><?= $row['company_id'] ? Company::findOne($row['company_id'])->name : '' ?></td>
+                    <?php if($showCompany): ?>
+                        <td><?= $row['username'] ?> <br>  <?= $row['company_id'] ? '<strong>'. Company::findOne($row['company_id'])->name .'</strong>' : '' ?></td>
+                    <?php  else: ?>
+                        <td><?= $row['username'] ?></td>
+                    <?php  endif; ?>
+                    <td><?= $row['id'] ? User::findOne($row['id'])->getFullName() : '' ?></td>
                     <td><?= $row['email'] ?></td>
                     <td><?= $row['phone'] ?></td>
                     <td><?= $row['address'] ?></td>
-                    <td><?= $row['language'] ? User::getLanguageByIndex($row['language']) : '' ?></td>
                     <td><?= $row['role'] ? User::getUserRoleByIndex($row['role']) : '' ?></td>
                     <td><?= $row['status'] ? User::getUserStatusByIndex($row['status']) : '' ?></td>
                     <td><?= $row['created_at'] ?></td>
@@ -46,6 +39,3 @@
             ?>
         </table>
     </div>
-</body>
-
-</html>
