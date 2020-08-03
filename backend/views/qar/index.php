@@ -37,16 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?= Html::a(
-                Yii::t('app', 'Create Qar'),
-                ['create'],
-                ['class' => 'btn btn-success']
-            ) ?>
-        </p>
-        <p class="pull-right pad-all">
             <?php
 
-            echo Html::a(
+            echo Html::a( '<i class="pli-file-csv icon-fw"></i>' .
                 Yii::t('app', 'Export to CSV'),
                 ['export-csv'],
                 [
@@ -67,9 +60,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             );
             ?>
-        </p>
-        <p class="pull-right pad-all">
-            <?= Html::a(Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+
+            <?= Html::a( '<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+
+            <?= Html::a( '<i class="pli-add icon-fw"></i>' .
+                Yii::t('app', 'Create Qar'),
+                ['create'],
+                ['class' => 'btn btn-success']
+            ) ?>
+
         </p>
         <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>
