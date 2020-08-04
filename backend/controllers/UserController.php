@@ -3,7 +3,10 @@
 namespace backend\controllers;
 
 use backend\models\Company;
+use backend\models\Report;
 use backend\models\search\UserEquipmentSearch;
+use common\helper\OmsHelper;
+use common\helpers\CashewAppHelper;
 use Yii;
 use backend\models\User;
 use backend\models\search\UserSearch;
@@ -212,14 +215,16 @@ class UserController extends Controller
      */
     public function actionExportCsv()
     {
-        $query = User::find();
-        $filter = Yii::$app->request->post();
+        $query = User::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
 
-        $filter['username'] ? $query->andFilterWhere(['username' => $filter['username']]) : null;
-        $filter['first_name'] ? $query->andWhere(['first_name' => $filter['first_name']]) : null;
-        $filter['last_name'] ? $query->andWhere(['last_name' => $filter['last_name']]) : null;
-        $filter['role'] ? $query->andWhere(['role' => $filter['role']]) : null;
-        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+        $filter['username'] ? $query->andFilterWhere(['like', 'username' , $filter['username']]) : null;
+        $filter['first_name'] ? $query->andFilterWhere(['like', 'first_name' , $filter['first_name']]) : null;
+        $filter['last_name'] ? $query->andFilterWhere(['like', 'last_name' , $filter['last_name']]) : null;
+        $filter['role'] ? $query->andFilterWhere(['role' => $filter['role']]) : null;
+        $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['status' => $filter['company_id']]) : null;
+
 
         $data = $query->asArray()->all();
 
@@ -268,23 +273,18 @@ class UserController extends Controller
      */
     public function actionExportPdf()
     {
+        $query = User::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
+
+        $filter['username'] ? $query->andFilterWhere(['like', 'username' , $filter['username']]) : null;
+        $filter['first_name'] ? $query->andFilterWhere(['like', 'first_name' , $filter['first_name']]) : null;
+        $filter['last_name'] ? $query->andFilterWhere(['like', 'last_name' , $filter['last_name']]) : null;
+        $filter['role'] ? $query->andFilterWhere(['role' => $filter['role']]) : null;
+        $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['status' => $filter['company_id']]) : null;
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@backend/web/css/pdf.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}', 
-            'options' => ['title' => 'Users Report Title'],
-            'methods' => [
-                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
-                'SetFooter' => ['{PAGENO}'],
-            ],
-        ]);
-        return $pdf->render();
+        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, '.kv-heading-1{font-size:18px}', ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "users_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

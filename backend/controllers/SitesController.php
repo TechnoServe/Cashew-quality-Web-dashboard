@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Company;
 use backend\models\search\QarSearch;
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use Yii;
 use backend\models\Site;
 use backend\models\search\SiteSearch;
@@ -196,12 +197,12 @@ class SitesController extends Controller
      */
     public function actionExportCsv()
     {
-        $query = Site::find();
-        $filter = Yii::$app->request->post();
+        $query = Site::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
 
-        $filter['site_name'] ? $query->andFilterWhere(['site_name' => $filter['site_name']]) : null;
-        $filter['site_location'] ? $query->andWhere(['site_location' => $filter['site_location']]) : null;
-        $filter['company_id'] ? $query->andWhere(['company_id' => $filter['company_id']]) : null;
+        $filter['site_name'] ? $query->andFilterWhere(['like', 'site_name' ,  $filter['site_name']]) : null;
+        $filter['site_location'] ? $query->andFilterWhere(['like', 'site_location' => $filter['site_location']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
         $data = $query->asArray()->all();
 
@@ -235,23 +236,12 @@ class SitesController extends Controller
      */
     public function actionExportPdf()
     {
-        $searchModel = new SiteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@backend/web/css/pdf.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}',
-            'options' => ['title' => 'Sites Report Title'],
-            'methods' => [
-                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
-                'SetFooter' => ['{PAGENO}'],
-            ],
-        ]);
-        return $pdf->render();
+        $query = Site::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
+        $filter['site_name'] ? $query->andFilterWhere(['like', 'site_name' ,  $filter['site_name']]) : null;
+        $filter['site_location'] ? $query->andFilterWhere(['like', 'site_location' ,  $filter['site_location']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
+
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, '.kv-heading-1{font-size:18px}', ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "sites_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

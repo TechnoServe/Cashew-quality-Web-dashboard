@@ -21,7 +21,7 @@ class QarSearch extends Qar
     {
         return [
             [['id', 'buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
-            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end', 'status'], 'safe'],
+            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end', 'status', 'company_id'], 'safe'],
         ];
     }
 

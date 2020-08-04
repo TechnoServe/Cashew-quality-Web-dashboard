@@ -30,12 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['export-csv'],
                 [
                     'data' => [
-                        'method' => 'post',
+                        'method' => 'get',
                         'params' => [
                             'id_user' => $searchModel['id_user'],
                             'brand' => $searchModel['brand'],
                             'model' => $searchModel['model'],
-                            'name' => $searchModel['name']
+                            'name' => $searchModel['name'],
+                            'company_id' => $searchModel['company_id']
                         ],
                     ],
                     'class' => 'btn btn-mint'
@@ -43,9 +44,18 @@ $this->params['breadcrumbs'][] = $this->title;
             );
             ?>
 
-            <?= Html::a('<i class="pli-file icon-fw"></i>' .Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+            <?= Html::a('<i class="pli-file icon-fw"></i>' .Yii::t('app', 'Export to PDF'), ['export-pdf'], ['data' => [
+                'method' => 'get',
+                'params' => [
+                    'id_user' => $searchModel['id_user'],
+                    'brand' => $searchModel['brand'],
+                    'model' => $searchModel['model'],
+                    'name' => $searchModel['name'],
+                    'company_id' => $searchModel['company_id']
+                ],
+            ],'class' => 'btn btn-warning']); ?>
 
-            <?= Html::a('<i class="pli-add icon-fw"></i>' .Yii::t('app', 'Create User Equipment'), ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('<i class="pli-add icon-fw"></i>' .Yii::t('app', 'Create User Equipment'), ['create'], ['class' => 'btn btn-primary']) ?>
         </p>
         <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>
