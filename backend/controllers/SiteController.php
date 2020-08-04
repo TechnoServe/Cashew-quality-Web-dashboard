@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use backend\models\form\ResetPasswordForm;
 use backend\models\form\PasswordResetRequestForm;
+use backend\models\Qar;
+use backend\models\Site;
 use backend\models\User;
 use Yii;
 use yii\base\InvalidArgumentException;
@@ -78,7 +80,38 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        // QARs
+        $qarsInProgress = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
+        $qarsToBeDone = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
+        $qarsCompleted = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        $qarsCanceled = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_CANCELED])->count();
+
+        // Sites
+        $totalSites =  Site::queryByCompany()->count();
+        $totalSitesWithoutImages =  Site::queryByCompany()->andWhere(["or", ["image" => ""], ["image" => null]])->count();
+        $totalSitesWithoutSiteLocation =  Site::queryByCompany()->andWhere(["or", ["map_location" => ""], ["map_location" => null]])->count();
+
+        // Users
+        $totalUsers = User::queryByCompany()->count();
+        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
+        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
+        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
+        //var_dump($totalUsers);
+        //die();
+
+        return $this->render('index', [
+            'qarsInProgress' => $qarsInProgress,
+            'qarsToBeDone' => $qarsToBeDone,
+            'qarsCompleted' => $qarsCompleted,
+            'qarsCanceled' => $qarsCanceled,
+            'totalSites' => $totalSites,
+            'totalSitesWithoutImages' => $totalSitesWithoutImages,
+            'totalSitesWithoutSiteLocation' => $totalSitesWithoutSiteLocation,
+            'totalUsers' => $totalUsers,
+            'totalFieldTech' => $totalFieldTech,
+            'totalBuyer' => $totalBuyer,
+            'totalFarmer' => $totalFarmer
+        ]);
     }
 
 
