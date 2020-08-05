@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-4">
                 <div class="panel panel-info panel-colorful media middle pad-all">
                     <div class="media-left">
                         <div class="pad-hor">
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-4">
                 <div class="panel panel-primary panel-colorful media middle pad-all">
                     <div class="media-left">
                         <div class="pad-hor">
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-4">
                 <div class="panel panel-mint panel-colorful media middle pad-all">
                     <div class="media-left">
                         <div class="pad-hor">
