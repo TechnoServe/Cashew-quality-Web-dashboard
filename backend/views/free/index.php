@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
                 <div class="panel panel-info panel-colorful media middle pad-all">
                     <div class="media-left">
                         <div class="pad-hor">
@@ -35,11 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <div class="media-body">
+                        <p class="text-2x mar-no text-semibold pull-right">
+                            <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "CSV"), ["free/export-users-csv"], ["class" => "btn btn-info btn-block"]) ?>
+                        </p>
                         <p class="text-2x mar-no text-semibold"><?=number_format($freeUsers, null, null, ' ')?></p>
                         <p class="mar-no"><?=Yii::t("app", "Users")?></p>
                     </div>
                 </div>
-                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all users"), ["free/export-users-csv"], ["class" => "btn btn-info btn-block"]) ?>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-primary panel-colorful media middle pad-all">
@@ -49,11 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <div class="media-body">
+                        <p class="text-2x mar-no text-semibold pull-right">
+                            <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' . Yii::t("app", "CSV"), ["free/export-qar-csv"], ["class" =>"btn btn-primary btn-block"]) ?>
+                        </p>
                         <p class="text-2x mar-no text-semibold"><?=number_format($freeQar, null, null, ' ')?></p>
                         <p class="mar-no"><?=Yii::t("app", "QR(s)")?></p>
                     </div>
                 </div>
-                <?= Html::a('<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' . Yii::t("app", "Download all QAR requests"), ["free/export-qar-csv"], ["class" =>"btn btn-primary btn-block"]) ?>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-mint panel-colorful media middle pad-all">
@@ -63,11 +67,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <div class="media-body">
+                        <p class="text-2x mar-no text-semibold pull-right">
+                            <?= Html::a( '<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "CSV"), ["free/export-sites-csv"], ["class" => "btn btn-mint btn-block"]) ?>
+                        </p>
                         <p class="text-2x mar-no text-semibold"><?=number_format($freeSites, null, null, ' ')?></p>
                         <p class="mar-no"><?=Yii::t("app", "Sites")?></p>
                     </div>
                 </div>
-                <?= Html::a( '<i class="pli-file-csv icon-fw " style="font-size: 1.3em;"></i>' .  Yii::t("app", "Download all Sites"), ["free/export-sites-csv"], ["class" => "btn btn-mint btn-block"]) ?>
             </div>
         </div>
     </div>
