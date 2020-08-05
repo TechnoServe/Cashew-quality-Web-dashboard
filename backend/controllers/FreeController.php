@@ -5,6 +5,7 @@ namespace backend\controllers;
 
 use backend\helpers\FirestoreHelper;
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use common\models\FreeQar;
 use common\models\FreeQarResult;
 use common\models\FreeSites;
@@ -58,7 +59,10 @@ class FreeController extends Controller
     /**
      * Default action
      */
-    public function actionIndex(){
+    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null){
+
+        list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
+
         $freeUsers = FreeUsers::find()->count();
         $freeQar = FreeQar::find()->count();
         $freeSites = FreeSites::find()->count();
