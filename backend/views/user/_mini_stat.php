@@ -16,7 +16,7 @@
         <div class="panel panel-warning panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="pli-geo-2-plus icon-3x"></i>
+                    <i class="pli-worker icon-3x"></i>
                 </div>
             </div>
             <div class="media-body">
@@ -29,7 +29,7 @@
         <div class="panel panel-primary panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="pli-notepad icon-3x"></i>
+                    <i class="pli-business-man icon-3x"></i>
                 </div>
             </div>
             <div class="media-body">
@@ -42,7 +42,7 @@
         <div class="panel panel-mint panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="pli-approved-window icon-3x"></i>
+                    <i class="pli-farmer icon-3x"></i>
                 </div>
             </div>
             <div class="media-body">

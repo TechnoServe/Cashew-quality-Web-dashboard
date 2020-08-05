@@ -19,7 +19,12 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             ]); ?>
         </div>
         <div class="panel-body">
-            <?= $this->render('//qar/_mini_graph') ?>
+            <?= $this->render('//qar/_mini_graph', [
+                'qarsInProgress' => $qarsInProgress,
+                'qarsToBeDone' => $qarsToBeDone,
+                'qarsCompleted' => $qarsCompleted,
+                'qarsCanceled' => $qarsCanceled
+            ]) ?>
         </div>
     </div>
 

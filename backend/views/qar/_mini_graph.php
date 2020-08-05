@@ -1,17 +1,51 @@
 <?php
 
+use common\helpers\CashewAppHtmlHelper;
 use dosamigos\highcharts\HighCharts;
+use kartik\date\DatePicker;
+use yii\web\JsExpression;
+use yii\widgets\ActiveForm;
+
 ?>
+
 <?=
     \dosamigos\highcharts\HighCharts::widget([
         'clientOptions' => [
             'chart' => [
-                //'type' => 'bar'
+                'type' => 'column'
+            ],
+            'rangeSelector' => [
+                'buttons' => [
+                    [
+                        'type' => 'week',
+                        'count' => 1,
+                        'text' => 'Weekly'
+                    ],
+                    [
+                        'type' => 'month',
+                        'count' => 1,
+                        'text' => 'Monthly'
+                    ],
+                    [
+                        'type' => 'month',
+                        'count' => 3,
+                        'text' => '3 Months'
+                    ],
+                    [
+                        'type' => 'year',
+                        'count' => 1,
+                        'text' => 'Yearly'
+                    ],
+                ]
             ],
             'title' => [
                 'text' => 'QARs chart'
             ],
             'xAxis' => [
+                // 'type' => 'datetime',
+                // 'dateTimeLabelFormats' => [
+                //     'day' => '%e of %b'
+                // ],
                 'categories' => [
                     'Monday',
                     'Tuesday',
@@ -34,25 +68,26 @@ use dosamigos\highcharts\HighCharts;
                         'style' => [
                             'left' => '50px',
                             'top' => '18px',
-                            //'color' => 
-                        ]
-                    ]
-                ]
+                            'color' => new JsExpression('(Highcharts.theme && Highcharts.theme.textColor) || "black"'),
+                        ],
+                    ],
+                ],
             ],
             'series' => [
                 [
-                    'type' => 'column', 
-                    'name' => 'To-be Done', 
+                    'type' => 'column',
+                    'name' => 'To-be Done',
                     'data' => [3, 2, 1, 3, 4, 1, 4]
+
                 ],
                 [
-                    'type' => 'column', 
-                    'name' => 'In Progress', 
+                    'type' => 'column',
+                    'name' => 'In Progress',
                     'data' => [2, 3, 5, 7, 6, 2, 5]
                 ],
                 [
-                    'type' => 'column', 
-                    'name' => 'Completed', 
+                    'type' => 'column',
+                    'name' => 'Completed',
                     'data' => [4, 3, 3, 9, 4, 9, 4]
                 ],
                 [
@@ -61,7 +96,7 @@ use dosamigos\highcharts\HighCharts;
                     'data' => [4.5, 4, 4.5, 9.5, 7, 6, 6.5],
                     'marker' => [
                         'lineWidth' => 2,
-                        //'lineColor' => ,
+                        'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
                         'fillColor' => 'white'
                     ]
                 ],
@@ -71,18 +106,18 @@ use dosamigos\highcharts\HighCharts;
                     'data' => [
                         [
                             'name' => 'To-be Done',
-                            'y' => 13,
-                            //'color' => 
+                            'y' => 18,
+                            'color' => new JsExpression('Highcharts.getOptions().colors[0]') // To-be Done's color
                         ],
                         [
                             'name' => 'In Progress',
-                            'y' => 23,
-                            //'color' => 
+                            'y' => 30,
+                            'color' => new JsExpression('Highcharts.getOptions().colors[1]') // In-Progress's color
                         ],
                         [
                             'name' => 'Completed',
-                            'y' => 19,
-                            //'color' => 
+                            'y' => 36,
+                            'color' => new JsExpression('Highcharts.getOptions().colors[2]') // Completed's color
                         ],
                     ],
                     'center' => [100, 80],
