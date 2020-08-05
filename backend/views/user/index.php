@@ -27,16 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
-        </p>
-        <p class="pull-right pad-all">
-            <?php
-            
-                echo Html::a(
+            <?= Html::a('<i class="pli-file-csv icon-fw"></i>' .
                     Yii::t('app', 'Export to CSV'), ['export-csv'],
                     [
                         'data' => [
-                            'method' => 'post',
+                            'method' => 'get',
                             'params' => [
                                 'username' => $searchModel['username'],
                                 'first_name' => $searchModel['first_name'],
@@ -49,9 +44,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 );
             ?>
-        </p>
-        <p class="pull-right pad-all">
-                <?= Html::a(Yii::t('app', 'Export to PDF'), ['export-pdf'], ['class' => 'btn btn-warning']); ?>
+
+            <?= Html::a('<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['data' => [
+                'method' => 'get',
+                'params' => [
+                    'username' => $searchModel['username'],
+                    'first_name' => $searchModel['first_name'],
+                    'last_name' => $searchModel['last_name'],
+                    'role' => $searchModel['role'],
+                    'status' => $searchModel['status'],
+                    'company_id' => $searchModel['company_id']
+                ],
+            ], 'class' => 'btn btn-warning']); ?>
+
+            <?= Html::a('<i class="pli-add icon-fw"></i>' . Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-primary']) ?>
+
+
         </p>
         <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>

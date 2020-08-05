@@ -189,7 +189,7 @@ class QarController extends Controller
     public function actionExportCsv()
     {
         $query = Qar::queryByCompany();
-        $filter = Yii::$app->request->post();
+        $filter = Yii::$app->request->getQueryParams();
 
         //$filter['created_at_start'] ? $query->andFilterWhere(['created_at_start' => $filter['created_at_start']]) : null;
         //$filter['created_at_end'] ? $query->andWhere(['created_at_end' => $filter['created_at_end']]) : null;
@@ -199,6 +199,7 @@ class QarController extends Controller
         $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
         $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
         $data = $query->asArray()->all();
 
@@ -244,23 +245,21 @@ class QarController extends Controller
      */
     public function actionExportPdf()
     {
-        $searchModel = new QarSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@backend/web/css/pdf.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}',
-            'options' => ['title' => 'QARs Report Title'],
-            'methods' => [
-                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
-                'SetFooter' => ['{PAGENO}'],
-            ],
-        ]);
-        return $pdf->render();
+        $query = Qar::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
+
+        //$filter['created_at_start'] ? $query->andFilterWhere(['created_at_start' => $filter['created_at_start']]) : null;
+        //$filter['created_at_end'] ? $query->andWhere(['created_at_end' => $filter['created_at_end']]) : null;
+        $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
+        $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
+        $filter['farmer'] ? $query->andWhere(['farmer' => $filter['farmer']]) : null;
+        $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
+        $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
+        $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
+
+        CashewAppHelper::renderPDF($this->renderPartial('_pdf',
+            ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]),
+            Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "qars_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Company;
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use Yii;
 use backend\models\UserEquipment;
 use backend\models\search\UserEquipmentSearch;
@@ -179,13 +180,14 @@ class UserEquipmentController extends Controller
      */
     public function actionExportCsv()
     {
-        $query = UserEquipment::find();
-        $filter = Yii::$app->request->post();
+        $query = UserEquipment::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
 
         $filter['id_user'] ? $query->andFilterWhere(['id_user' => $filter['id_user']]) : null;
-        $filter['brand'] ? $query->andWhere(['brand' => $filter['brand']]) : null;
-        $filter['model'] ? $query->andWhere(['model' => $filter['model']]) : null;
-        $filter['name'] ? $query->andWhere(['name' => $filter['name']]) : null;
+        $filter['brand'] ? $query->andFilterWhere(['like', 'brand' ,  $filter['brand']]) : null;
+        $filter['model'] ? $query->andFilterWhere(['like', 'model' , $filter['model']]) : null;
+        $filter['name'] ? $query->andFilterWhere(['like', 'name' , $filter['name']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
         $data = $query->asArray()->all();
 
@@ -223,23 +225,15 @@ class UserEquipmentController extends Controller
      */
     public function actionExportPdf()
     {
-        $searchModel = new UserEquipmentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $content = $this->renderPartial('_pdf', ['dataProvider' => $dataProvider]);
-        $pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@backend/web/css/pdf.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}',
-            'options' => ['title' => 'User Equipments Report Title'],
-            'methods' => [
-                'SetHeader' => ['<div><img src="img/logo.png" width="100"></div>'],
-                'SetFooter' => ['{PAGENO}'],
-            ],
-        ]);
-        return $pdf->render();
+        $query = UserEquipment::queryByCompany();
+        $filter = Yii::$app->request->getQueryParams();
+
+        $filter['id_user'] ? $query->andFilterWhere(['id_user' => $filter['id_user']]) : null;
+        $filter['brand'] ? $query->andFilterWhere(['like', 'brand' ,  $filter['brand']]) : null;
+        $filter['model'] ? $query->andFilterWhere(['like', 'model' , $filter['model']]) : null;
+        $filter['name'] ? $query->andFilterWhere(['like', 'name' , $filter['name']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
+
+        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' =>  $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "equipments_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

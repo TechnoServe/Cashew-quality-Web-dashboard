@@ -1,26 +1,25 @@
-<!DOCTYPE html>
-<html>
+<?= $this->render("../shared/_pdf_list_header", ["title"=>Yii::t("app", "List of Sites")])?>
 
-<body>
-    <div class="panel-body">
-        <h3>List of Sites</h3>
+<div class="panel-body">
         <table class="table-bordered">
             <tr>
-                <th>Company</th>
-                <th>Site Name</th>
-                <th>Site Location</th>
-                <th>Map Coordinates</th>
-                <th>Created At</th>
+                <?php if($showCompany): ?>
+                <th><?=Yii::t("app", "Company")?></th>
+                <?php  endif; ?>
+                <th><?=Yii::t("app", "Site name")?></th>
+                <th><?=Yii::t("app", "Site location")?></th>
+                <th><?=Yii::t("app", "Map cordinates")?></th>
+                <th><?=Yii::t("app", "Created At")?></th>
             </tr>
             <?php
-
             use backend\models\Company;
-
             $no = 1;
-            foreach ($dataProvider->getModels() as $row) {
+            foreach ($models as $row) {
             ?>
                 <tr>
+                    <?php if($showCompany): ?>
                     <td><?= $row['company_id'] ? Company::findOne($row['company_id'])->name : '' ?></td>
+                    <?php  endif; ?>
                     <td><?= $row['site_name'] ?></td>
                     <td><?= $row['site_location'] ?></td>
                     <td><?= $row['map_location'] ?></td>
@@ -31,6 +30,3 @@
             ?>
         </table>
     </div>
-</body>
-
-</html>
