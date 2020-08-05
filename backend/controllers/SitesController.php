@@ -60,7 +60,6 @@ class SitesController extends Controller
         $searchModel = new SiteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-
         $totalSites =  Site::queryByCompany()->count();
         $totalSitesWithoutImages =  Site::queryByCompany()->andWhere([ "or", ["image"=> ""],["image"=> null]])->count();
         $totalSitesWithoutSiteLocation =  Site::queryByCompany()->andWhere([ "or", ["map_location"=> ""],["map_location"=> null]])->count();

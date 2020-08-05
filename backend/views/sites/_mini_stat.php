@@ -1,4 +1,5 @@
 
+<div class="panel">
     <div class="panel-body text-center">
         <div class="col-lg-4">
             <div class="row">
@@ -40,3 +41,4 @@
             </div>
         </div>
     </div>
+</div>
