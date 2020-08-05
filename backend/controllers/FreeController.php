@@ -72,6 +72,9 @@ class FreeController extends Controller
             'freeUsers' => $freeUsers,
             'freeQar' => $freeQar,
             'freeSites' => $freeSites,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'predefinedPeriod' => $predefinedPeriod
         ]);
     }
 

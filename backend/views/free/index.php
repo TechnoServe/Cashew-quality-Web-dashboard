@@ -1,5 +1,6 @@
 <?php
 
+use backend\widgets\AnalyticsPeriodPicker;
 use yii\helpers\Html;
 
 $this->title = Yii::t('app', 'Free version data');
@@ -7,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<div id="demo-panel-w-alert" class="panel">
+<div class="panel">
 
     <!--Panel heading-->
     <div class="panel-heading ">
@@ -78,3 +79,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<?=AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "free/index"])?>
