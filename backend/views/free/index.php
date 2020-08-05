@@ -72,3 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+    <!--QAR Result Report-->
+<?php echo $this->render('qar_result_form', [
+
+]); ?>
