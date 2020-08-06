@@ -120,7 +120,113 @@ $this->params['breadcrumbs'][] = $this->title;
                             "text" => null
                     ]
                 ],
-                'series' => $series
+                'series' => $qarSeries
+            ]
+        ]);?>
+    </div>
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title">
+            <?=Yii::t("app", "Top sites per average KOR in the selected period")?>
+        </h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-lg-6 bord-rgt">
+                <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Top sites by average KOR")?></p>
+                <table class="table table-hover table-vcenter">
+                    <thead>
+                        <tr>
+                            <th> <?=Yii::t("app", "Site Name")?></th>
+                            <th class="text-center"><?=Yii::t("app", "Average KOR")?> <br> <small class="text-muted"><?=$startDate?> / <?=$endDate?></small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($topSitesPerKor as $topSite): ?>
+                        <tr>
+                            <td>
+                                <span class="text-main text-semibold"><?=$topSite["name"]?></span>
+                                <br>
+                                <i class="pli-location-2 icon-1x"></i>
+                                <small class="text-muted"><?=$topSite["location"]?></small>
+                            </td>
+                            <td class="text-center"><span class="text-primary text-semibold"><?=number_format($topSite["average_kor"], 2, null, " ")?></span></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-lg-6">
+                <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Top sites by number of QARs")?></p>
+                <table class="table table-hover table-vcenter">
+                    <thead>
+                    <tr>
+                        <th> <?=Yii::t("app", "Site Name")?></th>
+                        <th class="text-center"><?=Yii::t("app", "Number of QARs")?> <br> <small class="text-muted"><?=$startDate?> / <?=$endDate?></small></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($topSitesPerQar as $topSite): ?>
+                        <tr>
+                            <td>
+                                <span class="text-main text-semibold"><?=$topSite["name"]?></span>
+                                <br>
+                                <i class="pli-location-2 icon-1x"></i>
+                                <small class="text-muted"><?=$topSite["location"]?></small>
+                            </td>
+                            <td class="text-center"><span class="text-primary text-semibold"><?=number_format($topSite["number_qar"], 0, null, " ")?></span></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+</div>
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title">
+            <?=Yii::t("app", "Users growth against time")?>
+        </h3>
+    </div>
+
+    <div class="panel-body">
+
+        <?= \dosamigos\highcharts\HighCharts::widget([
+            'clientOptions' => [
+                'title' => [
+                    'text' => false
+                ],
+
+                'credits' => [
+                    'enabled' => false
+                ],
+
+                'xAxis' => [
+                    'categories' => $categories,
+                    'text' => false
+                ],
+
+                'yAxis' => [
+                    'labels' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        "text" => null
+                    ]
+                ],
+                'series' => $userSeries
             ]
         ]);?>
     </div>
