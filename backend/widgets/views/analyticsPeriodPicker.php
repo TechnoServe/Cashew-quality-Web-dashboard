@@ -40,10 +40,10 @@ use yii\helpers\Html; ?>
 
         <div class="pad-ver mar-btm">
             <div class="btn-group btn-group-justified">
-                <?=Html::a(Yii::t("app", "This week"), [$url, "predefinedPeriod" => 1], ["class"=>"btn  btn-primary text-bold", "value"=>"one"])?>
-                <?=Html::a(Yii::t("app", "This month"), [$url, "predefinedPeriod" => 2], ["class"=>"btn  btn-info text-bold", "value"=>"two"])?>
-                <?=Html::a(Yii::t("app", "This quarter"), [$url, "predefinedPeriod" => 3], ["class"=>"btn  btn-warning text-bold", "value"=>"three"])?>
-                <?=Html::a(Yii::t("app", "This year"), [$url, "predefinedPeriod" => 4], ["class"=>"btn  btn-mint text-bold", "value"=>"four"])?>
+                <?=Html::a(Yii::t("app", "This week"), [$url, "predefinedPeriod" => 1], ["class"=>"btn " . ($predefinedPeriod == 1  ? "btn-default" : "btn-primary" ). " text-bold", "value"=>"one"])?>
+                <?=Html::a(Yii::t("app", "This month"), [$url, "predefinedPeriod" => 2], ["class"=>"btn " . ($predefinedPeriod == 2  ? "btn-default" : "btn-info" ). " text-bold", "value"=>"two"])?>
+                <?=Html::a(Yii::t("app", "This quarter"), [$url, "predefinedPeriod" => 3], ["class"=>"btn " . ($predefinedPeriod == 3  ? "btn-default" : "btn-warning" ). " text-bold", "value"=>"three"])?>
+                <?=Html::a(Yii::t("app", "This year"), [$url, "predefinedPeriod" => 4], ["class"=>"btn " . ($predefinedPeriod == 4  ? "btn-default" : "btn-mint" ). " text-bold", "value"=>"four"])?>
             </div>
         </div>
     </div>

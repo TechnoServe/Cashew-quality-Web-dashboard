@@ -2,6 +2,7 @@
 
 use backend\widgets\AnalyticsPeriodPicker;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 
 $this->title = Yii::t('app', 'Free version data');
 $this->params['breadcrumbs'][] = $this->title;
@@ -81,3 +82,46 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?=AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "free/index"])?>
+
+
+<div class="panel">
+
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title">
+            <?=Yii::t("app", "QAR(s), Totals and Average KOR Graph against Date Priod")?>
+        </h3>
+    </div>
+
+    <div class="panel-body">
+        <?= \dosamigos\highcharts\HighCharts::widget([
+            'clientOptions' => [
+                'title' => [
+                    'text' => false
+                ],
+
+                'credits' => [
+                    'enabled' => false
+                ],
+
+                'chart' => [
+                    'type' => 'Combination chart'
+                ],
+
+                'xAxis' => [
+                    'categories' => $categories,
+                    'text' => false
+                ],
+
+                'yAxis' => [
+                    'labels' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                            "text" => null
+                    ]
+                ],
+                'series' => $series
+            ]
+        ]);?>
+    </div>
+</div>
