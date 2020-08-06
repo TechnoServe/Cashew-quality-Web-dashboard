@@ -47,6 +47,7 @@ class SiteController extends Controller
                             'error',
                             'index',
                             'switch-user-language',
+                            'search'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -284,4 +285,12 @@ class SiteController extends Controller
 
         return $this->redirect(["site/login"]);
     }
+
+
+//    public function actionSearch($q){
+//        return $this->render("search", [
+//            'q'=>$q,
+//            'resultCount'=>10
+//        ]);
+//    }
 }

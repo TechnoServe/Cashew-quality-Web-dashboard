@@ -30,6 +30,18 @@ use yii\helpers\Url;
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <!--End Navigation toogle button-->
 
+<!--                <li>-->
+<!--                    <div class="custom-search-form">-->
+<!--                        <label class="btn btn-trans" for="search-input" data-toggle="collapse" data-target="#nav-searchbox">-->
+<!--                            <i class="demo-pli-magnifi-glass"></i>-->
+<!--                        </label>-->
+<!--                        <form action="--><?//=Url::to(["site/search"])?><!--" method="get">-->
+<!--                            <div class="search-container collapse" id="nav-searchbox">-->
+<!--                                <input id="search-input" name="q" type="text" class="form-control" placeholder="--><?//=Yii::t("app","Type for search...")?><!--">-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </li>-->
 
 
             </ul>

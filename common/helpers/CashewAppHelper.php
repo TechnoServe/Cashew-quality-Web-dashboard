@@ -12,6 +12,15 @@ class CashewAppHelper
 {
 
     /**
+     * Group dates in periods
+     * @param $startDate
+     * @param $endDate
+     */
+    public static function getDatePeriodToFetch($startDate, $endDate){
+
+    }
+
+    /**
      * @param null $startDate
      * @param null $endDate
      * @param null $predefinedPeriod
