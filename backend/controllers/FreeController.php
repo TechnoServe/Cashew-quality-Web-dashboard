@@ -4,6 +4,8 @@
 namespace backend\controllers;
 
 use backend\helpers\FirestoreHelper;
+use backend\helpers\FreeVersionDataHelper;
+use backend\models\FreeSite;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
 use common\models\FreeQar;
@@ -72,86 +74,9 @@ class FreeController extends Controller
         //Period to fetch
         $datesPeriod = CashewAppHelper::getDatePeriodToFetch($startDate, $endDate);
 
+        //If provided invalid date
         if(empty($datesPeriod))
             return $this->redirect(["free/index"]);
-
-
-        $series  = [];
-
-        // Add to be done
-        array_push($series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "To be done"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 0)
-            ]
-        );
-
-        // Add in progress
-        array_push($series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "In progress"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 1)
-            ]
-        );
-
-
-        // Completed
-        array_push($series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "Completed"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 2)
-            ]
-        );
-
-        //Average qar
-        array_push($series,
-            [
-                'type' => 'spline',
-                'name' => Yii::t("app", "Average KOR"),
-                'data' => \backend\models\FreeQar::getAverageKorOfQarByTimePeriod($datesPeriod),
-                'marker' => [
-                    'lineWidth' => 2,
-                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
-                    'fillColor' => 'white'
-                ]
-            ]
-        );
-
-
-        //Pie chart
-        array_push($series,
-            [
-                'type' => 'pie',
-                'name' => 'Total QARs',
-                'title' => false,
-                'data' => [
-                    [
-                        'name' => Yii::t("app", "To be done") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[0]['data']),
-                        'color' =>"#25476a"
-                    ],
-                    [
-                        'name' => Yii::t("app", "In progress") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[1]['data']),
-                        'color' => "#26a69a"
-                    ],
-                    [
-                        'name' => Yii::t("app", "Completed") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[2]['data']),
-                        'color' =>"#8bc34a"
-                    ],
-                ],
-                'center' => [30, 30],
-                'size' => 100,
-                'showInLegend' => true,
-                'dataLabels' => [
-                    'enabled' => false
-                ]
-            ]
-        );
 
         return $this->render("index", [
             'lastSync' => Settings::findOne(FirestoreHelper::SYNC_TIME_SETTING),
@@ -162,7 +87,10 @@ class FreeController extends Controller
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => array_map( function ($date){ return $date["generic"];}, $datesPeriod),
-            'series' => $series,
+            'qarSeries' => FreeVersionDataHelper::getQarChartData($datesPeriod),
+            'userSeries' => FreeVersionDataHelper::getUsersChartData($datesPeriod),
+            'topSitesPerKor' => FreeSite::findBestSitesPerAverageQarByTimePeriod($startDate, $endDate),
+            'topSitesPerQar' => FreeSite::findBestSitesPerNumberOfQarsByTimePeriod($startDate, $endDate),
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace backend\models;
 
 
 use common\models\FreeQarResult;
+use common\models\FreeSites;
 
 class FreeQar extends \common\models\FreeQar
 {
@@ -27,6 +28,7 @@ class FreeQar extends \common\models\FreeQar
             array_push($data, (float) self::find()->innerJoin(FreeQarResult::tableName(), "free_qar.document_id = free_qar_result.qar")
                 ->where([">=", "DATE(free_qar.created_at)" , date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(free_qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+                ->andWhere(["free_qar.status"=> 2])
                 ->average('free_qar_result.kor'));
         }
         return $data;
