@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading bg-primary">
         <h3 class="panel-title">
-            <?=Yii::t("app", "QAR(s), Totals and Average KOR Graph against Date Priod")?>
+            <?=Yii::t("app", "QAR(s), Totals and Average KOR Graph against date period")?>
         </h3>
     </div>
 

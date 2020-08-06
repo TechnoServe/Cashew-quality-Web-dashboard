@@ -144,7 +144,7 @@ class FreeController extends Controller
                         'color' =>"#8bc34a"
                     ],
                 ],
-                'center' => [950, 30],
+                'center' => [30, 30],
                 'size' => 100,
                 'showInLegend' => true,
                 'dataLabels' => [
