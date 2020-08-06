@@ -2,6 +2,8 @@
 
 /* @var $this yii\web\View */
 
+use backend\widgets\AnalyticsPeriodPicker;
+
 $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
 <div class="site-index">
@@ -18,17 +20,23 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'qarsCanceled' => $qarsCanceled
             ]); ?>
         </div>
+
+        <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "/"]) ?>
+        
         <div class="panel-body">
             <?= $this->render('//qar/_mini_graph', [
                 'qarsInProgress' => $qarsInProgress,
                 'qarsToBeDone' => $qarsToBeDone,
                 'qarsCompleted' => $qarsCompleted,
-                'qarsCanceled' => $qarsCanceled
+                'qarsCanceled' => $qarsCanceled,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'predefinedPeriod' => $predefinedPeriod
             ]) ?>
         </div>
     </div>
 
-    
+
 
     <div class="panel">
         <div class="panel-heading">

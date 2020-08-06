@@ -14,52 +14,25 @@ use yii\widgets\ActiveForm;
             'chart' => [
                 'type' => 'column'
             ],
-            'rangeSelector' => [
-                'buttons' => [
-                    [
-                        'type' => 'week',
-                        'count' => 1,
-                        'text' => 'Weekly'
-                    ],
-                    [
-                        'type' => 'month',
-                        'count' => 1,
-                        'text' => 'Monthly'
-                    ],
-                    [
-                        'type' => 'month',
-                        'count' => 3,
-                        'text' => '3 Months'
-                    ],
-                    [
-                        'type' => 'year',
-                        'count' => 1,
-                        'text' => 'Yearly'
-                    ],
-                ]
-            ],
             'title' => [
                 'text' => 'QARs chart'
             ],
+            'credits' => [
+                'enabled' => false
+            ],
             'xAxis' => [
-                // 'type' => 'datetime',
-                // 'dateTimeLabelFormats' => [
-                //     'day' => '%e of %b'
-                // ],
-                'categories' => [
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday',
-                    'Sunday'
-                ]
+                'type' => 'datetime'
             ],
             'yAxis' => [
                 'title' => [
                     'text' => 'Qars'
                 ]
+            ],
+            'plotOptions' => [
+                'series' => [
+                    //'pointStart' => $startDate,
+                    'pointIntervalUnit' => 'day'
+                ],
             ],
             'labels' => [
                 'items' => [

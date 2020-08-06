@@ -7,6 +7,7 @@ use backend\models\form\PasswordResetRequestForm;
 use backend\models\Qar;
 use backend\models\Site;
 use backend\models\User;
+use common\helpers\CashewAppHelper;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
@@ -79,8 +80,11 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex($site = null)
+    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null)
     {
+
+        list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
+
         // QARs
         $qarsInProgress = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
         $qarsToBeDone = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
@@ -97,6 +101,12 @@ class SiteController extends Controller
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
         $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
         $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
+
+        // Group QARs daily
+        $dailyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->count();
+        $dailyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
+        $dailyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
+        $dailyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
 
         // Group QARs weekly
         $weeklyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 WEEK)')])->count();
@@ -116,15 +126,12 @@ class SiteController extends Controller
         $monthlyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
         $monthlyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
 
-
         // Group QARs yearly
         $yearlyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->count();
         $yearlyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
         $yearlyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
         $yearlyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
 
-        //var_dump($dailyQars);
-        //die();
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
@@ -137,7 +144,10 @@ class SiteController extends Controller
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,
-            'totalFarmer' => $totalFarmer
+            'totalFarmer' => $totalFarmer,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'predefinedPeriod' => $predefinedPeriod
         ]);
     }
 
