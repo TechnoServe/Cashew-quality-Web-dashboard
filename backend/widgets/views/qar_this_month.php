@@ -13,7 +13,7 @@ use miloschuman\highcharts\Highcharts;
 $this_month = date('Y F ');
 echo Highcharts::widget([
     'htmlOptions' => [
-        'class' => 'this-week',
+        'class' => 'this-month',
     ],
     'options' => [
         'credits' => [
@@ -23,7 +23,7 @@ echo Highcharts::widget([
             'type' => 'column',
         ],
         'title' => [
-            'text' => 'This Weekly Report',
+            'text' => '',
             'align' => 'center'
         ],
         'xAxis' => [
@@ -59,28 +59,28 @@ echo Highcharts::widget([
             [
                 'name' => 'To be Done',
                 'type' => 'column',
-                'data' => [3,2,1,3,2,1,3,2,1],
+                'data' => [31,20,1,6,2,1,3,2,7],
             ],
             [
                 'name' => 'In Progress',
                 'type' => 'column',
-                'data' => [21,4,7,21,4,7,21,4,7],
+                'data' => [21,14,17,21,8,4,21,4,1],
             ],
             [
                 'name' => 'Completed',
                 'type' => 'column',
-                'data' => [8,4,11,8,4,11,8,4,11],
+                'data' => [8,4,11,8,4,11,8,4,2],
             ],
             [
                 'name' => 'Canceled',
                 'type' => 'column',
-                'data' => [8,10,2,8,10,2,8,10,2],
+                'data' => [8,10,2,8,10,2,8,10,11],
             ],
 
             [
                 'type' => 'spline',
                           'name' => 'KOR',
-                          'data' => [4, 2.67, 8, 4, 2.67, 8, 4, 2.67, 8],
+                          'data' => [4, 2.67, 8, 4, 2.67, 8, 4, 2.67, 2],
                              'marker' => [
                                       'lineWidth' => 2,
                                       'lineColor' => Yii::$app->params['dark_blue_color'],

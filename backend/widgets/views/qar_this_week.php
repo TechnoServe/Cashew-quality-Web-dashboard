@@ -23,7 +23,7 @@ echo Highcharts::widget([
             'type' => 'column',
         ],
         'title' => [
-            'text' => 'This Weekly Report',
+            'text' => '',
             'align' => 'center'
         ],
         'xAxis' => [
