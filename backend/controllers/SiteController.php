@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use yii\db\Expression;
+use yii\web\JsExpression;
 
 /**
  * Site controller
@@ -92,63 +93,112 @@ class SiteController extends Controller
         $qarsCompleted = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
         $qarsCanceled = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_CANCELED])->count();
 
-        // Sites
-        $totalSites =  Site::queryByCompany()->count();
-        $totalSitesWithoutImages =  Site::queryByCompany()->andWhere(["or", ["image" => ""], ["image" => null]])->count();
-        $totalSitesWithoutSiteLocation =  Site::queryByCompany()->andWhere(["or", ["map_location" => ""], ["map_location" => null]])->count();
-
         // Users
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
         $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
         $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
 
-        // Group QARs daily
-        $dailyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->count();
-        $dailyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
-        $dailyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
-        $dailyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 DAY)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        // chart
+        $period = CashewAppHelper::getDatePeriodToFetch($startDate, $endDate);
+        if (empty($period))
+            return $this->redirect(["/"]);
 
-        // Group QARs weekly
-        $weeklyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 WEEK)')])->count();
-        $weeklyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 WEEK)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
-        $weeklyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 WEEK)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
-        $weeklyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 WEEK)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        $categories = array_map( function ($date){ return $date["generic"];}, $period);
 
-        // Group QARs monthly
-        $monthlyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 MONTH)')])->count();
-        $monthlyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 MONTH)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
-        $monthlyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 MONTH)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
-        $monthlyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 MONTH)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        $series = [];
 
-        // Group QARs quarterly
-        $monthlyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->count();
-        $monthlyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
-        $monthlyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
-        $monthlyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 3 MONTH)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        // QARs To-Be Done
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "To Be Done"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1)
+            ]
+        );
 
-        // Group QARs yearly
-        $yearlyQars = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->count();
-        $yearlyQarsToBeDone = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_TOBE_DONE])->count();
-        $yearlyQarsInProgress = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->count();
-        $yearlyQarsCompleted = Qar::queryByCompany()->andWhere(['>', 'created_at', new Expression('DATE_SUB(NOW(), INTERVAL 1 YEAR)')])->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
+        // QARs In Progress
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "In Progress"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2)
+            ]
+        );
 
+        // QARs Completed
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "Completed"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3)
+            ]
+        );
+
+        // QARs Average
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Average QAR"),
+                'data' => Qar::getAverageQarByTimePeriod($period),
+                'marker' => [
+                    'lineWidth' => 2,
+                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                    'fillColor' => 'white'
+                ]
+            ]
+        );
+
+        //Pie chart
+        array_push($series,
+            [
+                'type' => 'pie',
+                'name' => 'Total QARs',
+                'title' => false,
+                'data' => [
+                    [
+                        'name' => Yii::t("app", "To Be Done") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[0]['data']),
+                        'color' => "#25476a"
+                    ],
+                    [
+                        'name' => Yii::t("app", "In Progress") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[1]['data']),
+                        'color' => "#26a69a"
+                    ],
+                    [
+                        'name' => Yii::t("app", "Completed") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[2]['data']),
+                        'color' => "#8bc34a"
+                    ],
+                ],
+                'center' => [30, 30],
+                'size' => 100,
+                'showInLegend' => true,
+                'dataLabels' => [
+                    'enabled' => false
+                ]
+            ]
+        );
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
             'qarsToBeDone' => $qarsToBeDone,
             'qarsCompleted' => $qarsCompleted,
             'qarsCanceled' => $qarsCanceled,
-            'totalSites' => $totalSites,
-            'totalSitesWithoutImages' => $totalSitesWithoutImages,
-            'totalSitesWithoutSiteLocation' => $totalSitesWithoutSiteLocation,
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,
             'totalFarmer' => $totalFarmer,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'predefinedPeriod' => $predefinedPeriod
+            'predefinedPeriod' => $predefinedPeriod,
+            'categories' => $categories,
+            'series' => $series
         ]);
     }
 
