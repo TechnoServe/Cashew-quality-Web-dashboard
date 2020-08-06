@@ -243,4 +243,29 @@ class Qar extends \common\models\Qar
 
         $this->company_id = $currentUser->company_id;
     }
+
+    public static function getQarCountsByStatusAndTimePeriod($dates, $status)
+    {
+        $data = [];
+        foreach ($dates as $date) {
+            array_push($data, (int) self::find()
+                ->where([">=", "DATE(created_at)", date('Y-m-d', strtotime($date["startDate"]))])
+                ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+                ->andWhere(["status" => $status])
+                ->count());
+        }
+        return $data;
+    }
+
+    public static function getAverageQarByTimePeriod($dates)
+    {
+        $data = [];
+        foreach ($dates as $date) {
+            array_push($data, (int) self::find()
+            ->where([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
+            ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+            ->count());
+        }
+        return $data;
+    }
 }
