@@ -13,6 +13,14 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?= $this->render('//user/_mini_stat', [
+    'totalUsers' => $totalUsers,
+    'totalFieldTech' => $totalFieldTech,
+    'totalBuyer' => $totalBuyer,
+    'totalFarmer' => $totalFarmer
+]); ?>
+
 <div class="panel">
 
     <div class="panel-heading bg-primary">
@@ -27,22 +35,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?= Html::a('<i class="pli-file-csv icon-fw"></i>' .
-                    Yii::t('app', 'Export to CSV'), ['export-csv'],
-                    [
-                        'data' => [
-                            'method' => 'get',
-                            'params' => [
-                                'username' => $searchModel['username'],
-                                'first_name' => $searchModel['first_name'],
-                                'last_name' => $searchModel['last_name'],
-                                'role' => $searchModel['role'],
-                                'status' => $searchModel['status']
-                            ],
+            <?= Html::a(
+                '<i class="pli-file-csv icon-fw"></i>' .
+                    Yii::t('app', 'Export to CSV'),
+                ['export-csv'],
+                [
+                    'data' => [
+                        'method' => 'get',
+                        'params' => [
+                            'username' => $searchModel['username'],
+                            'first_name' => $searchModel['first_name'],
+                            'last_name' => $searchModel['last_name'],
+                            'role' => $searchModel['role'],
+                            'status' => $searchModel['status']
                         ],
-                        'class' => 'btn btn-mint'
-                    ]
-                );
+                    ],
+                    'class' => 'btn btn-mint'
+                ]
+            );
             ?>
 
             <?= Html::a('<i class="pli-file icon-fw"></i>' . Yii::t('app', 'Export to PDF'), ['export-pdf'], ['data' => [

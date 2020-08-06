@@ -67,12 +67,21 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+        $totalUsers = User::queryByCompany()->count();
+        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
+        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
+        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'totalUsers' => $totalUsers,
+            'totalFieldTech' => $totalFieldTech,
+            'totalBuyer' => $totalBuyer,
+            'totalFarmer' => $totalFarmer
         ]);
     }
 
