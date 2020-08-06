@@ -31,4 +31,11 @@ class FreeSite extends FreeSites
             ->orderBy(["number_qar" => SORT_DESC, "free_sites.created_at" => SORT_ASC])
             ->limit(10)->asArray()->all();
     }
+
+
+    public static function countByPeriod($date){
+        return self::find()
+            ->where(["<=", "DATE(free_sites.created_at)" , date('Y-m-d', strtotime($date))])
+            ->count();
+    }
 }

@@ -19,4 +19,12 @@ class FreeUser extends FreeUsers
         }
         return $data;
     }
+
+
+    public static function countByPeriod($date){
+        return self::find()
+            ->where(["<=", "DATE(free_users.created_at)" , date('Y-m-d', strtotime($date))])
+            ->count();
+    }
+
 }

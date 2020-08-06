@@ -33,4 +33,11 @@ class FreeQar extends \common\models\FreeQar
         }
         return $data;
     }
+
+    public static function countByPeriod($startDate, $endDate){
+        return self::find()
+            ->where([">=", "DATE(created_at)" , date('Y-m-d', strtotime($startDate))])
+            ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($endDate))])
+            ->count();
+    }
 }

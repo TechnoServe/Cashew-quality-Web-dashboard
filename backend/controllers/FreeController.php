@@ -6,9 +6,10 @@ namespace backend\controllers;
 use backend\helpers\FirestoreHelper;
 use backend\helpers\FreeVersionDataHelper;
 use backend\models\FreeSite;
+use backend\models\FreeUser;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
-use common\models\FreeQar;
+use backend\models\FreeQar;
 use common\models\FreeQarResult;
 use common\models\FreeSites;
 use common\models\FreeUsers;
@@ -91,6 +92,9 @@ class FreeController extends Controller
             'userSeries' => FreeVersionDataHelper::getUsersChartData($datesPeriod),
             'topSitesPerKor' => FreeSite::findBestSitesPerAverageQarByTimePeriod($startDate, $endDate),
             'topSitesPerQar' => FreeSite::findBestSitesPerNumberOfQarsByTimePeriod($startDate, $endDate),
+            'totalSites' => FreeSite::countByPeriod($endDate),
+            'totalUsers' => FreeUser::countByPeriod($endDate),
+            'totalQar' => FreeQar::countByPeriod($startDate, $endDate),
         ]);
     }
 

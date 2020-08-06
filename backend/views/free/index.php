@@ -83,13 +83,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?=AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "free/index"])?>
 
-
 <div class="panel">
 
     <div class="panel-heading bg-primary">
         <h3 class="panel-title">
-            <?=Yii::t("app", "QAR(s), Totals and Average KOR Graph against date period")?>
+            <?=Yii::t("app", "QAR(s), Totals and Average KOR Graph against date period")?> <br>
         </h3>
+    </div>
+    <div class="panel-body">
+        <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Total QARs")?>: <?=number_format($totalQar, 0, 0, " ")?></p>
     </div>
 
     <div class="panel-body">
@@ -133,6 +135,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title">
             <?=Yii::t("app", "Top sites per average KOR in the selected period")?>
         </h3>
+    </div>
+
+    <div class="panel-body">
+        <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Total Sites")?>: <?=number_format($totalSites, 0, 0, " ")?></p>
     </div>
 
     <div class="panel-body">
@@ -199,6 +205,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title">
             <?=Yii::t("app", "Users growth against time")?>
         </h3>
+    </div>
+
+    <div class="panel-body">
+        <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Total users")?>: <?=number_format($totalUsers, 0, 0, " ")?></p>
     </div>
 
     <div class="panel-body">
