@@ -46,46 +46,5 @@ use yii\helpers\Html; ?>
                 <?=Html::a(Yii::t("app", "This year"), [$url, "predefinedPeriod" => 4], ["class"=>"btn  btn-mint text-bold", "value"=>"four"])?>
             </div>
         </div>
-
-
-        <div class="row">
-            <?php echo $this->render('qar_this_week', [
-
-            ]); ?>
-
-        </div>
     </div>
 </div>
-
-
-<?php
-$script = "
-$('.dropDown').change(function() {
-    var value= $(this).val();
-    if(value=='one') {
-        $('.this-week').show();
-        $('.this-month').hide();
-        $('.quarterly').hide();
-        $('.this-year').hide();
-    }
-    if(value=='two') {
-        $('.this-week').hide();
-        $('.this-month').show();
-        $('.quarterly').hide();
-        $('.this-year').hide();
-    }
-    if(value=='three') {
-        $('.this-week').hide();
-        $('.this-month').hide();
-        $('.quarterly').show();
-        $('.this-year').hide();
-    }
-    if(value=='four') {
-        $('.this-week').hide();
-        $('.this-month').hide();
-        $('.quarterly').hide();
-        $('.this-year').show();
-    }
-});";
-$this->registerJs($script);
-?>

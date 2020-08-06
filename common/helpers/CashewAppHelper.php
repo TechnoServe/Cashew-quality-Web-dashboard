@@ -6,18 +6,79 @@ namespace common\helpers;
 
 use DateTime;
 use kartik\mpdf\Pdf;
+use Yii;
 use function GuzzleHttp\Psr7\str;
 
 class CashewAppHelper
 {
 
     /**
-     * Group dates in periods
+     * Calculate date period from two dates
+     * Groups by period
      * @param $startDate
      * @param $endDate
      */
     public static function getDatePeriodToFetch($startDate, $endDate){
 
+        $daysDifference =  self::dateDiffInDays($startDate, $endDate);
+
+        $daysGrouping = 0;
+        if($daysDifference <= 31) {
+            $daysGrouping = "day";
+        }
+
+        if($daysDifference  > 31 && $daysDifference <= 180) {
+            $daysGrouping = "week";
+        }
+
+        if($daysDifference  > 180 && $daysDifference <= 1080) {
+            $daysGrouping = "month";
+        }
+
+        if($daysDifference  > 1080) {
+            $daysGrouping = "year";
+        }
+
+        return self::groupDateByPeriod($startDate, $endDate, $daysGrouping);
+
+    }
+
+
+    public static function groupDateByPeriod($startDate, $endDate, $daysGrouping){
+        $rows = [];
+        while (strtotime($startDate) <= strtotime($endDate)) {
+
+            $next = date ("Y-m-d", strtotime("+1 ".$daysGrouping, strtotime($startDate)));
+
+            $row = [
+                "startDate" => $startDate,
+                "endDate" => strtotime($startDate) <= strtotime($endDate) ? date ("Y-m-d", strtotime("-1 day", strtotime($next))) : $endDate,
+                "groupedBy" => $daysGrouping == "day" ? Yii::t("app", "Day") :
+                    ($daysGrouping == "week" ? Yii::t("app", "Week") :
+                        ($daysGrouping == "month"  ? Yii::t("app", "Month") : Yii::t("app", "Year")))
+            ];
+
+            $row ["generic"] = $daysGrouping == "day" ? date ("d M,y", strtotime($row["startDate"])) : date ("d M,y", strtotime($row["startDate"])) . " - ".date ("d M,y", strtotime($row["endDate"]));;
+            array_push($rows, $row);
+
+            $startDate = $next;
+        }
+        return $rows;
+    }
+
+    /**
+     * Calculate the date difference in days
+     * @param $date1
+     * @param $date2
+     * @return float|int
+     */
+    public static function dateDiffInDays($date1, $date2)
+    {
+        // Calculating the difference in timestamps
+        $diff = strtotime($date2) - strtotime($date1);
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400)) + 1;
     }
 
     /**
