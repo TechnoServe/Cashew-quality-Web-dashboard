@@ -261,10 +261,11 @@ class Qar extends \common\models\Qar
     {
         $data = [];
         foreach ($dates as $date) {
-            array_push($data, (int) self::find()
-            ->where([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
-            ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
-            ->count());
+            array_push($data, (float) self::find()
+                ->where([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
+                ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+                ->count() / 3
+            );
         }
         return $data;
     }

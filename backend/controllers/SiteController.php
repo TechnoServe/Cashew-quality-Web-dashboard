@@ -114,7 +114,8 @@ class SiteController extends Controller
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "To Be Done"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1)
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1),
+                'color' => "#ffb300"
             ]
         );
 
@@ -124,7 +125,8 @@ class SiteController extends Controller
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "In Progress"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2)
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2),
+                'color' => "#03a9f4"
             ]
         );
 
@@ -134,7 +136,8 @@ class SiteController extends Controller
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "Completed"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3)
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3),
+                'color' => "#26a69a"
             ]
         );
 
@@ -163,17 +166,17 @@ class SiteController extends Controller
                     [
                         'name' => Yii::t("app", "To Be Done") . "(" . Yii::t("app", "Total") . ")",
                         'y' => array_sum($series[0]['data']),
-                        'color' => "#25476a"
+                        'color' => "#ffb300"
                     ],
                     [
                         'name' => Yii::t("app", "In Progress") . "(" . Yii::t("app", "Total") . ")",
                         'y' => array_sum($series[1]['data']),
-                        'color' => "#26a69a"
+                        'color' => "#03a9f4"
                     ],
                     [
                         'name' => Yii::t("app", "Completed") . "(" . Yii::t("app", "Total") . ")",
                         'y' => array_sum($series[2]['data']),
-                        'color' => "#8bc34a"
+                        'color' => "#26a69a"
                     ],
                 ],
                 'center' => [30, 30],
