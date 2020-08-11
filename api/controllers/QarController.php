@@ -4,7 +4,7 @@ namespace api\controllers;
 
 use backend\models\Qar;
 use common\models\QarDetail;
-use common\models\User;
+use backend\models\User;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
@@ -123,6 +123,36 @@ class QarController extends ActiveController
                 $qar_detail->save();
             }
         }
+        return $qar;
+    }
+
+    public function actionSaveQar()
+    {
+
+        $data = Yii::$app->request->post();
+
+        $qar = new Qar();
+
+        $buyerExists = User::queryByCompany()->andWhere([User::ROLE_FIELD_BUYER => $data['buyer']])->exists();
+        if($buyerExists){
+            $qar->buyer = $data['buyer'];
+        }else{
+            $qar = 'This buyer does not exist';
+        }
+
+        $field_techExist = User::queryByCompany()->andWhere([User::ROLE_FIELD_TECH => $data['field_tech']])->exists();
+        if($field_techExist){
+            $qar->field_tech = $data['field_tech'];
+        }else{
+            $qar = 'This field tech does not exist';
+        }
+        $qar->site = $data['site'];
+        $qar->initiator = $data['initiator'];
+        $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
+        $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
+        $qar->save();
+        $qar->refresh();
+
         return $qar;
     }
 
