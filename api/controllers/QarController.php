@@ -2,17 +2,23 @@
 
 namespace api\controllers;
 
+use api\components\ApiError;
+use api\components\ApiResponse;
 use backend\models\Qar;
+use backend\models\Site;
 use common\models\QarDetail;
 use backend\models\User;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
+use yii\validators\DateValidator;
 
 class QarController extends ActiveController
 {
     public function behaviors()
     {
+
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::class,
@@ -23,7 +29,24 @@ class QarController extends ActiveController
                 }
             }
         ];
-        return $behaviors;
+        return array_merge($behaviors,
+            ['access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+
+                    [
+                        'actions' => ['index', 'view', 'export-csv', 'export-pdf'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+
+                    [
+                        'allow' => true,
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
+                    ],
+
+                ],
+            ]]);
     }
 
     public $modelClass = 'common\models\Qar';
@@ -133,27 +156,53 @@ class QarController extends ActiveController
 
         $qar = new Qar();
 
-        $buyerExists = User::queryByCompany()->andWhere([User::ROLE_FIELD_BUYER => $data['buyer']])->exists();
+        $errors = [];
+        $buyerExists = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER, "id" => $data['buyer'] ])->exists();
         if($buyerExists){
             $qar->buyer = $data['buyer'];
         }else{
-            $qar = 'This buyer does not exist';
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Buyer is invalid"));
         }
 
-        $field_techExist = User::queryByCompany()->andWhere([User::ROLE_FIELD_TECH => $data['field_tech']])->exists();
+        $field_techExist = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH, "id" => $data['field_tech']])->exists();
         if($field_techExist){
             $qar->field_tech = $data['field_tech'];
         }else{
-            $qar = 'This field tech does not exist';
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
         }
-        $qar->site = $data['site'];
-        $qar->initiator = $data['initiator'];
+
+        $initiator = Yii::$app->user->identity->role == User::ROLE_FIELD_TECH ? QAR::INITIATED_BY_FIELD_TECH : QAR::INITIATED_BY_BUYER;
+        $qar->initiator = $initiator;
+
+
+        $site_exist = Site::queryByCompany()->andWhere(["id"=>$data['site']])->exists();
+        if($site_exist){
+            $qar->site = $data['site'];
+        }else{
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Site is invalid"));
+        }
+
+
+        $dateValidator = new DateValidator();
+        if(empty(trim($data['deadline'])))
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide deadline"));
+        else if(!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$data['deadline']))
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Invalid date format"));
+        else
+        $qar->deadline = $data['deadline'];
+
+
+        if(!empty($errors)){
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse(null, $errors, false);
+        }
+
+        $qar->company_id = Yii::$app->user->identity->company_id;
         $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
         $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
         $qar->save();
-        $qar->refresh();
 
-        return $qar;
+        return new ApiResponse($qar, null, true);
     }
 
 
