@@ -244,27 +244,42 @@ class Qar extends \common\models\Qar
         $this->company_id = $currentUser->company_id;
     }
 
-    public static function getQarCountsByStatusAndTimePeriod($dates, $status)
+    public static function getQarCountsByStatusAndTimePeriod($dates, $status, $siteId = null)
     {
         $data = [];
         foreach ($dates as $date) {
-            array_push($data, (int) self::find()
-                ->where([">=", "DATE(created_at)", date('Y-m-d', strtotime($date["startDate"]))])
+            $q = self::queryByCompany();
+
+            if($siteId)
+                $q->andWhere(["site" => $siteId]);
+
+            $q->andWhere([">=", "DATE(created_at)", date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
-                ->andWhere(["status" => $status])
-                ->count());
+                ->andWhere(["status" => $status]);
+
+            array_push($data, (int) $q->count());
         }
         return $data;
     }
 
-    public static function getAverageQarByTimePeriod($dates)
+    public static function getAverageQarByTimePeriod($dates, $siteId = null)
     {
         $data = [];
+
         foreach ($dates as $date) {
-            array_push($data, (int) self::find()
-            ->where([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
-            ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
-            ->count());
+
+            $q = self::queryByCompany()->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar");
+
+            if($siteId)
+                $q->andWhere(["qar.site" => $siteId]);
+
+            $q->andWhere([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
+                ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+                ->andWhere(["qar.status" => Qar::STATUS_COMPLETED])
+                ->andWhere(["qar_detail.key" => Qar::RESULT_KOR])
+                ->andWhere(["qar_detail.result" => 1]);
+
+            array_push($data, (float) $q->average("qar_detail.value"));
         }
         return $data;
     }

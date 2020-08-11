@@ -53,15 +53,44 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']) ?>
+
+            <?php if($model->status == Qar::STATUS_TOBE_DONE || $model->status == Qar::STATUS_CANCELED): ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => Yii::t('app',
-                            'Are you sure you want to delete this item?'),
+                            'Are you sure you want to delete this QAR?'),
                         'method' => 'post',
                     ],
                 ]) ?>
+            <?php endif; ?>
+
+            <?php if($model->status == Qar::STATUS_TOBE_DONE): ?>
+
+                <?= Html::a(Yii::t('app', 'Cancel'), ['cancel', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app',
+                                'Are you sure you want to cancel this QAR?'),
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+            <?php endif; ?>
+
+            <?php if($model->status == Qar::STATUS_CANCELED): ?>
+                <?= Html::a(Yii::t('app', 'Restore'), ['restore', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app',
+                                'Are you sure you want to restore this QAR?'),
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+            <?php endif; ?>
+
         </p>
 
         <div class="row">

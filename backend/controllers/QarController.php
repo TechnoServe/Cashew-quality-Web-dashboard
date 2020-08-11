@@ -13,6 +13,7 @@ use backend\models\Site;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -48,6 +49,8 @@ class QarController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'cancel' => ['POST'],
+                    'restore' => ['POST']
                 ],
             ],
         ];
@@ -154,6 +157,42 @@ class QarController extends Controller
         ]);
     }
 
+
+
+    /**
+     * Deletes an existing Qar model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionCancel($id)
+    {
+        $model = $this->findModel($id);
+
+        if($model->status == Qar::STATUS_IN_PROGRESS || $model->status == Qar::STATUS_COMPLETED)
+            throw new ForbiddenHttpException(Yii::t("app", "QAR can no longer be canceled, Field Tech has already started measurement"));
+
+        $model->status = Qar::STATUS_CANCELED;
+        $model->save(false);
+        Yii::$app->session->setFlash("success", Yii::t("app", "QAR canceled successfully"));
+        return $this->redirect(['qar/view', "id"=>$model->id]);
+    }
+
+
+    public function actionRestore($id)
+    {
+        $model = $this->findModel($id);
+
+        if($model->status != Qar::STATUS_CANCELED)
+            throw new ForbiddenHttpException(Yii::t("app", "QAR has not been canceled"));
+
+        $model->status = Qar::STATUS_TOBE_DONE;
+        $model->save(false);
+        Yii::$app->session->setFlash("success", Yii::t("app", "QAR restored successfully"));
+        return $this->redirect(['qar/view', "id"=>$model->id]);
+    }
+
     /**
      * Deletes an existing Qar model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -163,7 +202,12 @@ class QarController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if($model->status != Qar::STATUS_TOBE_DONE && $model->status != Qar::STATUS_CANCELED)
+            throw new ForbiddenHttpException();
+
+        $model->delete();
         return $this->redirect(['index']);
     }
 
@@ -258,7 +302,7 @@ class QarController extends Controller
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
         $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
-        CashewAppHelper::renderPDF($this->renderPartial('_pdf',
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf',
             ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]),
             Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "qars_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }

@@ -109,6 +109,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     'type' => 'Combination chart'
                 ],
 
+                'exporting' => [
+                    'filename' => 'free_version_qars',
+                    'buttons' => [
+                        'contextButton' => [
+                            'menuItems' => [
+                                [
+                                    'textKey' => 'printChart',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-printer"></i> ' . Yii::t("app", "Print Chart") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.print();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-file-jpg"></i> ' . Yii::t("app", "Download PNG Image") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"> <i class="pli-file-text-image"></i> ' . Yii::t("app", "Download PDF Document") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart({type: 'application/pdf'});}")
+                                ],
+                            ],
+                        ]
+
+                    ],
+                ],
+
                 'xAxis' => [
                     'categories' => $categories,
                     'text' => false
@@ -116,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'yAxis' => [
                     'labels' => [
-                        'enabled' => false
+                        'enabled' => true
                     ],
                     'title' => [
                             "text" => null
@@ -228,9 +254,35 @@ $this->params['breadcrumbs'][] = $this->title;
                     'text' => false
                 ],
 
+                'exporting' => [
+                    'filename' => 'free_version_users',
+                    'buttons' => [
+                        'contextButton' => [
+                            'menuItems' => [
+                                [
+                                    'textKey' => 'printChart',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-printer"></i> ' . Yii::t("app", "Print Chart") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.print();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-file-jpg"></i> ' . Yii::t("app", "Download PNG Image") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"> <i class="pli-file-text-image"></i> ' . Yii::t("app", "Download PDF Document") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart({type: 'application/pdf'});}")
+                                ],
+                            ],
+                        ]
+
+                    ],
+                ],
+
                 'yAxis' => [
                     'labels' => [
-                        'enabled' => false
+                        'enabled' => true
                     ],
                     'title' => [
                         "text" => null
