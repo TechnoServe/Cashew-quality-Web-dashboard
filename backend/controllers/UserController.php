@@ -292,8 +292,10 @@ class UserController extends Controller
         $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
         $filter['company_id'] ? $query->andFilterWhere(['status' => $filter['company_id']]) : null;
 
+
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "users_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "users_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }
