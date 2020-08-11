@@ -133,14 +133,14 @@ class QarController extends ActiveController
 
         $qar = new Qar();
 
-        $buyerExists = User::queryByCompany()->andWhere([User::ROLE_FIELD_BUYER => $data['buyer']])->exists();
+        $buyerExists = User::queryByCompany()->andWhere(['role' => $data['buyer']])->exists();
         if($buyerExists){
             $qar->buyer = $data['buyer'];
         }else{
             $qar = 'This buyer does not exist';
         }
 
-        $field_techExist = User::queryByCompany()->andWhere([User::ROLE_FIELD_TECH => $data['field_tech']])->exists();
+        $field_techExist = User::queryByCompany()->andWhere(['role' => $data['field_tech']])->exists();
         if($field_techExist){
             $qar->field_tech = $data['field_tech'];
         }else{
