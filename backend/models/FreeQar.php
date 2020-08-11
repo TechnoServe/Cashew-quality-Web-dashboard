@@ -10,7 +10,7 @@ use common\models\FreeSites;
 class FreeQar extends \common\models\FreeQar
 {
 
-    public static function getQarCountsByStatusAndTimePeriod($dates, $status){
+    public static function getQarCountsByStatusAndTimePeriod($dates, $status, $siteId = null){
      $data = [];
      foreach ($dates as $date){
          array_push($data, (int) self::find()
@@ -22,7 +22,7 @@ class FreeQar extends \common\models\FreeQar
      return $data;
     }
 
-    public static function getAverageKorOfQarByTimePeriod($dates){
+    public static function getAverageKorOfQarByTimePeriod($dates, $siteId = null){
         $data = [];
         foreach ($dates as $date){
             array_push($data, (float) self::find()->innerJoin(FreeQarResult::tableName(), "free_qar.document_id = free_qar_result.qar")

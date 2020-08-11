@@ -10,7 +10,7 @@ use Yii;
 class FreeVersionDataHelper
 {
 
-    public static function getQarChartData($datesPeriod){
+    public static function getQarChartData($datesPeriod, $siteId = null){
 
         $series  = [];
 
@@ -19,7 +19,7 @@ class FreeVersionDataHelper
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "To be done"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 0),
+                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 0, $siteId),
                 "color" => "#ffb300"
             ]
         );
@@ -29,7 +29,7 @@ class FreeVersionDataHelper
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "In progress"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 1),
+                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 1, $siteId),
                 "color" => "#03a9f4"
             ]
         );
@@ -40,7 +40,7 @@ class FreeVersionDataHelper
             [
                 'type' => 'column',
                 'name' => Yii::t("app", "Completed"),
-                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 2),
+                'data' => \backend\models\FreeQar::getQarCountsByStatusAndTimePeriod($datesPeriod, 2, $siteId),
                 "color" => "#26a69a"
             ]
         );
@@ -50,7 +50,7 @@ class FreeVersionDataHelper
             [
                 'type' => 'spline',
                 'name' => Yii::t("app", "Average KOR"),
-                'data' => \backend\models\FreeQar::getAverageKorOfQarByTimePeriod($datesPeriod),
+                'data' => \backend\models\FreeQar::getAverageKorOfQarByTimePeriod($datesPeriod, $siteId),
                 'marker' => [
                     'lineWidth' => 2,
                     'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
