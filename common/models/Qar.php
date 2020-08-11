@@ -20,6 +20,7 @@ use Yii;
  * @property User $buyer0
  * @property User $farmer0
  * @property User $fieldTech
+ * @property string $deadline
  * @property QarDetail[] $qarDetails
  */
 class Qar extends \yii\db\ActiveRecord
