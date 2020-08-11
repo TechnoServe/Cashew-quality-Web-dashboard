@@ -13,6 +13,11 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+
+        'authManager' => [
+            'class' => 'backend\components\RoleManager',
+        ],
+
         'request' => [
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',

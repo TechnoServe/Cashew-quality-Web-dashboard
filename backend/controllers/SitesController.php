@@ -79,8 +79,11 @@ class SitesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $startDate = null, $endDate = null, $predefinedPeriod = null)
     {
+
+        list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
+
 
         $model = $this->findModel($id);
 
@@ -92,7 +95,10 @@ class SitesController extends Controller
 
         return $this->render('view', [
             'model' => $model,
-            'qarListDataProvider' => $qarListDataProvider
+            'qarListDataProvider' => $qarListDataProvider,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'predefinedPeriod' => $predefinedPeriod
         ]);
     }
 

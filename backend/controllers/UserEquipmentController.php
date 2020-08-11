@@ -234,6 +234,6 @@ class UserEquipmentController extends Controller
         $filter['name'] ? $query->andFilterWhere(['like', 'name' , $filter['name']]) : null;
         $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
-        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' =>  $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "equipments_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' =>  $query->all(), 'showCompany' => Yii::$app->user->identity->company_id  == null]), Pdf::FORMAT_A4, Pdf::ORIENT_PORTRAIT, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "equipments_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }
