@@ -257,6 +257,6 @@ class CompanyController extends Controller
         $filter['primary_contact'] ? $query->andWhere(['primary_contact' => $filter['primary_contact']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
 
-        CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all()]), Pdf::FORMAT_A4, Pdf::ORIENT_LANDSCAPE, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "companies_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
+        return CashewAppHelper::renderPDF($this->renderPartial('_pdf', ['models' => $query->all()]), Pdf::FORMAT_A4, Pdf::ORIENT_LANDSCAPE, null, ['marginTop' => '15px','marginLeft' => '10px','marginRight' => '10px','marginBottom' => '15px'], "companies_" .date('Y_m_d-H_i_s', strtotime('now')). ".pdf");
     }
 }

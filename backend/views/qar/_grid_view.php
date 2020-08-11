@@ -5,6 +5,8 @@ use backend\models\Qar;
 use backend\models\Site;
 use backend\models\User;
 use yii\grid\GridView;
+use yii\helpers\Html;
+
 !isset($summary) ? $summary = true : null;
 ?>
 <?= GridView::widget([
@@ -73,6 +75,16 @@ use yii\grid\GridView;
             },
         ],
 
-        ['class' => 'yii\grid\ActionColumn'],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>' ,
+                        ["qar/view","id" => $model->id], ['title' => Yii::t('app', 'Details'),]);
+                },
+            ],
+        ],
+
     ],
 ]); ?>
