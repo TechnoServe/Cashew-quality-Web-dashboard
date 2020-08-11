@@ -252,7 +252,8 @@ class Qar extends \common\models\Qar
                 ->where([">=", "DATE(created_at)", date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
                 ->andWhere(["status" => $status])
-                ->count());
+                ->count()
+            );
         }
         return $data;
     }
@@ -262,10 +263,14 @@ class Qar extends \common\models\Qar
         $data = [];
         foreach ($dates as $date) {
             array_push($data, (float) self::find()
+                ->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar")
                 ->where([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
-                ->count() / 3
-            );
+                ->andWhere(["qar.status" => Qar::STATUS_COMPLETED])
+                ->andWhere(["qar_detail.key" => Qar::RESULT_KOR])
+                ->andWhere(["qar_detail.result" => 1])
+                ->average("qar_detail.value")
+            );    
         }
         return $data;
     }
