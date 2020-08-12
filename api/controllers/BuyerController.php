@@ -10,6 +10,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 use yii\filters\auth\QueryParamAuth;
+use yii\web\Response;
 
 
 class BuyerController extends ActiveController
@@ -29,7 +30,7 @@ class BuyerController extends ActiveController
         return $behaviors;
     }
 
-    public $modelClass = 'common\models\User';
+    public $modelClass = 'api\models\User';
     // Some reserved attributes like maybe 'q' for searching all fields at once 
     // or 'sort' which is already supported by Yii RESTful API
    // public $reservedParams = ['sort','q'];
@@ -38,9 +39,53 @@ class BuyerController extends ActiveController
     {
         $actions = parent::actions();
       //  $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-       // unset($actions['view']);
+       unset($actions['index']);
+       unset($actions['view']);
         return $actions;
     }
 
+    public function actionIndex() {
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        
+        $buyers = $this->modelClass::find()->where(['role' => $this->modelClass::ROLE_FIELD_BUYER])->all();
+
+        $data = [];
+        foreach ($buyers as $buyer) {
+            $data[] = $buyer;
+        }
+        if ($buyers) {
+            return $response->data = [
+                        'data' => $data,
+                        'code' => 200
+                    ];
+        } else {
+            return $response->data = [
+                        'data' => 'Not Found',
+                        'code' => 404
+                    ];
+        }
+        
+    }
+
+    public function actionView($id) {
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        
+            $buyer = $this->modelClass::findOne(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER]);
+
+            if($buyer){
+                return $response->data = [
+                        'data' => $buyer,
+                        'code' => 200
+                    ];
+            }else{
+                return $response->data = [
+                        'data' => 'Not Found',
+                        'code' => 404
+                    ];
+            
+            }
+        }
 
 }
