@@ -183,7 +183,7 @@ class QarController extends ActiveController
         }
 
 
-        $dateValidator = new DateValidator();
+        //$dateValidator = new DateValidator();
         if(empty(trim($data['deadline'])))
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide deadline"));
         else if(!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$data['deadline']))
