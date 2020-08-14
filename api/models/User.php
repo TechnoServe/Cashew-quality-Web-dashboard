@@ -2,7 +2,7 @@
 
 namespace api\models;
 
-class User extends \common\models\User
+class User extends \backend\models\User
 {
 public function fields()
 
