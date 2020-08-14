@@ -55,7 +55,7 @@ class BuyerController extends ActiveController
 
     /**
      * Method can be passed parameters which will be used to filter result
-     * Responds to request to get list of fieldTechs
+     * Responds to request to get list of buyers
      * @return array
      */
     public function actionIndex() {
@@ -63,7 +63,7 @@ class BuyerController extends ActiveController
         // Initiate search query
         $query = $this->modelClass::queryByCompany();
 
-        // Search has to be performed on active fieldTechs
+        // Search has to be performed on active buyers
         $query->andWhere(["role" => User::ROLE_FIELD_BUYER]) ->andWhere(["status" => User::STATUS_ACTIVE]);
 
         // Get filter parameters from query params
@@ -91,7 +91,7 @@ class BuyerController extends ActiveController
 
 
     /**
-     * Handles request to get details of a specific fieldTech by id
+     * Handles request to get details of a specific buyer by id
      * @param $id
      * @return ApiResponse
      */
