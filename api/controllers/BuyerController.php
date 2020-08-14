@@ -61,7 +61,7 @@ class BuyerController extends ActiveController
     public function actionIndex() {
 
         // Initiate search query
-        $query = $this->modelClass::queryByCompany();
+        $query = $this->modelClass::queryByCompany(Yii::$app->user->identity);
 
         // Search has to be performed on active buyers
         $query->andWhere(["role" => User::ROLE_FIELD_BUYER]) ->andWhere(["status" => User::STATUS_ACTIVE]);
@@ -97,7 +97,7 @@ class BuyerController extends ActiveController
      */
     public function actionView($id)
     {
-        $buyer = $this->modelClass::queryByCompany()->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER])->one();
+        $buyer = $this->modelClass::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER])->one();
 
         if ($buyer) {
             return new ApiResponse($buyer, null, true);

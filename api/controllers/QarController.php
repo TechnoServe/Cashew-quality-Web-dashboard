@@ -64,7 +64,13 @@ class QarController extends ActiveController
 
     public function actionView($id)
     {
-        $qar = Qar::findOne($id);
+        $qar = Qar::queryByCompany(Yii::$app->user->identity)->andWhere(["id" => $id])->one();
+
+        if(!$qar) {
+            Yii::$app->response->statusCode = 404;
+            return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, "Invalid QAR ID")], false);
+        }
+
         $data = [
             Qar::FIELD_LOT_INFO => [
                 Qar::FIELD_NUMBER_OF_BAGS_SAMPLED => $qar->number_of_bags,
@@ -82,7 +88,8 @@ class QarController extends ActiveController
                 'value_without_shell' => $detail->value_without_shell,
             ];
         }
-        return $data;
+
+        return new ApiResponse($data, null, true);
 
     }
 
