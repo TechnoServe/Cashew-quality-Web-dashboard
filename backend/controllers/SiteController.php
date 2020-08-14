@@ -93,6 +93,9 @@ class SiteController extends Controller
         $qarsCompleted = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
         $qarsCanceled = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_CANCELED])->count();
 
+        // Sites
+        $totalSites = Site::queryByCompany()->count();
+
         // Users
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
@@ -193,6 +196,7 @@ class SiteController extends Controller
             'qarsToBeDone' => $qarsToBeDone,
             'qarsCompleted' => $qarsCompleted,
             'qarsCanceled' => $qarsCanceled,
+            'totalSites' => $totalSites,
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,

@@ -8,8 +8,10 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
 <div class="site-index">
 
+    <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "/"]) ?>
+
     <div class="panel">
-        <div class="panel-heading">
+        <div class="panel-heading bg-primary">
             <h4 class="panel-title"><?= Yii::t('app', 'QARs') ?></h4>
         </div>
         <div class="panel-body">
@@ -21,8 +23,6 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             ]); ?>
         </div>
 
-        <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "/"]) ?>
-        
         <div class="panel-body">
             <?= $this->render('//qar/_mini_graph', [
                 'qarsInProgress' => $qarsInProgress,
@@ -38,10 +38,28 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
         </div>
     </div>
 
+    <div class="panel">
+        <div class="panel-heading bg-primary">
+            <h4 class="panel-title"><?= Yii::t('app', 'Sites') ?></h4>
+        </div>
 
+        <div class="panel-body">
+            <?= $this->render('//sites/_stat', [
+                'totalSites' => $totalSites
+            ]); ?>
+        </div>
+
+        <div class="panel-body">
+            <?= $this->render('//sites/_mini_heatmap', [
+                'totalSites' => $totalSites,
+                'categories' => $categories,
+                'series' => $series
+            ]); ?>
+        </div>
+    </div>
 
     <div class="panel">
-        <div class="panel-heading">
+        <div class="panel-heading bg-primary">
             <h4 class="panel-title"><?= Yii::t('app', 'Users') ?></h4>
         </div>
         <div class="panel-body">
