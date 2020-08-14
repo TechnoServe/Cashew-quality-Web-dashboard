@@ -97,10 +97,10 @@ class BuyerController extends ActiveController
      */
     public function actionView($id)
     {
-        $field_tech = $this->modelClass::queryByCompany()->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER])->one();
+        $buyer = $this->modelClass::queryByCompany()->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER])->one();
 
-        if ($field_tech) {
-            return new ApiResponse($field_tech, null, true);
+        if ($buyer) {
+            return new ApiResponse($buyer, null, true);
         } else {
             Yii::$app->response->statusCode = 404;
             return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, "Invalid Buyer ID")], false);
