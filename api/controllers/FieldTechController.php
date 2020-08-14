@@ -7,6 +7,7 @@ use api\components\ApiResponse;
 use api\models\User;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
+use yii\filters\VerbFilter;
 use yii\rest\ActiveController;
 
 
@@ -24,7 +25,17 @@ class FieldTechController extends ActiveController
                 }
             }
         ];
-        return $behaviors;
+        return array_merge(
+            $behaviors,
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'index' => ['GET'],
+                        'view' => ['GET']
+                    ],
+                ],
+            ]);
     }
 
     public $modelClass = 'api\models\User';
