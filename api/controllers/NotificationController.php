@@ -14,7 +14,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\validators\DateValidator;
 
-class QarController extends ActiveController
+class NotificationController extends ActiveController
 {
     public function behaviors()
     {
