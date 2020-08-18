@@ -89,7 +89,7 @@ class CompanyController extends Controller
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             // get the instance of the uploaded file
             $model->logoUploaded = UploadedFile::getInstance($model, 'logoUploaded');
@@ -115,7 +115,7 @@ class CompanyController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
 
             // get the instance of the uploaded file

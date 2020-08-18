@@ -152,7 +152,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        $user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+
+        if(!$user)
+            return  null;
+
+        if($user->role == User::ROLE_ADMIN || $user->role == User::ROLE_ADMIN_VIEW)
+            return $user;
+
+        $company = Company::findOne(['id' => $user->company_id, 'status' => \backend\models\Company::STATUS_ACTIVE]);
+
+        return $company ? $user : null;
     }
 
     /**
@@ -171,7 +181,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        $user = static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+
+        if(!$user)
+            return  null;
+
+        if($user->role == User::ROLE_ADMIN || $user->role == User::ROLE_ADMIN_VIEW)
+            return $user;
+
+        $company = Company::findOne(['id' => $user->company_id, 'status' => \backend\models\Company::STATUS_ACTIVE]);
+
+        return $company ? $user : null;
     }
 
     /**
