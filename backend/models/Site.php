@@ -203,7 +203,12 @@ class Site extends baseSite
      * Get latitude and longitude from map location
      */
     public function getLatitudeAndLongitudeFromMapLocation(){
-        if(!empty($this->map_location))
-            list($this->latitude, $this->longitude) = explode(",", $this->map_location);
+        if(!empty($this->map_location)) {
+            try {
+                list($this->latitude, $this->longitude) = explode(",", $this->map_location);
+            } catch (\Exception $e) {
+                Yii::error($e->getMessage());
+            }
+        }
     }
 }
