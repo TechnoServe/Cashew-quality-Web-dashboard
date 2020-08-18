@@ -28,6 +28,17 @@ class Site extends baseSite
                 'skipOnEmpty' => !$this->isNewRecord,
                 'extensions' => 'png, jpg, gif',
             ],
+            [
+                'site_name',
+                function ($attribute, $params) {
+                    if (self::find()->where(["site_name" => trim($this->site_name)])
+                        ->andWhere(["<>", "id", $this->id])
+                        ->andWhere(['company_id' => Yii::$app->user->identity->company_id])
+                        ->exists())
+                        $this->addError($attribute, Yii::t("app", "Site already exists"));
+                    return false;
+                },
+                'skipOnEmpty' => false, 'skipOnError' => false],
         ]);
     }
 
