@@ -170,7 +170,7 @@ class Company extends \common\models\Company
         $data = [];
 
         foreach ($companies as $company) {
-            $data[$company->id] = $company->name;
+            $data[$company->id] = $company->name . " • " . self::getStatusDropdownValues()[$company->status];
         }
 
         return [
