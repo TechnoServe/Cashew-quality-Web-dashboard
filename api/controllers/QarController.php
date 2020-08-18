@@ -174,6 +174,11 @@ class QarController extends ActiveController
 
         if(!empty($data['lot_info'])) {
         $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
+        }else{
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Lot info is empty"));
+        }
+
+        if(!empty($data['lot_info'])) {
         $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
         }else{
             array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Lot info is empty"));
