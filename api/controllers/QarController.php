@@ -73,6 +73,27 @@ class QarController extends ActiveController
         return $actions;
     }
 
+    public function actionIndex()
+    {
+        // Initiate search query
+        $query = Qar::find();
+
+        // Search has to be performed on completed field work
+        $query->andWhere(["status" => Qar::STATUS_COMPLETED])->all();
+
+        // Get filter parameters from query params
+        $filter =  Yii::$app->request->getQueryParams();
+
+         // Filter by buyer if passed
+        (isset($filter['buyer']) && $filter['buyer']) ? $query->andFilterWhere(['like', 'buyer', trim($filter['buyer'])]) : null;
+
+
+        return new ApiResponse($query->all(), null, true);
+
+
+
+    }
+
 
     public function actionView($id)
     {
