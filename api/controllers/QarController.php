@@ -152,7 +152,7 @@ class QarController extends ActiveController
         }
 
 
-        if(!empty($data['deadline'])) {
+
         //$dateValidator = new DateValidator();
         if(empty(trim($data['deadline'])))
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide deadline"));
@@ -161,10 +161,6 @@ class QarController extends ActiveController
         else
             $qar->deadline = $data['deadline'];
 
-        }else{
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Deadline is empty"));
-        }
-
         if(!empty($errors)){
             Yii::$app->response->statusCode = 400;
             return new ApiResponse(null, $errors, false);
@@ -172,16 +168,16 @@ class QarController extends ActiveController
 
         $qar->company_id = Yii::$app->user->identity->company_id;
 
-        if(!empty($data['lot_info'])) {
+        if(!empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS])) {
         $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
         }else{
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Lot info is empty"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Number total bags is empty"));
         }
 
-        if(!empty($data['lot_info'])) {
+        if(!empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK])) {
         $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
         }else{
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Lot info is empty"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Volume total stock is empty"));
         }
         $qar->save();
 
@@ -190,7 +186,6 @@ class QarController extends ActiveController
 
     public function actionSaveDetail()
     {
-
         $data = Yii::$app->request->post();
 
         $errors = [];
