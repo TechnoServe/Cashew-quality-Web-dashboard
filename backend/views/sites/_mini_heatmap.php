@@ -6,12 +6,12 @@
     <script src="https://code.highcharts.com/maps/modules/data.js"></script>
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/bj/bj-all.js"></script>
 </head>
 
 <style>
     #map-container {
-        height: 500px;
+        height: 800px;
         min-width: 310px;
         max-width: 800px;
         margin: 0 auto;
@@ -31,109 +31,65 @@
     </div>
 
     <script>
-        var H = Highcharts,
-            map = H.maps['countries/us/us-all'],
-            chart;
+        var data = [
+            ['bj-do', 0], // Donga
+            ['bj-bo', 1], // Borgou
+            ['bj-al', 2], // Alibori
+            ['bj-cl', 3], // Collines
+            ['bj-aq', 4], // Atlantique
+            ['bj-li', 5], // Littoral
+            ['bj-cf', 6], // Kouffo
+            ['bj-ou', 7], // Ouémé
+            ['bj-zo', 8], // Zou
+            ['bj-pl', 9], // Plateau
+            ['bj-mo', 10], // Mono
+            ['bj-ak', 11] // Atakora
+        ];
 
-        // Add series with state capital bubbles
-        Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/us-capitals.json', function(json) {
-            var data = [];
-            json.forEach(function(p) {
-                p.z = p.population;
-                data.push(p);
-            });
+        Highcharts.mapChart('map-container', {
+            chart: {
+                map: 'countries/bj/bj-all'
+            },
 
-            chart = Highcharts.mapChart('map-container', {
-                title: {
-                    text: 'Highcharts Maps lat/lon demo'
-                },
+            title: {
+                text: 'Heatmap for KOR Average per site'
+            },
 
-                tooltip: {
-                    pointFormat: '{point.capital}, {point.parentState}<br>' +
-                        'Lat: {point.lat}<br>' +
-                        'Lon: {point.lon}<br>' +
-                        'Population: {point.population}'
-                },
+            credits: {
+                enabled: false
+            },
 
-                xAxis: {
-                    crosshair: {
-                        zIndex: 5,
-                        dashStyle: 'dot',
-                        snap: false,
-                        color: 'gray'
-                    }
-                },
+            tooltip: {
+                headerFormat: '',
+                pointFormat: 'Site: <b>{point.name}</b>, Location: <b>{point.name}</b><br>Lat: <b>{point.properties.latitude}</b>, Lon: <b>{point.properties.longitude}</b><br>KOR: <b>{point.properties.hasc}</b>'
+            },
 
-                yAxis: {
-                    crosshair: {
-                        zIndex: 5,
-                        dashStyle: 'dot',
-                        snap: false,
-                        color: 'gray'
-                    }
-                },
-
-                series: [{
-                    name: 'Basemap',
-                    mapData: map,
-                    borderColor: '#606060',
-                    nullColor: 'rgba(200, 200, 200, 0.2)',
-                    showInLegend: false
-                }, {
-                    name: 'Separators',
-                    type: 'mapline',
-                    data: H.geojson(map, 'mapline'),
-                    color: '#101010',
-                    enableMouseTracking: false,
-                    showInLegend: false
-                }, {
-                    type: 'mapbubble',
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.capital}'
-                    },
-                    name: 'Cities',
-                    data: data,
-                    maxSize: '12%',
-                    color: H.getOptions().colors[0]
-                }]
-            });
-        });
-
-        // Display custom label with lat/lon next to crosshairs
-        document.getElementById('container').addEventListener('mousemove', function(e) {
-            var position;
-            if (chart) {
-                if (!chart.lab) {
-                    chart.lab = chart.renderer.text('', 0, 0)
-                        .attr({
-                            zIndex: 5
-                        })
-                        .css({
-                            color: '#505050'
-                        })
-                        .add();
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'top'
                 }
+            },
 
-                e = chart.pointer.normalize(e);
-                position = chart.fromPointToLatLon({
-                    x: chart.xAxis[0].toValue(e.chartX),
-                    y: chart.yAxis[0].toValue(e.chartY)
-                });
+            colorAxis: {
+                min: 0
+            },
 
-                chart.lab.attr({
-                    x: e.chartX + 5,
-                    y: e.chartY - 22,
-                    text: 'Lat: ' + position.lat.toFixed(2) + '<br>Lon: ' + position.lon.toFixed(2)
-                });
-            }
-        });
+            //series: $siteSeries,
 
-        document.getElementById('container').addEventListener('mouseout', function() {
-            if (chart && chart.lab) {
-                chart.lab.destroy();
-                chart.lab = null;
-            }
+            series: [{
+                data: data,
+                name: 'Average of KOR',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }]
         });
     </script>
 

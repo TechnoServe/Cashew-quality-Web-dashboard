@@ -33,7 +33,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'endDate' => $endDate,
                 'predefinedPeriod' => $predefinedPeriod,
                 'categories' => $categories,
-                'series' => $series
+                'qarSeries' => $qarSeries
             ]) ?>
         </div>
     </div>
@@ -53,7 +53,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             <?= $this->render('//sites/_mini_heatmap', [
                 'totalSites' => $totalSites,
                 'categories' => $categories,
-                'series' => $series
+                'siteSeries' => $siteSeries
             ]); ?>
         </div>
     </div>
