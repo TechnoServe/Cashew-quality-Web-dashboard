@@ -12,7 +12,6 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        //'nifty/css/site.css',
         'nifty/css/nifty.min.css',
         'nifty/css/pace.min.css',
         'nifty/premium/icon-sets/icons/line-icons/premium-line-icons.min.css',
@@ -21,6 +20,7 @@ class AppAsset extends AssetBundle
         'nifty/css/demo/nifty-demo-icons.css',
         'nifty/css/themes/type-b/theme-navy.min.css',
         'nifty/css/flag-icon-css/css/flag-icon.css',
+        'css/site.css',
     ];
     public $js = [
         'nifty/js/bootstrap.min.js',

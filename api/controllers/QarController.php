@@ -13,6 +13,7 @@ use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\validators\DateValidator;
+use yii\filters\VerbFilter;
 
 class QarController extends ActiveController
 {
@@ -46,7 +47,16 @@ class QarController extends ActiveController
                     ],
 
                 ],
-            ]]);
+            ],
+
+            'verbs' => [
+        'class' => VerbFilter::className(),
+        'actions' => [
+            'save-qar' => ['POST'],
+            'save-detail' => ['POST'],
+            'save-result' => ['POST'],
+        ],
+    ],]);
     }
 
     public $modelClass = 'common\models\Qar';
@@ -103,30 +113,46 @@ class QarController extends ActiveController
         $qar = new Qar();
 
         $errors = [];
-        $buyerExists = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER, "id" => $data['buyer'] ])->exists();
-        if($buyerExists){
-            $qar->buyer = $data['buyer'];
+        if(!empty($data['buyer'])) {
+            $buyerExists = User::queryByCompany()->andWhere([
+                "role" => User::ROLE_FIELD_BUYER,
+                "id" => $data['buyer']
+            ])->exists();
+            if ($buyerExists) {
+                $qar->buyer = $data['buyer'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Buyer is invalid"));
+            }
         }else{
-            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Buyer is invalid"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Buyer is empty"));
         }
 
+        if(!empty($data['field_tech'])) {
         $field_techExist = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH, "id" => $data['field_tech']])->exists();
         if($field_techExist){
             $qar->field_tech = $data['field_tech'];
         }else{
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
         }
+        }else{
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Field Tech is empty"));
+        }
 
         $initiator = Yii::$app->user->identity->role == User::ROLE_FIELD_TECH ? QAR::INITIATED_BY_FIELD_TECH : QAR::INITIATED_BY_BUYER;
         $qar->initiator = $initiator;
 
 
+        if(!empty($data['site'])) {
         $site_exist = Site::queryByCompany()->andWhere(["id"=>$data['site']])->exists();
         if($site_exist){
             $qar->site = $data['site'];
         }else{
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Site is invalid"));
         }
+        }else{
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Site is empty"));
+        }
+
 
 
         //$dateValidator = new DateValidator();
@@ -137,15 +163,24 @@ class QarController extends ActiveController
         else
             $qar->deadline = $data['deadline'];
 
-
         if(!empty($errors)){
             Yii::$app->response->statusCode = 400;
             return new ApiResponse(null, $errors, false);
         }
 
         $qar->company_id = Yii::$app->user->identity->company_id;
+
+        if(!empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS])) {
         $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
+        }else{
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Number total bags is empty"));
+        }
+
+        if(!empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK])) {
         $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
+        }else{
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Volume total stock is empty"));
+        }
         $qar->save();
 
         return new ApiResponse($qar, null, true);
@@ -153,7 +188,6 @@ class QarController extends ActiveController
 
     public function actionSaveDetail()
     {
-
         $data = Yii::$app->request->post();
 
         $errors = [];
@@ -180,7 +214,16 @@ class QarController extends ActiveController
                 $qar_detail->value_with_shell = $value['value_with_shell'];
                 $qar_detail->value_without_shell = $value['value_with_shell'];
                 $qar_detail->picture = $value['picture'];
-                $qar_detail->id_qar = $data['id'];
+                if(!empty($data['id'])) {
+                    $field_techExist = User::queryByCompany()->exists();
+                    if($field_techExist) {
+                        $qar_detail->id_qar = $data['id'];
+                    }else{
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+                    }
+                }else{
+                    array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
+                }
                 $qar_detail->result = 0;
                 $qar_detail->save();
             }
@@ -219,7 +262,16 @@ class QarController extends ActiveController
                   $qar_detail->value_with_shell = $value['value_with_shell'];
                   $qar_detail->value_without_shell = $value['value_with_shell'];
                   $qar_detail->picture = $value['picture'];
-                  $qar_detail->id_qar = $data['id'];
+                  if(!empty($data['id'])) {
+                      $field_techExist = User::queryByCompany()->exists();
+                      if($field_techExist) {
+                            $qar_detail->id_qar = $data['id'];
+                      }else{
+                          array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+                      }
+                  }else{
+                      array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
+                  }
                   $qar_detail->result = 1;
                   $qar_detail->save();
               }

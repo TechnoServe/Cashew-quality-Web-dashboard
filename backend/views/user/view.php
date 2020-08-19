@@ -26,6 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']) ?>
+
+            <?php if($model->status == User::STATUS_ACTIVE): ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-danger',
@@ -35,6 +37,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         'method' => 'post',
                     ],
                 ]) ?>
+            <?php endif; ?>
+
+            <?php if($model->status == User::STATUS_INACTIVE): ?>
+                <?= Html::a(Yii::t('app', 'Re-activate'), ['restore', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-success',
+                        'data' => [
+                            'confirm' => Yii::t('app',
+                                'Are you sure you want to restore this user?'),
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+            <?php endif; ?>
         </p>
 
         <?= DetailView::widget([
