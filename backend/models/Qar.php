@@ -97,8 +97,9 @@ class Qar extends \common\models\Qar
      * Query users by company
      * @return \yii\db\ActiveQuery
      */
-    public static function queryByCompany(){
-        $loggedInUser = Yii::$app->user->identity;
+    public static function queryByCompany($loggedInUser = null){
+        if(!$loggedInUser)
+            $loggedInUser = Yii::$app->user->identity;
 
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
 

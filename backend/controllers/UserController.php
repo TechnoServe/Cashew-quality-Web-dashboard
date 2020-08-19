@@ -56,6 +56,7 @@ class UserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'restore' => ['POST'],
                 ],
             ],
         ];
@@ -129,9 +130,10 @@ class UserController extends Controller
 
             $transaction = Yii::$app->db->beginTransaction();
 
+
             if ($model->validate() && $model->save()) {
                 if ($model->sendEmail($plain_pass)) {
-                    Yii::$app->session->setFlash('success', 'Email sent to newly created user.');
+                    Yii::$app->session->setFlash('success', Yii::t("app", "Email sent to newly created user."));
 
                     $transaction ->commit();
 
@@ -139,7 +141,7 @@ class UserController extends Controller
                 } else {
                     $transaction ->rollBack();
                     Yii::$app->session->setFlash('danger',
-                        'Sorry, we are unable to send an email to the newly created user.');
+                        Yii::t("app", "Sorry, we are unable to send an email to the newly created user."));
                 }
             }
             $transaction ->rollBack();
@@ -193,13 +195,46 @@ class UserController extends Controller
     {
 
         $model = $this->findModel($id);
-        if ($model->status == User::STATUS_ACTIVE) {
-            $model->status = User::STATUS_INACTIVE;
-        } else {
-            $model->status = User::STATUS_ACTIVE;
+
+        if ($model->id == Yii::$app->user->getId()) {
+            Yii::$app->session->setFlash("danger", Yii::t("app", "You can not deactivate your own account"));
+            return $this->redirect(["user/view", "id" => $model->id]);
         }
+
+
+        if ($model->status == User::STATUS_INACTIVE) {
+            Yii::$app->session->setFlash("danger", Yii::t("app", "User account already inactive"));
+            return $this->redirect(["user/view", "id" => $model->id]);
+        }
+
+        $model->status = User::STATUS_INACTIVE;
+
         $model->save(0);
-        return $this->redirect(['index']);
+
+        Yii::$app->session->setFlash("success", Yii::t("app", "User deactivated successfully"));
+
+        return $this->redirect(['user/view', "id"=>$model->id]);
+
+    }
+
+
+    public function actionRestore($id)
+    {
+
+        $model = $this->findModel($id);
+
+        if ($model->status == User::STATUS_ACTIVE) {
+            Yii::$app->session->setFlash("danger", Yii::t("app", "User account already active"));
+            return $this->redirect(["user/view", "id" => $model->id]);
+        }
+
+        $model->status = User::STATUS_ACTIVE;
+
+        $model->save(0);
+
+        Yii::$app->session->setFlash("success", Yii::t("app", "User re-activated successfully"));
+
+        return $this->redirect(['user/view', "id"=>$model->id]);
 
     }
 

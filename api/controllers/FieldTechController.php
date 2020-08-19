@@ -61,7 +61,7 @@ class FieldTechController extends ActiveController
     public function actionIndex() {
 
         // Initiate search query
-        $query = $this->modelClass::queryByCompany();
+        $query = $this->modelClass::queryByCompany(Yii::$app->user->identity);
 
         // Search has to be performed on active fieldTechs
         $query->andWhere(["role" => User::ROLE_FIELD_TECH]) ->andWhere(["status" => User::STATUS_ACTIVE]);
@@ -97,7 +97,7 @@ class FieldTechController extends ActiveController
      */
     public function actionView($id)
     {
-        $field_tech = $this->modelClass::queryByCompany()->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_TECH])->one();
+        $field_tech = $this->modelClass::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_TECH])->one();
 
         if ($field_tech) {
             return new ApiResponse($field_tech, null, true);

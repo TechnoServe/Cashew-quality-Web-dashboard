@@ -7,6 +7,25 @@ use Yii;
 class User extends \common\models\User
 {
 
+    public function rules()
+    {
+        return array_merge(parent::rules(), [
+            ['company_id',
+                function ($attribute, $params) {
+
+                    if (Yii::$app->user->identity->role == User::ROLE_ADMIN && $this->role == User::ROLE_INSTITUTION_ADMIN && empty($this->company_id))
+                        $this->addError($attribute, Yii::t("app","You need to choose company"));
+
+                    if (Yii::$app->user->identity->role == User::ROLE_ADMIN && ($this->role == User::ROLE_ADMIN || $this->role == User::ROLE_ADMIN_VIEW)  && !empty($this->company_id))
+                        $this->addError($attribute, Yii::t("app","Please remove company"));
+
+                    return false;
+                },
+                'skipOnEmpty' => false, 'skipOnError' => false]
+        ]);
+    }
+
+
     const ROLE_ADMIN = 1;
 
     const ROLE_ADMIN_VIEW = 2;
@@ -26,8 +45,10 @@ class User extends \common\models\User
      * Query users by company
      * @return \yii\db\ActiveQuery
      */
-    public static function queryByCompany(){
-        $loggedInUser = Yii::$app->user->identity;
+    public static function queryByCompany($loggedInUser = null){
+
+        if(!$loggedInUser)
+            $loggedInUser = Yii::$app->user->identity;
 
         if($loggedInUser->role != self::ROLE_ADMIN && $loggedInUser->role != self::ROLE_ADMIN_VIEW)
             return self::find()->where(["company_id" =>  $loggedInUser->company_id]);

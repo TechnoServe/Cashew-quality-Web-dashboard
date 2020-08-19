@@ -9,10 +9,12 @@ use backend\models\Site;
 use common\models\QarDetail;
 use backend\models\User;
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\validators\DateValidator;
+use yii\filters\VerbFilter;
 
 class QarController extends ActiveController
 {
@@ -30,23 +32,48 @@ class QarController extends ActiveController
             }
         ];
         return array_merge($behaviors,
-            ['access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
+            [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
 
-                    [
-                        'actions' => ['index', 'view', 'export-csv', 'export-pdf', 'save', 'save-qar', 'save-detail', 'save-result'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        [
+                            'actions' => [
+                                'index',
+                                'view',
+                                'export-csv',
+                                'export-pdf',
+                                'save',
+                                'save-qar',
+                                'save-detail',
+                                'save-result'
+                            ],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+
+                        [
+                            'allow' => true,
+                            'roles' => [
+                                User::ROLE_INSTITUTION_ADMIN,
+                                User::ROLE_FIELD_TECH,
+                                User::ROLE_FIELD_FARMER,
+                                User::ROLE_FIELD_BUYER
+                            ],
+                        ],
+
                     ],
-
-                    [
-                        'allow' => true,
-                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
-                    ],
-
                 ],
-            ]]);
+
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'save-qar' => ['POST'],
+                        'save-detail' => ['POST'],
+                        'save-result' => ['POST'],
+                    ],
+                ],
+            ]);
     }
 
     public $modelClass = 'common\models\Qar';
@@ -64,7 +91,13 @@ class QarController extends ActiveController
 
     public function actionView($id)
     {
-        $qar = Qar::findOne($id);
+        $qar = Qar::queryByCompany(Yii::$app->user->identity)->andWhere(["id" => $id])->one();
+
+        if (!$qar) {
+            Yii::$app->response->statusCode = 404;
+            return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, "Invalid QAR ID")], false);
+        }
+
         $data = [
             Qar::FIELD_LOT_INFO => [
                 Qar::FIELD_NUMBER_OF_BAGS_SAMPLED => $qar->number_of_bags,
@@ -82,7 +115,8 @@ class QarController extends ActiveController
                 'value_without_shell' => $detail->value_without_shell,
             ];
         }
-        return $data;
+
+        return new ApiResponse($data, null, true);
 
     }
 
@@ -94,49 +128,91 @@ class QarController extends ActiveController
         $qar = new Qar();
 
         $errors = [];
-        $buyerExists = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER, "id" => $data['buyer'] ])->exists();
-        if($buyerExists){
-            $qar->buyer = $data['buyer'];
-        }else{
-            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Buyer is invalid"));
+        if (isset($data['buyer']) && !empty($data['buyer'])) {
+            $buyerExists = User::queryByCompany()->andWhere([
+                "role" => User::ROLE_FIELD_BUYER,
+                "id" => $data['buyer']
+            ])->exists();
+            if ($buyerExists) {
+                $qar->buyer = $data['buyer'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Buyer is invalid"));
+            }
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide buyer"));
         }
 
-        $field_techExist = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH, "id" => $data['field_tech']])->exists();
-        if($field_techExist){
-            $qar->field_tech = $data['field_tech'];
-        }else{
-            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+        if (isset($data['field_tech']) && !empty($data['field_tech'])) {
+            $field_techExist = User::queryByCompany()->andWhere([
+                "role" => User::ROLE_FIELD_TECH,
+                "id" => $data['field_tech']
+            ])->exists();
+            if ($field_techExist) {
+                $qar->field_tech = $data['field_tech'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+            }
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Field Tech is empty"));
         }
 
         $initiator = Yii::$app->user->identity->role == User::ROLE_FIELD_TECH ? QAR::INITIATED_BY_FIELD_TECH : QAR::INITIATED_BY_BUYER;
         $qar->initiator = $initiator;
 
 
-        $site_exist = Site::queryByCompany()->andWhere(["id"=>$data['site']])->exists();
-        if($site_exist){
-            $qar->site = $data['site'];
-        }else{
-            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Site is invalid"));
+        if (isset($data['site']) && !empty($data['site'])) {
+            $site_exist = Site::queryByCompany()->andWhere(["id" => $data['site']])->exists();
+            if ($site_exist) {
+                $qar->site = $data['site'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Site is invalid"));
+            }
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Site is empty"));
         }
 
 
         //$dateValidator = new DateValidator();
-        if(empty(trim($data['deadline'])))
+        if (!isset($data['deadline']) || empty(trim($data['deadline']))) {
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide deadline"));
-        else if(!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$data['deadline']))
-            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Invalid date format"));
-        else
-            $qar->deadline = $data['deadline'];
+        } else {
+            if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $data['deadline'])) {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Invalid date format"));
+            } else {
+                $qar->deadline = $data['deadline'];
+            }
+        }
 
 
-        if(!empty($errors)){
+        $qar->company_id = Yii::$app->user->identity->company_id;
+
+        if (!isset($data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS]) && empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS])) {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Number total bags is required"));
+        } else {
+            if (!is_numeric($data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS])) {
+                array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Number total bags is not a number"));
+            } else {
+
+                $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
+            }
+        }
+
+        if (!isset($data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK]) && empty($data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK])) {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Volume total stock is required"));
+        } else {
+            if (!is_numeric($data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK])) {
+                array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Volume total stock is not a number"));
+            } else {
+                $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
+            }
+        }
+
+        // If validation
+        if (!empty($errors)) {
             Yii::$app->response->statusCode = 400;
             return new ApiResponse(null, $errors, false);
         }
 
-        $qar->company_id = Yii::$app->user->identity->company_id;
-        $qar->number_of_bags = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_TOTAL_NUMBER_OF_BAGS];
-        $qar->volume_of_stock = $data[Qar::FIELD_LOT_INFO][Qar::FIELD_VOLUME_TOTAL_STOCK];
         $qar->save();
 
         return new ApiResponse($qar, null, true);
@@ -144,7 +220,6 @@ class QarController extends ActiveController
 
     public function actionSaveDetail()
     {
-
         $data = Yii::$app->request->post();
 
         $errors = [];
@@ -162,32 +237,88 @@ class QarController extends ActiveController
         ];
 
         $qar = new Qar();
+        $id_qar = 0;
 
-        foreach ($data as $key => $value) {
-            if (in_array($key, $data_keys)) {
-                $qar_detail = new QarDetail();
-                $qar_detail->key = $key;
-                $qar_detail->value = $value['value'];
-                $qar_detail->value_with_shell = $value['value_with_shell'];
-                $qar_detail->value_without_shell = $value['value_with_shell'];
-                $qar_detail->picture = $value['picture'];
-                $qar_detail->id_qar = $data['id'];
-                $qar_detail->result = 0;
-                $qar_detail->save();
+        if (isset($data['id']) && !empty($data['id'])) {
+            $field_techExist = QAR::queryByCompany()->exists();
+            if ($field_techExist) {
+                $id_qar = $data['id'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
             }
-        }
-        if(!empty($errors)){
-            Yii::$app->response->statusCode = 400;
-            return new ApiResponse(null, $errors, false);
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
         }
 
-        return new ApiResponse($qar, null, true);
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+
+            foreach ($data as $key => $value) {
+                if (in_array($key, $data_keys)) {
+                    $qar_detail = new QarDetail();
+                    $qar_detail->key = $key;
+
+                    $qar_detail->value = isset($value['value']) ?: null;
+                    if (!is_numeric($value['value'])) {
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                    }
+
+                    $qar_detail->value_with_shell = isset($value['value_with_shell']) ?: null;
+                    if (!is_numeric($value['value_with_shell'])) {
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                    }
+
+                    $qar_detail->value_without_shell = isset($value['value_with_shell']) ?: null;
+                    if (!is_numeric($value['value_with_shell'])) {
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                    }
+
+                    $qar_detail->picture = $value['picture'];
+                    $qar_detail->id_qar = $id_qar;
+                    $qar_detail->result = 0;
+
+                    if (!$qar_detail->save()) {
+//                        var_dump($qar_detail->getErrors());
+//                        die();
+                        $transaction->rollBack();
+                        break;
+                    }
+                }
+            }
+
+            $transaction->commit();
+
+            if (!empty($errors)) {
+                Yii::$app->response->statusCode = 400;
+                return new ApiResponse(null, $errors, false);
+            }
+
+
+            return new ApiResponse($qar, null, true);
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function actionSaveResult()
     {
 
         $data = Yii::$app->request->post();
+        $id_qar = 0;
+
+        if (isset($data['id']) && !empty($data['id'])) {
+            $field_techExist = QAR::queryByCompany()->exists();
+            if ($field_techExist) {
+                $id_qar = $data['id'];
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+            }
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
+        }
 
         $errors = [];
 
@@ -202,25 +333,54 @@ class QarController extends ActiveController
 
         $qar = new Qar();
 
-        foreach ($data as $key => $value) {
-              if (in_array($key, $result_keys)) {
-                  $qar_detail = new QarDetail();
-                  $qar_detail->key = $key;
-                  $qar_detail->value = $value['value'];
-                  $qar_detail->value_with_shell = $value['value_with_shell'];
-                  $qar_detail->value_without_shell = $value['value_with_shell'];
-                  $qar_detail->picture = $value['picture'];
-                  $qar_detail->id_qar = $data['id'];
-                  $qar_detail->result = 1;
-                  $qar_detail->save();
-              }
+        if (!$this->isObjectVariableSetAndNotNull($data,
+                Qar::RESULT_DEFECTIVE_RATE) || !$this->isObjectVariableSetAndNotNull($data,
+                Qar::RESULT_FOREIGN_MATERIAL_RATE) || !$this->isObjectVariableSetAndNotNull($data,
+                Qar::RESULT_KOR) || !$this->isObjectVariableSetAndNotNull($data,
+                Qar::RESULT_MOISTURE_CONTENT) || !$this->isObjectVariableSetAndNotNull($data,
+                Qar::RESULT_NUT_COUNT) || !$this->isObjectVariableSetAndNotNull($data, Qar::RESULT_USEFUL_KERNEL)) {
+            // add error
+            // return and halt execution
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "You are sending empty data"));
         }
-        if(!empty($errors)){
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+        foreach ($data as $key => $value) {
+            if (in_array($key, $result_keys)) {
+                $qar_result = new QarDetail();
+                $qar_result->key = $key;
+                $qar_result->value = $value['value'];
+                $qar_result->value_with_shell = $value['value_with_shell'];
+                $qar_result->value_without_shell = $value['value_with_shell'];
+                $qar_result->picture = $value['picture'];
+                $qar_result->id_qar = $id_qar;
+                $qar_result->result = 1;
+
+                if (!$qar_result->save()) {
+                    $transaction->rollBack();
+                    break;
+                }
+            }
+        }
+        if (!empty($errors)) {
             Yii::$app->response->statusCode = 400;
             return new ApiResponse(null, $errors, false);
         }
 
+        $transaction->commit();
+
         return new ApiResponse($qar, null, true);
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    private function isObjectVariableSetAndNotNull($array, $key)
+    {
+        return isset($array[$key]) && !empty($array[$key]);
     }
 
 }

@@ -47,6 +47,7 @@ class CompanyController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'restore' => ['POST'],
                 ],
             ],
         ];
@@ -89,7 +90,7 @@ class CompanyController extends Controller
     {
         $model = new Company();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             // get the instance of the uploaded file
             $model->logoUploaded = UploadedFile::getInstance($model, 'logoUploaded');
@@ -115,7 +116,7 @@ class CompanyController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
 
             // get the instance of the uploaded file
@@ -146,10 +147,43 @@ class CompanyController extends Controller
      */
     public function actionDelete($id)
     {
+
         $model = $this->findModel($id);
-        $model->deleteAttachments();
-        $model->delete();
-        return $this->redirect(['index']);
+
+        if ($model->status == Company::STATUS_INACTIVE) {
+            Yii::$app->session->setFlash("danger", Yii::t("app", "Company already inactive"));
+            return $this->redirect(["company/view", "id" => $model->id]);
+        }
+
+        $model->status = Company::STATUS_INACTIVE;
+
+        $model->save(0);
+
+        Yii::$app->session->setFlash("success", Yii::t("app", "Company deactivated successfully"));
+
+        return $this->redirect(['company/view', "id"=>$model->id]);
+    }
+
+
+
+    public function actionRestore($id)
+    {
+
+        $model = $this->findModel($id);
+
+        if ($model->status == Company::STATUS_ACTIVE) {
+            Yii::$app->session->setFlash("danger", Yii::t("app", "Company already active"));
+            return $this->redirect(["company/view", "id" => $model->id]);
+        }
+
+        $model->status = Company::STATUS_ACTIVE;
+
+        $model->save(0);
+
+        Yii::$app->session->setFlash("success", Yii::t("app", "Company re-activated successfully"));
+
+        return $this->redirect(['company/view', "id"=>$model->id]);
+
     }
 
     /**

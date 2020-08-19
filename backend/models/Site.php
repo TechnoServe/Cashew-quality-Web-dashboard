@@ -28,6 +28,17 @@ class Site extends baseSite
                 'skipOnEmpty' => !$this->isNewRecord,
                 'extensions' => 'png, jpg, gif',
             ],
+            [
+                'site_name',
+                function ($attribute, $params) {
+                    if (self::find()->where(["site_name" => trim($this->site_name)])
+                        ->andWhere(["<>", "id", $this->id])
+                        ->andWhere(['company_id' => Yii::$app->user->identity->company_id])
+                        ->exists())
+                        $this->addError($attribute, Yii::t("app", "Site already exists"));
+                    return false;
+                },
+                'skipOnEmpty' => false, 'skipOnError' => false],
         ]);
     }
 
@@ -42,8 +53,10 @@ class Site extends baseSite
      * Query users by company
      * @return \yii\db\ActiveQuery
      */
-    public static function queryByCompany(){
-        $loggedInUser = Yii::$app->user->identity;
+    public static function queryByCompany($loggedInUser = null){
+
+        if(!$loggedInUser)
+            $loggedInUser = Yii::$app->user->identity;
 
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
             return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
@@ -190,7 +203,12 @@ class Site extends baseSite
      * Get latitude and longitude from map location
      */
     public function getLatitudeAndLongitudeFromMapLocation(){
-        if(!empty($this->map_location))
-            list($this->latitude, $this->longitude) = explode(",", $this->map_location);
+        if(!empty($this->map_location)) {
+            try {
+                list($this->latitude, $this->longitude) = explode(",", $this->map_location);
+            } catch (\Exception $e) {
+                Yii::error($e->getMessage());
+            }
+        }
     }
 }
