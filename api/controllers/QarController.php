@@ -57,10 +57,12 @@ class QarController extends ActiveController
 
         // disable the "delete" and "create" actions ?????
         unset($actions['view']);
+        unset($actions['index']);
         // customize the data provider preparation with the "prepareDataProvider()" method
 
         return $actions;
     }
+
 
     public function actionView($id)
     {
