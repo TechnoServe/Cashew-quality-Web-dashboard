@@ -29,7 +29,7 @@ class Site extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['site_name', 'site_location'], 'required'],
+            [['site_name', 'site_location', 'map_location'], 'required'],
             [['site_location'], 'string'],
             [['created_at', 'updated_at', 'company_id', 'map_location', 'image'], 'safe'],
             [['site_name'], 'string', 'max' => 255],

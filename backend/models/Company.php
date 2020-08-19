@@ -39,6 +39,13 @@ class Company extends \common\models\Company
                 'skipOnEmpty' => true,
                 'extensions' => 'png, jpg, gif',
             ],
+
+            [
+                'name', function($attribute, $params){
+                    if(self::find()->where(["name" => trim($this->name)])->andWhere(["<>", "id", $this->id])->exists())
+                        $this->addError($attribute, Yii::t("app", "Company name already exists"));
+                    return false;
+            }, 'skipOnEmpty' => false, 'skipOnError' => false],
         ]);
     }
 
@@ -170,7 +177,7 @@ class Company extends \common\models\Company
         $data = [];
 
         foreach ($companies as $company) {
-            $data[$company->id] = $company->name;
+            $data[$company->id] = $company->name . " • " . self::getStatusDropdownValues()[$company->status];
         }
 
         return [
