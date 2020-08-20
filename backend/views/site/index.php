@@ -3,6 +3,10 @@
 /* @var $this yii\web\View */
 
 use backend\widgets\AnalyticsPeriodPicker;
+use common\helpers\CashewAppHtmlHelper;
+use kartik\select2\Select2;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
@@ -50,10 +54,38 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
         </div>
 
         <div class="panel-body">
+            <h3 class="panel-title">
+                <span class="text-1x text-muted text-bold text-italic"> <?= Yii::t("app", "Choose a Country") ?></span>
+            </h3>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form class="fomr-inline" method="get">
+                            <div class="form-group">
+                                <?= Select2::widget([
+                                    'name' => 'country_code',
+                                    'data' => CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country')),
+                                    'options' => [
+                                        'placeholder' => 'Select Country'
+                                    ]
+                                ])
+                                ?>
+                            </div>
+                            <div class="form-group">
+                                <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
             <?= $this->render('//sites/_mini_heatmap', [
                 'totalSites' => $totalSites,
                 'categories' => $categories,
-                'siteSeries' => $siteSeries
+                'siteSeries' => $siteSeries,
+                'country_code' => $country_code
             ]); ?>
         </div>
     </div>

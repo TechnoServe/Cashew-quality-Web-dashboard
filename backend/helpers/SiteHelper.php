@@ -3,6 +3,7 @@
 
 namespace backend\helpers;
 
+use backend\models\Department;
 use backend\models\Qar;
 use yii\web\JsExpression;
 use Yii;
@@ -101,29 +102,16 @@ class SiteHelper
         return $series;
     }
 
-    public static function getSitesChart($period, $siteId = null)
+    public static function getSitesChart($startDate = null, $endDate= null, $siteId = null, $countryCode = null)
     {
-        $series  = [];
+        $series  = '[' ;
 
-        // QARs Average
-        array_push(
-            $series,
-            [
-                'data' => Qar::getAverageQarByTimePeriod($period, 1)
-    
-            ]
-        );
+        $departments = Department::find()->where(["country_code" => $countryCode])->asArray()->all();
 
-        // Sum
-        array_push(
-            $series,
-            [
-                'data' => [
-                    array_sum($series[0]['data'])
-                ]
-            ]
-        );
-
-        return $series[1];
+        foreach($departments as $key => $department) {
+            $row = "[\"". strtolower($countryCode) . "-" . strtolower($department["postal_code"]) . "\"," . (float) Qar::getAverageQarByPeriodStartDateAndEndDate($startDate, $endDate, $siteId, $department["id"]) . "]" . ($key < count($departments)-1 ? "," : "") ;
+            $series.= $row;
+        }
+       return $series. "]";
     }
 }
