@@ -25,6 +25,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_KOR]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?></span></td>
                     </tr>
@@ -39,6 +43,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_DEFECTIVE_RATE]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td width="30%" class="text-center">
                             <span class="text-danger text-semibold"><?=$data['value']?>%</span>
@@ -57,6 +65,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_FOREIGN_MATERIAL_RATE]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-warning text-semibold"><?=$data['value']?>%</span></td>
                     </tr>
@@ -71,6 +83,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_MOISTURE_CONTENT]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-warning text-semibold"><?=$data['value']?>%</span></td>
                     </tr>
@@ -86,6 +102,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_NUT_COUNT]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?></span></td>
                     </tr>
@@ -100,6 +120,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarResultLabels()[Qar::RESULT_USEFUL_KERNEL]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-success text-semibold"><?=$data['value']?>g</span></td>
                     </tr>
@@ -114,6 +138,10 @@ use backend\models\QarDetail;
                             <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_VOLUME_TOTAL_STOCK]?></span>
                             <br>
                             <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                            <br>
+                            <?php if($data['picture']): ?>
+                                <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?>g</span></td>
                     </tr>
@@ -138,6 +166,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_NUMBER_OF_BAGS_SAMPLED]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-primary text-semibold"><?=$data['value']?></span>
@@ -155,6 +187,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_TOTAL_NUMBER_OF_BAGS]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?></span></td>
                             </tr>
@@ -170,6 +206,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_NUT_WEIGHT]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?>g</span></td>
                             </tr>
@@ -185,6 +225,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_NUT_COUNT]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-primary text-semibold"><?=$data['value']?></span></td>
                             </tr>
@@ -200,6 +244,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_MOISTURE_CONTENT]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-warning text-semibold"><?=$data['value']?>%</span></td>
                             </tr>
@@ -214,6 +262,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_FOREIGN_MATERIAL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=QarDetail::findOneMeasurementFromQarDetailsArray(Qar::FIELD_FOREIGN_MATERIAL, $measurement)['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-danger text-semibold"><?=QarDetail::findOneMeasurementFromQarDetailsArray(Qar::FIELD_FOREIGN_MATERIAL, $measurement)['value']?>g</span></td>
                             </tr>
@@ -235,6 +287,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_GOOD_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center"><span class="text-success text-semibold"><?=$data['value']?>g</span></td>
                             </tr>
@@ -249,6 +305,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_SPOTTED_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-warning text-semibold add-tooltip" data-toggle="tooltip" data-original-title="<?=Yii::t("app","With shell")?>"><?=$data['value_with_shell']?>g</span>
@@ -268,6 +328,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_IMMATURE_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-warning text-semibold add-tooltip" data-toggle="tooltip" data-original-title="<?=Yii::t("app","With shell")?>"><?=$data['value_with_shell']?>g</span>
@@ -287,6 +351,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_OILY_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-warning text-semibold add-tooltip" data-toggle="tooltip" data-original-title="<?=Yii::t("app","With shell")?>"><?=$data['value_with_shell']?>g</span>
@@ -306,6 +374,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_BAD_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-warning text-semibold add-tooltip" data-toggle="tooltip" data-original-title="<?=Yii::t("app","With shell")?>"><?=$data['value_with_shell']?>g</span>
@@ -325,6 +397,10 @@ use backend\models\QarDetail;
                                     <span class="text-main text-semibold"><?=Qar::qarMeasurementFieldLabels()[Qar::FIELD_VOID_KERNEL]?></span>
                                     <br>
                                     <small class="text-muted"><?=Yii::t("app", "Added on")?> : <?=$data['updated_at']?></small>
+                                    <br>
+                                    <?php if($data['picture']): ?>
+                                        <small class="text-muted"> <?=\yii\helpers\Html::a(Yii::t("app", "Open picture"), $data['picture'], ["class"=> "btn-link text-bold", "target" => "_blank"])?> </small>
+                                    <?php endif; ?>
                                 </td>
                                 <td class="text-center">
                                     <span class="text-warning text-semibold add-tooltip" data-toggle="tooltip" data-original-title="<?=Yii::t("app","With shell")?>"><?=$data['value_with_shell']?>g</span>

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\helpers\SiteHelper;
 use backend\models\form\ResetPasswordForm;
 use backend\models\form\PasswordResetRequestForm;
 use backend\models\Qar;
@@ -93,6 +94,9 @@ class SiteController extends Controller
         $qarsCompleted = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_COMPLETED])->count();
         $qarsCanceled = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_CANCELED])->count();
 
+        // Sites
+        $totalSites = Site::queryByCompany()->count();
+
         // Users
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
@@ -105,94 +109,18 @@ class SiteController extends Controller
             return $this->redirect(["/"]);
 
         $categories = array_map( function ($date){ return $date["generic"];}, $period);
+        $qarSeries = SiteHelper::getQarChart($period);
+        $siteSeries = SiteHelper::getSitesChart($period, 1);
 
-        $series = [];
-
-        // QARs To-Be Done
-        array_push(
-            $series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "To Be Done"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1),
-                'color' => "#ffb300"
-            ]
-        );
-
-        // QARs In Progress
-        array_push(
-            $series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "In Progress"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2),
-                'color' => "#03a9f4"
-            ]
-        );
-
-        // QARs Completed
-        array_push(
-            $series,
-            [
-                'type' => 'column',
-                'name' => Yii::t("app", "Completed"),
-                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3),
-                'color' => "#26a69a"
-            ]
-        );
-
-        // QARs Average
-        array_push(
-            $series,
-            [
-                'type' => 'spline',
-                'name' => Yii::t("app", "Average QAR"),
-                'data' => Qar::getAverageQarByTimePeriod($period),
-                'marker' => [
-                    'lineWidth' => 2,
-                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
-                    'fillColor' => 'white'
-                ]
-            ]
-        );
-
-        //Pie chart
-        array_push($series,
-            [
-                'type' => 'pie',
-                'name' => 'Total QARs',
-                'title' => false,
-                'data' => [
-                    [
-                        'name' => Yii::t("app", "To Be Done") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[0]['data']),
-                        'color' => "#ffb300"
-                    ],
-                    [
-                        'name' => Yii::t("app", "In Progress") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[1]['data']),
-                        'color' => "#03a9f4"
-                    ],
-                    [
-                        'name' => Yii::t("app", "Completed") . "(" . Yii::t("app", "Total") . ")",
-                        'y' => array_sum($series[2]['data']),
-                        'color' => "#26a69a"
-                    ],
-                ],
-                'center' => [30, 30],
-                'size' => 100,
-                'showInLegend' => true,
-                'dataLabels' => [
-                    'enabled' => false
-                ]
-            ]
-        );
+        //var_dump($siteSeries);
+        //die();
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
             'qarsToBeDone' => $qarsToBeDone,
             'qarsCompleted' => $qarsCompleted,
             'qarsCanceled' => $qarsCanceled,
+            'totalSites' => $totalSites,
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,
@@ -201,8 +129,11 @@ class SiteController extends Controller
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => $categories,
-            'series' => $series
+            'qarSeries' => $qarSeries,
+            'siteSeries' => $siteSeries
+
         ]);
+
     }
 
 

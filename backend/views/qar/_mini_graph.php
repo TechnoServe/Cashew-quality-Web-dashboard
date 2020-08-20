@@ -34,6 +34,6 @@ use yii\widgets\ActiveForm;
                 ]
             ],
             
-            'series' => $series
+            'series' => $qarSeries
         ]
     ]);
