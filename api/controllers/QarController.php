@@ -236,88 +236,102 @@ class QarController extends ActiveController
             Qar::FIELD_VOID_KERNEL
         ];
 
-        $qar = new Qar();
+
         $id_qar = 0;
 
+
         if (isset($data['id']) && !empty($data['id'])) {
-            $field_techExist = QAR::queryByCompany()->exists();
-            if ($field_techExist) {
-                $id_qar = $data['id'];
+            $qar_exist = QAR::queryByCompany()->andWhere(["id"=>$data["id"]])->exists();
+            if ($qar_exist) {
+                $id_qar = (int)$data['id'];
             } else {
-                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "QAR is invalid"));
             }
         } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "QAR is not provided"));
         }
 
 
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
+        if ($qar_exist) {
 
             foreach ($data as $key => $value) {
                 if (in_array($key, $data_keys)) {
                     $qar_detail = new QarDetail();
                     $qar_detail->key = $key;
 
-                    $qar_detail->value = isset($value['value']) ?: null;
-                    if (!is_numeric($value['value'])) {
-                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+
+                    if ($this->isObjectVariableSetAndNotNull($value, 'value')) {
+                        if (!is_numeric($value['value'])) {
+                            array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                        } else {
+                            $qar_detail->value = (float)$value['value'];
+                        }
                     }
 
-                    $qar_detail->value_with_shell = isset($value['value_with_shell']) ?: null;
-                    if (!is_numeric($value['value_with_shell'])) {
-                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+
+                    if ($this->isObjectVariableSetAndNotNull($value, 'value_with_shell')) {
+                        if (!is_numeric($value['value_with_shell'])) {
+                            array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                        } else {
+                            $qar_detail->value_with_shell = (float)$value['value_with_shell'];
+                        }
+
                     }
 
-                    $qar_detail->value_without_shell = isset($value['value_with_shell']) ?: null;
-                    if (!is_numeric($value['value_with_shell'])) {
-                        array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+
+                    if ($this->isObjectVariableSetAndNotNull($value, 'value_without_shell')) {
+                        if (!is_numeric($value['value_without_shell'])) {
+                            array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                        } else {
+                            $qar_detail->value_without_shell = (float)$value['value_without_shell'];
+                        }
+
                     }
+
 
                     $qar_detail->picture = $value['picture'];
                     $qar_detail->id_qar = $id_qar;
                     $qar_detail->result = 0;
 
                     if (!$qar_detail->save()) {
-//                        var_dump($qar_detail->getErrors());
-//                        die();
                         $transaction->rollBack();
                         break;
                     }
                 }
             }
-
-            $transaction->commit();
-
-            if (!empty($errors)) {
-                Yii::$app->response->statusCode = 400;
-                return new ApiResponse(null, $errors, false);
-            }
-
-
-            return new ApiResponse($qar, null, true);
-
-        } catch (Exception $e) {
-            return $e->getMessage();
         }
+
+
+        if (!empty($errors)) {
+            $transaction->rollBack();
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse(null, $errors, false);
+        }
+
+        $transaction->commit();
+
+        return new ApiResponse([], null, true);
+
     }
 
     public function actionSaveResult()
     {
 
         $data = Yii::$app->request->post();
+
         $id_qar = 0;
 
         if (isset($data['id']) && !empty($data['id'])) {
-            $field_techExist = QAR::queryByCompany()->exists();
+            $field_techExist = QAR::queryByCompany()->andWhere(["id"=>$data["id"]])->exists();
             if ($field_techExist) {
-                $id_qar = $data['id'];
+                $id_qar = (int)$data['id'];
             } else {
-                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Qar is invalid"));
             }
         } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Id is empty"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Qar is not provided"));
         }
 
         $errors = [];
@@ -331,7 +345,7 @@ class QarController extends ActiveController
             Qar::RESULT_USEFUL_KERNEL
         ];
 
-        $qar = new Qar();
+        //$qar = new Qar();
 
         if (!$this->isObjectVariableSetAndNotNull($data,
                 Qar::RESULT_DEFECTIVE_RATE) || !$this->isObjectVariableSetAndNotNull($data,
@@ -341,20 +355,21 @@ class QarController extends ActiveController
                 Qar::RESULT_NUT_COUNT) || !$this->isObjectVariableSetAndNotNull($data, Qar::RESULT_USEFUL_KERNEL)) {
             // add error
             // return and halt execution
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "You are sending empty data"));
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Missing required parameters"));
         }
 
         $transaction = Yii::$app->db->beginTransaction();
 
-        try {
         foreach ($data as $key => $value) {
             if (in_array($key, $result_keys)) {
                 $qar_result = new QarDetail();
                 $qar_result->key = $key;
-                $qar_result->value = $value['value'];
-                $qar_result->value_with_shell = $value['value_with_shell'];
-                $qar_result->value_without_shell = $value['value_with_shell'];
-                $qar_result->picture = $value['picture'];
+
+                if (!is_numeric($value['value'])) {
+                    array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
+                } else {
+                    $qar_result->value = (float)$value['value'];
+                }
                 $qar_result->id_qar = $id_qar;
                 $qar_result->result = 1;
 
@@ -365,17 +380,15 @@ class QarController extends ActiveController
             }
         }
         if (!empty($errors)) {
+            $transaction->rollBack();
             Yii::$app->response->statusCode = 400;
             return new ApiResponse(null, $errors, false);
         }
 
         $transaction->commit();
 
-        return new ApiResponse($qar, null, true);
+        return new ApiResponse([], null, true);
 
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
     }
 
     private function isObjectVariableSetAndNotNull($array, $key)
