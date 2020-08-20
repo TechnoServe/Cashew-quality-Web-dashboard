@@ -340,7 +340,7 @@ class QarController extends ActiveController
                     }
 
 
-                    $qar_detail->picture = $value['picture'];
+                    $qar_detail->picture = $value['image_url'];
                     $qar_detail->id_qar = $id_qar;
                     $qar_detail->result = 0;
 
