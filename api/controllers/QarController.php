@@ -6,6 +6,7 @@ use api\components\ApiError;
 use api\components\ApiResponse;
 use backend\models\Qar;
 use backend\models\Site;
+use backend\models\Company;
 use common\models\QarDetail;
 use backend\models\User;
 use Yii;
@@ -14,6 +15,9 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
+
 
 class QarController extends ActiveController
 {
@@ -74,23 +78,45 @@ class QarController extends ActiveController
     }
 
     public function actionIndex()
-    {
-        // Initiate search query
-        $query = Qar::find();
 
-        // Search has to be performed on completed field work
-        $query->andWhere(["status" => Qar::STATUS_COMPLETED])->all();
+    {
+        $buyers=[];
+        $field_techs=[];
 
         // Get filter parameters from query params
         $filter =  Yii::$app->request->getQueryParams();
 
-         // Filter by buyer if passed
-        (isset($filter['buyer']) && $filter['buyer']) ? $query->andFilterWhere(['like', 'buyer', trim($filter['buyer'])]) : null;
+        if(isset($filter['buyer']) && !empty($filter['buyer']))
+        {
+           $buyers = ArrayHelper::getColumn(User::queryByCompany()->andWhere(['or',
+                ['like', 'first_name', trim($filter['buyer'])],
+                ['like', 'username', trim($filter['buyer'])],
+                ['like', 'middle_name', trim($filter['buyer'])],
+                ['like', 'last_name', trim($filter['buyer'])],
+            ])->andWhere(["role" => User::ROLE_FIELD_BUYER])->all(),'id');
+        }
+
+        if(isset($filter['field_tech']) && !empty($filter['field_tech']))
+        {
+           $field_techs = ArrayHelper::getColumn(User::queryByCompany()->andWhere(['or',
+                ['like', 'first_name', trim($filter['field_tech'])],
+                ['like', 'username', trim($filter['field_tech'])],
+                ['like', 'middle_name', trim($filter['field_tech'])],
+                ['like', 'last_name', trim($filter['field_tech'])],
+            ])->andWhere(["role" => User::ROLE_FIELD_TECH])->all(),'id');
+        }
+
+        // Initiate search query
+        $query = Qar::queryByCompany()->leftJoin(Site::tableName(), 'qar.site = site.id')
+            ->select(['qar.id','qar.buyer', 'qar.field_tech','qar.farmer','qar.id','site.site_name','qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline','qar.created_at'])
+            ->andFilterWhere(['in', 'qar.buyer',$buyers])
+            ->andFilterWhere(['in', 'qar.field_tech',$field_techs]);
+
+            if(isset($filter['site_name']))
+                $query->andFilterWhere(['like', 'site.site_name' , $filter['site_name']]);
 
 
-        return new ApiResponse($query->all(), null, true);
-
-
+        return new ApiResponse($query->asArray()->all(), null, true);
 
     }
 
