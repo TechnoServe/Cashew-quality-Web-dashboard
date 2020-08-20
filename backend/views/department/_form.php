@@ -1,5 +1,6 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,7 +15,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'country_code')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'country_code')->widget(Select2::className(), \common\helpers\CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code',"country_code",  Yii::t('app', 'Select country'))) ?>
         </div>
 
         <div class="col-md-6">

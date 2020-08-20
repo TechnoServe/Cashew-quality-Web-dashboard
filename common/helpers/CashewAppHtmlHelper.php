@@ -120,4 +120,32 @@ class CashewAppHtmlHelper
     {
         return $role != User::ROLE_FIELD_BUYER;
     }
+
+    /**
+     * Select 2 widget for countries
+     * @param $attribute
+     * @param $html_id
+     * @param $placeholder
+     * @return array
+     */
+    public static function getCountriesSelectWidgetValues($attribute , $html_id, $placeholder)
+    {
+        $countries = CashewAppHelper::getListOfCountries();
+
+        $data = [];
+
+        foreach ($countries as $key => $country){
+            $data[$key] = $country . " [". $key ."]";
+        }
+
+        return [
+            'data' => $data,
+            'attribute' => $attribute,
+            'language' => Yii::$app->language,
+            'options' => ['id' => $html_id, 'placeholder' => $placeholder],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ];
+    }
 }
