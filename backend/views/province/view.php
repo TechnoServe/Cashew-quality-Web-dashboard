@@ -7,13 +7,13 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\Department */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Departments', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Provinces', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="panel">
 
     <div class="panel-heading bg-primary">
-        <h3 class="panel-title"><?= Yii::t("app", "Department details") ?></h3>
+        <h3 class="panel-title"><?= Yii::t("app", "Province details") ?></h3>
     </div>
 
     <div class="panel-body">
