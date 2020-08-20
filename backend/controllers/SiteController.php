@@ -109,6 +109,11 @@ class SiteController extends Controller
             return $this->redirect(["/"]);
 
         $categories = array_map( function ($date){ return $date["generic"];}, $period);
+        $qarSeries = SiteHelper::getQarChart($period);
+        $siteSeries = SiteHelper::getSitesChart($period, 1);
+
+        //var_dump($siteSeries);
+        //die();
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
@@ -124,9 +129,11 @@ class SiteController extends Controller
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => $categories,
-            'qarSeries' => SiteHelper::getQarChart($period),
-            'siteSeries' => SiteHelper::getSitesChart($period)
+            'qarSeries' => $qarSeries,
+            'siteSeries' => $siteSeries
+
         ]);
+
     }
 
 
