@@ -109,20 +109,21 @@ class SiteHelper
         array_push(
             $series,
             [
-                'data' => Qar::getAverageQarByTimePeriod($period),
-                'name' => 'Average of KOR',
-                'states' => [
-                   'hover' => [
-                       'color' => '#BADA55'
-                   ]
-                ],
-                'dataLabels' => [
-                   'enabled' => true,
-                   'format' => '{point.name}'
-               ]
+                'data' => Qar::getAverageQarByTimePeriod($period, 1)
+    
             ]
         );
 
-        return $series;
+        // Sum
+        array_push(
+            $series,
+            [
+                'data' => [
+                    array_sum($series[0]['data'])
+                ]
+            ]
+        );
+
+        return $series[1];
     }
 }
