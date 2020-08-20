@@ -1,6 +1,7 @@
 <?php
 
 use backend\models\Company;
+use backend\models\Department;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -93,6 +94,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     'site_name',
+                    [
+                        'attribute' => 'department_id',
+                        'value' => function ($model) {
+                            $department = Department::findOne($model->department_id);
+                            return $department ? $department->name : null;
+                        }
+                    ],
                     'site_location:ntext',
                     'map_location',
                     'created_at',

@@ -93,6 +93,10 @@ class UserEquipmentController extends Controller
     {
         $model = new UserEquipment();
 
+        if(Yii::$app->user->identity->role == User::ROLE_FIELD_TECH){
+            $model->id_user = Yii::$app->user->getId();
+        }
+
         if ($model->load(Yii::$app->request->post())) {
 
             // get the instance of the uploaded file
@@ -102,9 +106,8 @@ class UserEquipmentController extends Controller
 
                 $model->purifyInput();
 
-                if($model->save(false))
+                if($model->validate(["model", "name"]) && $model->save(false))
                     return $this->redirect(['view', 'id' => $model->id]);
-
             };
         }
 
@@ -126,7 +129,7 @@ class UserEquipmentController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // get the instance of the uploaded file
             $model->image = UploadedFile::getInstance($model, 'image');
 
@@ -134,7 +137,7 @@ class UserEquipmentController extends Controller
 
                 $model->purifyInput();
 
-                if( $model->save(false))
+                if($model->save(false))
                     return $this->redirect(['view', 'id' => $model->id]);
             };
         }

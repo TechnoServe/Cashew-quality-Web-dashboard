@@ -1,6 +1,7 @@
 <?php
 
 use backend\models\Company;
+use backend\models\Department;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -21,6 +22,13 @@ use yii\widgets\DetailView;
                     'value' => function($model){
                         $company = Company::findOne($model->company_id);
                         return $company ?  $company->name : null;
+                    }
+                ],
+                [
+                    'attribute' => 'department_id',
+                    'value' => function($model) {
+                        $department = Department::findOne($model->department_id);
+                        return $department ? $department->name : null;
                     }
                 ],
                 'site_name',

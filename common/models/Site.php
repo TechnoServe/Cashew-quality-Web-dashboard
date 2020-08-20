@@ -29,9 +29,9 @@ class Site extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['site_name', 'site_location', 'map_location'], 'required'],
+            [['site_name', 'site_location', 'map_location', 'department_id'], 'required'],
             [['site_location'], 'string'],
-            [['created_at', 'updated_at', 'company_id', 'map_location', 'image'], 'safe'],
+            [['created_at', 'updated_at', 'company_id', 'department_id', 'map_location', 'image'], 'safe'],
             [['site_name'], 'string', 'max' => 255],
         ];
     }
@@ -48,6 +48,7 @@ class Site extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'company_id' => Yii::t('app', 'Company'),
+            'department_id' => Yii::t('app', 'Department'),
             'map_location' => Yii::t('app', 'Map Coordinates'),
         ];
     }

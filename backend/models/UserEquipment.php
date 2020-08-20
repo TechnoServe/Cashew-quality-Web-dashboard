@@ -17,9 +17,6 @@ class UserEquipment extends \common\models\UserEquipment
     const STORAGE_DIRECTORY = "uploads/equipments/";
 
     public $image;
-
-
-
     /**
      * Query users by company
      * @return \yii\db\ActiveQuery
@@ -52,6 +49,41 @@ class UserEquipment extends \common\models\UserEquipment
                 'file',
                 'skipOnEmpty' => !$this->isNewRecord,
                 'extensions' => 'png, jpg, gif',
+            ],
+
+            [
+                'model',
+                function ($attribute, $params) {
+
+                    $q = self::queryByCompany()->andWhere(["model" => trim($this->model)]);
+                    if (!$this->isNewRecord)
+                        $q->andWhere(["<>", "id", $this->id]);
+
+                    $q->andWhere(['id_user' => $this->id_user]);
+
+                    if ($q->exists())
+                        $this->addError($attribute, Yii::t("app", "FieldTech already has this model registered"));
+
+                    return false;
+                },
+                'skipOnEmpty' => false, 'skipOnError' => false
+            ],
+
+            [
+                'name',
+                function ($attribute, $params) {
+
+                    $q = self::queryByCompany()->andWhere(["name" => trim($this->name)]);
+                    if (!$this->isNewRecord)
+                        $q->andWhere(["<>", "id", $this->id]);
+
+                    $q->andWhere(['id_user' => $this->id_user]);
+
+                    if ($q->exists())
+                        $this->addError($attribute, Yii::t("app", "FieldTech already has this name registered"));
+                    return false;
+                },
+                'skipOnEmpty' => false, 'skipOnError' => false
             ],
         ]);
     }
@@ -107,8 +139,6 @@ class UserEquipment extends \common\models\UserEquipment
 
             // Create directory if not exists
             CashewAppHelper::createFolderIfNotExist(self::STORAGE_DIRECTORY);
-
-            var_dump($thumb_path);
 
             try {
                 $imageSaved = $image->saveAs($path);

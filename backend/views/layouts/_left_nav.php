@@ -11,13 +11,11 @@ use yii\helpers\Url;
 <!--===================================================-->
 
 <style>
-
     @media only screen and (max-width: 770px) {
         .mainnav-container {
             margin-top: -5px !important;
         }
     }
-
 </style>
 
 
@@ -53,19 +51,20 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
 
-                                <?php if(Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
-                                    <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
-                                <?php else: ?>
-                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id);  $logoUrl = $company->getThumbLogoPath();?>
+                            <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
+                                <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
+                            <?php else : ?>
+                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id);
+                                $logoUrl = $company->getThumbLogoPath(); ?>
 
-                                    <?=!empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?>
+                                <?= !empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?>
 
-                                <?php endif; ?>
+                            <?php endif; ?>
 
 
 
                             <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
-                                <?php if(Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW): ?>
+                                <?php if (Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW) : ?>
                                     <h4> <strong> <?= $company->name ?> </strong></h4>
                                 <?php endif; ?>
                                 <p class="box-bock text-bold"> <span class="badge badge-success"> <?= User::getUserRole()[Yii::$app->user->identity->role] ?> </span></p>
@@ -121,51 +120,61 @@ use yii\helpers\Url;
 
                         <?= CashewAppHtmlHelper::showMenuContent('qar', 'pli-receipt-4', Yii::t('app', 'QAR')) ?>
 
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
-                        ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
+                        <?php if (
+                            Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW
+                        ) :
                         ?>
-                        <?= CashewAppHtmlHelper::showMenuContent('free', 'pli-bar-chart', Yii::t('app', 'Free version data')) ?>
+                            <?= CashewAppHtmlHelper::showMenuContent('free', 'pli-bar-chart', Yii::t('app', 'Free version data')) ?>
                         <?php endif; ?>
 
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
-                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
-                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
-                        || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_FIELD_TECH
-                        ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
-                        ?>
-
-                        <li class="list-divider"></li>
-
-                        <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
-
-                        <?php endif; ?>
-
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
-                                || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
-                                || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
-                                ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
-                        ?>
-
-                        <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
-
-                        <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
-
-                        <?php endif; ?>
-
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                        <?php if (
+                            Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
                             || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
                             || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
                             || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_FIELD_TECH
-                            ||Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW):
-                            ?>
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW
+                        ) :
+                        ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'Equipments')) ?>
+                            <li class="list-divider"></li>
+
+                            <li class="list-header"><?= Yii::t("app", "Administration") ?></li>
 
                         <?php endif; ?>
 
-                        <?php if(Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW): ?>
+                        <?php if (
+                            Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW
+                        ) :
+                        ?>
 
-                        <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
+                            <?= CashewAppHtmlHelper::showMenuContent('sites', 'pli-map', Yii::t('app', 'Sites')) ?>
+
+                            <?= CashewAppHtmlHelper::showMenuContent('user', 'pli-male', Yii::t('app', 'Users')) ?>
+
+                        <?php endif; ?>
+
+                        <?php if (
+                            Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_INSTITUTION_ADMIN_VIEW
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_FIELD_TECH
+                            || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW
+                        ) :
+                        ?>
+
+                            <?= CashewAppHtmlHelper::showMenuContent('user-equipment', 'pli-gears', Yii::t('app', 'Equipments')) ?>
+
+                        <?php endif; ?>
+
+                        <?php if (Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW) : ?>
+
+                            <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
+
+                            <?= CashewAppHtmlHelper::showMenuContent('province', 'pli-location-2', Yii::t('app', 'Provinces')) ?>
 
                         <?php endif; ?>
 
@@ -174,10 +183,10 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
                             <div class="pad-btm">
-                                <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => "120px", "height"=>"auto"]]) ?>
+                                <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => "120px", "height" => "auto"]]) ?>
                             </div>
                             <a target="_blank" href="<?= Url::to("http://tns.org/") ?>" class="box-block">
-                                <span class="mnp-desc"> <?=Yii::t("app", "Powered by TechnoServe")?></span>
+                                <span class="mnp-desc"> <?= Yii::t("app", "Powered by TechnoServe") ?></span>
                             </a>
                         </div>
                     </div>

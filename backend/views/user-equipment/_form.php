@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
         <div class="col-md-6">
             <?= $form->field($model, 'id_user')->widget(Select2::className(), User::getUsersSelectWidgetValues('id_user', User::ROLE_FIELD_TECH, "id_user",   Yii::t('app', 'Select Field Tech'))) ?>
         </div>
+        <?php else: ?>
+            <?= $form->field($model, 'id_user', ['template' => '{input}', 'options' => ["tag" => false]])->hiddenInput() ?>
         <?php endif; ?>
 
         <div class="col-md-6">
