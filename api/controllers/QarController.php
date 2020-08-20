@@ -365,10 +365,10 @@ class QarController extends ActiveController
                 $qar_result = new QarDetail();
                 $qar_result->key = $key;
 
-                if (!is_numeric($value['value'])) {
+                if (!is_numeric($value)) {
                     array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
                 } else {
-                    $qar_result->value = (float)$value['value'];
+                    $qar_result->value = (float)$value;
                 }
                 $qar_result->id_qar = $id_qar;
                 $qar_result->result = 1;
