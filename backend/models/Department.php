@@ -51,4 +51,36 @@ class Department extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
+    /**
+     * Department dropdown values for select2
+     *
+     * @param $attribute
+     * @param $html_id
+     * @param $placeholder
+     *
+     * @return array
+     */
+    public static function getDepartmentsSelectWidgetValues($attribute, $html_id, $placeholder)
+    {
+
+        $departments = self::find()->all();
+
+        $data = [];
+
+        foreach ($departments as $department) {
+            $data[$department->id] = $department->name . " • " . $department->postal_code;
+        }
+
+        return [
+            'data' => $data,
+            'attribute' => $attribute,
+            'language' => Yii::$app->language,
+            'options' => ['id' => $html_id, 'placeholder' => $placeholder],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+        ];
+    }
+    
 }
