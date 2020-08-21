@@ -124,6 +124,8 @@ class UserController extends Controller
 
             $model->generateAuthKey();
 
+            $model->generateEmailVerificationToken();
+
             $model->purifyInput();
 
             $plain_pass = $model->pass;
