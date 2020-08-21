@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\helpers\CashewAppHelper;
 use Yii;
 
 /**
@@ -69,7 +70,7 @@ class Department extends \yii\db\ActiveRecord
         $data = [];
 
         foreach ($departments as $department) {
-            $data[$department->id] = $department->name . " • " . $department->postal_code;
+            $data[$department->id] = CashewAppHelper::getListOfCountries()[$department->country_code] . " [" . $department->country_code  . "]" .  " • " . $department->name . " [" . $department->postal_code . "]";
         }
 
         return [
