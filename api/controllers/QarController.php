@@ -340,6 +340,11 @@ class QarController extends ActiveController
                         }
 
                     $qar_detail->picture = $value['image_url'];
+                        if (!is_numeric($datum['sample_number'])) {
+                            array_push($errors, new ApiError(ApiError::INVALID_DATA,  "Sample number is not valid"));
+                        }else {
+                            $qar_detail->sample_number = isset($datum['sample_number']) && !empty($datum['sample_number']) && $datum['sample_number'] > 0 ? $datum['sample_number'] : 1;
+                        }
                     $qar_detail->id_qar = $id_qar;
                     $qar_detail->result = 0;
 
