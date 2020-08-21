@@ -51,7 +51,7 @@ class User extends \common\models\User
             $loggedInUser = Yii::$app->user->identity;
 
         if($loggedInUser->role != self::ROLE_ADMIN && $loggedInUser->role != self::ROLE_ADMIN_VIEW)
-            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+            return self::find()->where(["user.company_id" =>  $loggedInUser->company_id]);
 
         return self::find();
     }
