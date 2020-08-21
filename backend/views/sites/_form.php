@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'site_name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'department_id')->widget(Select2::className(), Department::getDepartmentsSelectWidgetValues('department', "department_id", Yii::t('app', 'Select department'))) ?>
+            <?= $form->field($model, 'department_id')->widget(Select2::className(), Department::getDepartmentsSelectWidgetValues('department', "department_id", Yii::t('app', 'Select province'))) ?>
         </div>
     </div>
 

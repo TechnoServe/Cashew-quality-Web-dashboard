@@ -3,6 +3,10 @@
 /* @var $this yii\web\View */
 
 use backend\widgets\AnalyticsPeriodPicker;
+use common\helpers\CashewAppHtmlHelper;
+use kartik\select2\Select2;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
@@ -40,12 +44,13 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 
     <div class="panel">
         <div class="panel-heading bg-primary">
-            <h4 class="panel-title"><?= Yii::t('app', 'Sites') ?></h4>
+            <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and province') ?></h4>
         </div>
 
         <div class="panel-body">
             <?= $this->render('//sites/_stat', [
-                'totalSites' => $totalSites
+                'totalSites' => $totalSites,
+                'country_code' => $country_code
             ]); ?>
         </div>
 
@@ -53,7 +58,8 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             <?= $this->render('//sites/_mini_heatmap', [
                 'totalSites' => $totalSites,
                 'categories' => $categories,
-                'siteSeries' => $siteSeries
+                'siteSeries' => $siteSeries,
+                'country_code' => $country_code
             ]); ?>
         </div>
     </div>
@@ -68,6 +74,12 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'totalFieldTech' => $totalFieldTech,
                 'totalBuyer' => $totalBuyer,
                 'totalFarmer' => $totalFarmer
+            ]); ?>
+        </div>
+        <div class="panel-body">
+            <?= $this->render('//user/_mini_graph', [
+                'categories' => $categories,
+                'userSeries' => $userSeries,
             ]); ?>
         </div>
     </div>

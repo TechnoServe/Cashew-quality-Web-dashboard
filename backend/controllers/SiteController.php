@@ -17,6 +17,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use yii\db\Expression;
+use yii\helpers\Json;
 use yii\web\JsExpression;
 
 /**
@@ -83,7 +84,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null)
+    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null, $country_code = null)
     {
 
         list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
@@ -98,10 +99,10 @@ class SiteController extends Controller
         $totalSites = Site::queryByCompany()->count();
 
         // Users
-        $totalUsers = User::queryByCompany()->count();
-        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
-        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
-        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
+        $totalUsers = User::queryByCompany()->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
 
         // chart
         $period = CashewAppHelper::getDatePeriodToFetch($startDate, $endDate);
@@ -110,10 +111,14 @@ class SiteController extends Controller
 
         $categories = array_map( function ($date){ return $date["generic"];}, $period);
         $qarSeries = SiteHelper::getQarChart($period);
-        $siteSeries = SiteHelper::getSitesChart($period, 1);
 
-        //var_dump($siteSeries);
-        //die();
+
+        if(!$country_code) {
+            $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
+        }
+        $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
+
+        $userSeries = SiteHelper::getUsersChart($period);
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
@@ -130,8 +135,9 @@ class SiteController extends Controller
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => $categories,
             'qarSeries' => $qarSeries,
-            'siteSeries' => $siteSeries
-
+            'siteSeries' => $siteSeries,
+            'country_code'=> $country_code,
+            'userSeries' => $userSeries
         ]);
 
     }

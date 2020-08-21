@@ -104,18 +104,18 @@ class Qar extends \common\models\Qar
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
 
             if($loggedInUser->role == User::ROLE_INSTITUTION_ADMIN || $loggedInUser->role == User::ROLE_INSTITUTION_ADMIN_VIEW)
-                return self::find()->where(["company_id" => $loggedInUser->company_id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id]);
 
             if($loggedInUser->role == User::ROLE_FIELD_TECH)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["field_tech"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["field_tech"=>$loggedInUser->id]);
 
 
             if($loggedInUser->role == User::ROLE_FIELD_BUYER)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
 
 
             if($loggedInUser->role == User::ROLE_FIELD_FARMER)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
 
         }
 
@@ -263,7 +263,7 @@ class Qar extends \common\models\Qar
         return $data;
     }
 
-    public static function getAverageQarByTimePeriod($dates, $siteId = null)
+    public static function getAverageQarByTimePeriod($dates, $siteId = null, $departmentId = null)
     {
         $data = [];
 
@@ -271,8 +271,14 @@ class Qar extends \common\models\Qar
 
             $q = self::queryByCompany()->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar");
 
+            if($departmentId)
+            $q->innerJoin(Site::tableName(), "qar.site = site.id");
+
             if($siteId)
                 $q->andWhere(["qar.site" => $siteId]);
+
+            if ($departmentId)
+                $q->andWhere(["site.department_id" => $departmentId]);
 
             $q->andWhere([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($date["endDate"]))])
@@ -283,5 +289,28 @@ class Qar extends \common\models\Qar
             array_push($data, (float) $q->average("qar_detail.value"));
         }
         return $data;
+    }
+
+
+    public static function getAverageQarByPeriodStartDateAndEndDate($startDate, $endDate, $siteId = null, $departmentId = null)
+    {
+
+            $q = self::queryByCompany()->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar");
+
+            if ($departmentId)
+                $q->innerJoin(Site::tableName(), "qar.site = site.id");
+
+            if ($siteId)
+                $q->andWhere(["qar.site" => $siteId]);
+
+            if ($departmentId)
+                $q->andWhere(["site.department_id" => $departmentId]);
+
+           return  $q->andWhere([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($startDate))])
+            ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($endDate))])
+            ->andWhere(["qar.status" => Qar::STATUS_COMPLETED])
+                ->andWhere(["qar_detail.key" => Qar::RESULT_KOR])
+                ->andWhere(["qar_detail.result" => 1])->average("qar_detail.value");
+        
     }
 }

@@ -6,6 +6,7 @@ use api\components\ApiError;
 use api\components\ApiResponse;
 use backend\models\Qar;
 use backend\models\Site;
+use backend\models\Company;
 use common\models\QarDetail;
 use backend\models\User;
 use Yii;
@@ -15,6 +16,9 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
+
 
 class QarController extends ActiveController
 {
@@ -84,10 +88,55 @@ class QarController extends ActiveController
 
         // disable the "delete" and "create" actions ?????
         unset($actions['view']);
+        unset($actions['index']);
         // customize the data provider preparation with the "prepareDataProvider()" method
 
         return $actions;
     }
+
+    public function actionIndex()
+
+    {
+        $buyers=[];
+        $field_techs=[];
+
+        // Get filter parameters from query params
+        $filter =  Yii::$app->request->getQueryParams();
+
+        if(isset($filter['buyer']) && !empty($filter['buyer']))
+        {
+           $buyers = ArrayHelper::getColumn(User::queryByCompany()->andWhere(['or',
+                ['like', 'first_name', trim($filter['buyer'])],
+                ['like', 'username', trim($filter['buyer'])],
+                ['like', 'middle_name', trim($filter['buyer'])],
+                ['like', 'last_name', trim($filter['buyer'])],
+            ])->andWhere(["role" => User::ROLE_FIELD_BUYER])->all(),'id');
+        }
+
+        if(isset($filter['field_tech']) && !empty($filter['field_tech']))
+        {
+           $field_techs = ArrayHelper::getColumn(User::queryByCompany()->andWhere(['or',
+                ['like', 'first_name', trim($filter['field_tech'])],
+                ['like', 'username', trim($filter['field_tech'])],
+                ['like', 'middle_name', trim($filter['field_tech'])],
+                ['like', 'last_name', trim($filter['field_tech'])],
+            ])->andWhere(["role" => User::ROLE_FIELD_TECH])->all(),'id');
+        }
+
+        // Initiate search query
+        $query = Qar::queryByCompany()->leftJoin(Site::tableName(), 'qar.site = site.id')
+            ->select(['qar.id','qar.buyer', 'qar.field_tech','qar.farmer','qar.id','site.site_name','qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline','qar.created_at'])
+            ->andFilterWhere(['in', 'qar.buyer',$buyers])
+            ->andFilterWhere(['in', 'qar.field_tech',$field_techs]);
+
+            if(isset($filter['site_name']))
+                $query->andFilterWhere(['like', 'site.site_name' , $filter['site_name']]);
+
+
+        return new ApiResponse($query->asArray()->all(), null, true);
+
+    }
+
 
     public function actionView($id)
     {
@@ -292,13 +341,9 @@ class QarController extends ActiveController
 
                         $qar_detail->picture = $value['picture'];
 
-                        if (!is_numeric($datum['sample_number'])) {
-                            array_push($errors, new ApiError(ApiError::INVALID_DATA,  "Sample number is not valid"));
-                        }else {
-                            $qar_detail->sample_number = isset($datum['sample_number']) && !empty($datum['sample_number']) && $datum['sample_number'] > 0 ? $datum['sample_number'] : 1;
-                        }
-                        $qar_detail->id_qar = $id_qar;
-                        $qar_detail->result = 0;
+                    $qar_detail->picture = $value['image_url'];
+                    $qar_detail->id_qar = $id_qar;
+                    $qar_detail->result = 0;
 
                         if (!$qar_detail->save()) {
                             $transaction->rollBack();

@@ -3,7 +3,9 @@
 
 namespace backend\helpers;
 
+use backend\models\Department;
 use backend\models\Qar;
+use backend\models\User;
 use yii\web\JsExpression;
 use Yii;
 
@@ -101,29 +103,45 @@ class SiteHelper
         return $series;
     }
 
-    public static function getSitesChart($period, $siteId = null)
+    public static function getSitesChart($startDate = null, $endDate= null, $siteId = null, $countryCode = null)
     {
-        $series  = [];
+        $series  = '[' ;
 
-        // QARs Average
+        $departments = Department::find()->where(["country_code" => $countryCode])->asArray()->all();
+
+        foreach($departments as $key => $department) {
+            $row = "[\"". strtolower($countryCode) . "-" . strtolower($department["postal_code"]) . "\"," . (float) Qar::getAverageQarByPeriodStartDateAndEndDate($startDate, $endDate, $siteId, $department["id"]) . "]" . ($key < count($departments)-1 ? "," : "") ;
+            $series.= $row;
+        }
+       return $series. "]";
+    }
+
+    public static function getUsersChart($period)
+    {
+        $series = [];
+
+        // Buyers
         array_push(
             $series,
             [
-                'data' => Qar::getAverageQarByTimePeriod($period, 1)
-    
+                'type' => 'spline',
+                'name' => Yii::t("app", "Buyers"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_BUYER),
+                'color' => "#26a69a"
             ]
         );
 
-        // Sum
+        // Field Tech
         array_push(
             $series,
             [
-                'data' => [
-                    array_sum($series[0]['data'])
-                ]
+                'type' => 'spline',
+                'name' => Yii::t("app", "FieldTech"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_TECH),
+                'color' => "#25476a"
             ]
         );
+        return $series;
 
-        return $series[1];
     }
 }

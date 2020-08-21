@@ -1,9 +1,8 @@
-<html>
+<?php
+use yii\web\JqueryAsset;
+$this->registerJsFile("https://code.highcharts.com/mapdata/countries/".strtolower($country_code)."/" . strtolower($country_code) . "-all.js", ["depends"=>JqueryAsset::className()]) ?>
 
-<head>
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/bj/bj-all.js"></script>
-</head>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
 <style>
     #map-container {
@@ -20,45 +19,29 @@
     }
 </style>
 
-<body>
-
     <div class="container">
         <div id="map-container"></div>
     </div>
 
-    <script>
-        var data = [
-            ['bj-do', 7], // Donga
-            ['bj-bo', 4], // Borgou
-            ['bj-al', 1], // Alibori
-            ['bj-cl', 5], // Collines
-            ['bj-aq', 3], // Atlantique
-            ['bj-li', 8], // Littoral
-            ['bj-cf', 6], // Kouffo
-            ['bj-ou', 10], // Ouémé
-            ['bj-zo', 12], // Zou
-            ['bj-pl', 11], // Plateau
-            ['bj-mo', 9], // Mono
-            ['bj-ak', 2] // Atakora
-        ];
-
-        Highcharts.mapChart('map-container', {
+    <?php $this->registerJs("
+    
+      Highcharts.mapChart('map-container', {
             chart: {
-                map: 'countries/bj/bj-all'
+                map: 'countries/" . strtolower($country_code) . "/".strtolower($country_code)."-all'
             },
 
             title: {
-                text: 'Heatmap for KOR Average per site'
+                text: null
             },
 
             credits: {
                 enabled: false
             },
 
-            tooltip: {
-                headerFormat: '',
-                pointFormat: 'Site: <b>{point.name}</b>, Location: <b>{point.name}</b><br>Lat: <b>{point.properties.latitude}</b>, Lon: <b>{point.properties.longitude}</b><br>KOR: <b>{point.properties.hasc}</b>'
-            },
+            // tooltip: {
+            //     headerFormat: '',
+            //     pointFormat: 'Site: <b>{point.name}</b>, Location: <b>{point.name}</b><br>Lat: <b>{point.properties.latitude}</b>, Lon: <b>{point.properties.longitude}</b><br>KOR: <b>{point.properties.hasc}</b>'
+            // },
 
             mapNavigation: {
                 enabled: true,
@@ -71,10 +54,8 @@
                 min: 0
             },
 
-            //series: $siteSeries,
-
             series: [{
-                data: data,
+                data: " . $siteSeries . ",
                 name: 'Average of KOR',
                 states: {
                     hover: {
@@ -87,8 +68,5 @@
                 }
             }]
         });
-    </script>
-
-</body>
-
-</html>
+    
+    ") ?>
