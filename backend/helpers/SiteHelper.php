@@ -5,6 +5,7 @@ namespace backend\helpers;
 
 use backend\models\Department;
 use backend\models\Qar;
+use backend\models\User;
 use yii\web\JsExpression;
 use Yii;
 
@@ -113,5 +114,34 @@ class SiteHelper
             $series.= $row;
         }
        return $series. "]";
+    }
+
+    public static function getUsersChart($period)
+    {
+        $series = [];
+
+        // Buyers
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Buyers"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_BUYER),
+                'color' => "#26a69a"
+            ]
+        );
+
+        // Field Tech
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "FieldTech"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_TECH),
+                'color' => "#25476a"
+            ]
+        );
+        return $series;
+
     }
 }

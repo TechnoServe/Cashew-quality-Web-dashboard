@@ -76,5 +76,11 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'totalFarmer' => $totalFarmer
             ]); ?>
         </div>
+        <div class="panel-body">
+            <?= $this->render('//user/_mini_graph', [
+                'categories' => $categories,
+                'userSeries' => $userSeries,
+            ]); ?>
+        </div>
     </div>
 </div>

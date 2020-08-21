@@ -217,4 +217,20 @@ class User extends \common\models\User
             ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->send();
     }
+
+    /**
+     * Count Users per period and role
+     */
+    public static function getUsersCountsByPeriodAndRole($dates, $role) {
+        $data = [];
+        foreach ($dates as $date) {
+            array_push($data, (int) self::find()
+                //->where([">=", "DATE(created_at)" , date('Y-m-d', strtotime($date["startDate"]))])
+                ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
+                ->andWhere(["role" => $role])
+                ->andWhere(["status" => User::STATUS_ACTIVE])
+                ->count());
+        }
+        return $data;
+    }
 }

@@ -99,10 +99,10 @@ class SiteController extends Controller
         $totalSites = Site::queryByCompany()->count();
 
         // Users
-        $totalUsers = User::queryByCompany()->count();
-        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
-        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
-        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
+        $totalUsers = User::queryByCompany()->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
+        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
 
         // chart
         $period = CashewAppHelper::getDatePeriodToFetch($startDate, $endDate);
@@ -117,6 +117,8 @@ class SiteController extends Controller
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
         }
         $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
+
+        $userSeries = SiteHelper::getUsersChart($period);
 
         return $this->render('index', [
             'qarsInProgress' => $qarsInProgress,
@@ -134,7 +136,8 @@ class SiteController extends Controller
             'categories' => $categories,
             'qarSeries' => $qarSeries,
             'siteSeries' => $siteSeries,
-            'country_code'=> $country_code
+            'country_code'=> $country_code,
+            'userSeries' => $userSeries
         ]);
 
     }
