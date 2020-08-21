@@ -28,9 +28,9 @@ class UserEquipment extends \common\models\UserEquipment
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
 
             if($loggedInUser->role == User::ROLE_FIELD_TECH)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["id_user"=>$loggedInUser->id]);
+                return self::find()->where(["user_equipment.company_id" => $loggedInUser->company_id])->andWhere(["user_equipment.id_user"=>$loggedInUser->id]);
 
-            return self::find()->where(["company_id" => $loggedInUser->company_id]);
+            return self::find()->where(["user_equipment.company_id" => $loggedInUser->company_id]);
         }
 
         return self::find();

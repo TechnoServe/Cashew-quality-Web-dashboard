@@ -104,18 +104,18 @@ class Qar extends \common\models\Qar
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW) {
 
             if($loggedInUser->role == User::ROLE_INSTITUTION_ADMIN || $loggedInUser->role == User::ROLE_INSTITUTION_ADMIN_VIEW)
-                return self::find()->where(["company_id" => $loggedInUser->company_id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id]);
 
             if($loggedInUser->role == User::ROLE_FIELD_TECH)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["field_tech"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["field_tech"=>$loggedInUser->id]);
 
 
             if($loggedInUser->role == User::ROLE_FIELD_BUYER)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
 
 
             if($loggedInUser->role == User::ROLE_FIELD_FARMER)
-                return self::find()->where(["company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
+                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
 
         }
 

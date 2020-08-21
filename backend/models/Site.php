@@ -59,7 +59,7 @@ class Site extends baseSite
             $loggedInUser = Yii::$app->user->identity;
 
         if($loggedInUser->role != User::ROLE_ADMIN && $loggedInUser->role != User::ROLE_ADMIN_VIEW)
-            return self::find()->where(["company_id" =>  $loggedInUser->company_id]);
+            return self::find()->where(["site.company_id" =>  $loggedInUser->company_id]);
         return self::find();
     }
 
