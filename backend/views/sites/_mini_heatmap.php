@@ -1,14 +1,8 @@
-<html>
-
-<head>
-    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    <?php
-
+<?php
 use yii\web\JqueryAsset;
-
 $this->registerJsFile("https://code.highcharts.com/mapdata/countries/".strtolower($country_code)."/" . strtolower($country_code) . "-all.js", ["depends"=>JqueryAsset::className()]) ?>
 
-</head>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
 <style>
     #map-container {
@@ -25,8 +19,6 @@ $this->registerJsFile("https://code.highcharts.com/mapdata/countries/".strtolowe
     }
 </style>
 
-<body>
-
     <div class="container">
         <div id="map-container"></div>
     </div>
@@ -39,7 +31,7 @@ $this->registerJsFile("https://code.highcharts.com/mapdata/countries/".strtolowe
             },
 
             title: {
-                text: 'Heatmap for KOR Average per site'
+                text: null
             },
 
             credits: {
@@ -78,7 +70,3 @@ $this->registerJsFile("https://code.highcharts.com/mapdata/countries/".strtolowe
         });
     
     ") ?>
-    
-</body>
-
-</html>

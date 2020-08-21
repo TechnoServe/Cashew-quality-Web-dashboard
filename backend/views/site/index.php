@@ -44,40 +44,14 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 
     <div class="panel">
         <div class="panel-heading bg-primary">
-            <h4 class="panel-title"><?= Yii::t('app', 'Sites') ?></h4>
+            <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and province') ?></h4>
         </div>
 
         <div class="panel-body">
             <?= $this->render('//sites/_stat', [
-                'totalSites' => $totalSites
+                'totalSites' => $totalSites,
+                'country_code' => $country_code
             ]); ?>
-        </div>
-
-        <div class="panel-body">
-            <h3 class="panel-title">
-                <span class="text-1x text-muted text-bold text-italic"> <?= Yii::t("app", "Choose a Country") ?></span>
-            </h3>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <form class="fomr-inline" method="get">
-                            <div class="form-group">
-                                <?= Select2::widget([
-                                    'name' => 'country_code',
-                                    'data' => CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country')),
-                                    'options' => [
-                                        'placeholder' => 'Select Country'
-                                    ]
-                                ])
-                                ?>
-                            </div>
-                            <div class="form-group">
-                                <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="panel-body">
