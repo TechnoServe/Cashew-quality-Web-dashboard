@@ -366,6 +366,8 @@ class QarController extends ActiveController
 
         $transaction->commit();
 
+        Yii::$app->db->createCommand()->update('qar', ['status' => Qar::STATUS_IN_PROGRESS], ['id' => $id_qar])->execute();
+
         return new ApiResponse([], null, true);
 
     }
@@ -419,7 +421,6 @@ class QarController extends ActiveController
             array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Missing required parameters"));
         }
 
-
                 foreach ($datum as $key => $value) {
                     if (in_array($key, $result_keys)) {
                         $qar_result = new QarDetail();
@@ -454,6 +455,8 @@ class QarController extends ActiveController
             }
 
             $transaction->commit();
+
+        Yii::$app->db->createCommand()->update('qar', ['status' => Qar::STATUS_COMPLETED], ['id' => $id_qar])->execute();
 
             return new ApiResponse([], null, true);
 
