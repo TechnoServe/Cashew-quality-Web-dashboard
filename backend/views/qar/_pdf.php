@@ -4,18 +4,18 @@
         <table class="table-bordered">
             <tr>
                 <?php if($showCompany): ?>
-                <th>Company</th>
+                <th><?=Yii::t("app", "Company")?></th>
                 <?php  endif; ?>
-                <th>Buyer</th>
-                <th>Field Tech</th>
-                <th>Farmer</th>
-                <th>Initiator</th>
-                <th>Site</th>
-                <th>Estimated Volume of bags</th>
-                <th>Estimated Volume of Stock (KG)</th>
-                <th>Deadline</th>
-                <th>Status</th>
-                <th>Created At</th>
+                <th><?=Yii::t("app", "Buyer")?></th>
+                <th><?=Yii::t("app", "Field Tech")?></th>
+                <th><?=Yii::t("app", "Farmer")?></th>
+                <th><?=Yii::t("app", "Initiator")?></th>
+                <th><?=Yii::t("app", "Site")?></th>
+                <th><?=Yii::t("app", "Estimated number of bags")?></th>
+                <th><?=Yii::t("app", "Estimated Volume of Stock (KG)")?></th>
+                <th><?=Yii::t("app", "Deadline")?></th>
+                <th><?=Yii::t("app", "Status")?></th>
+                <th><?=Yii::t("app", "Created At")?></th>
             </tr>
             <?php
 
