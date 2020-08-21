@@ -224,7 +224,7 @@ class User extends \common\models\User
     public static function getUsersCountsByPeriodAndRole($dates, $role) {
         $data = [];
         foreach ($dates as $date) {
-            array_push($data, (int) self::find()
+            array_push($data, (int) self::queryByCompany()
                 //->where([">=", "DATE(created_at)" , date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
                 ->andWhere(["role" => $role])
