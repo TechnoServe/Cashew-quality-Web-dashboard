@@ -38,9 +38,11 @@ AppAsset::register($this);
 
             <div class="panel-body">
 
-                <div class="pad-btm mar-btm">
-                    <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => 'auto']]) ?>
-                </div>
+                <a href="<?=Yii::$app->homeUrl?>">
+                    <div class="pad-btm mar-btm">
+                        <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => 'auto']]) ?>
+                    </div>
+                </a>
 
                 <?php
 
