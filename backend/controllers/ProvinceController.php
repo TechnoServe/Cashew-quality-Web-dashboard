@@ -2,9 +2,11 @@
 
 namespace backend\controllers;
 
+use backend\models\User;
 use Yii;
 use backend\models\Department;
 use backend\models\search\DepartmentSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,22 @@ class ProvinceController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'export-csv', 'export-pdf'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN ,  User::ROLE_ADMIN_VIEW],
+                    ],
+
+                    [
+                        //'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => [User::ROLE_ADMIN],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
