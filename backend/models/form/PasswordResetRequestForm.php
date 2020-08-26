@@ -35,7 +35,7 @@ class PasswordResetRequestForm extends Model
      *
      * @return bool whether the email was send
      */
-    public function sendEmail()
+    public function sendEmail($baseUrl = null)
     {
         /* @var $user User */
         $user = User::findOne([
@@ -58,7 +58,7 @@ class PasswordResetRequestForm extends Model
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
-                ['user' => $user]
+                ['user' => $user, "baseUrl" => $baseUrl]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->setTo($this->email)
