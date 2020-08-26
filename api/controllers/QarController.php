@@ -18,6 +18,7 @@ use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use api\models\QarNotification;
 
 
 class QarController extends ActiveController
@@ -50,7 +51,8 @@ class QarController extends ActiveController
                                 'save',
                                 'save-qar',
                                 'save-detail',
-                                'save-result'
+                                'save-result',
+                                'notification'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -465,6 +467,18 @@ class QarController extends ActiveController
     private function isObjectVariableSetAndNotNull($array, $key)
     {
         return isset($array[$key]) && !empty($array[$key]);
+    }
+
+    public function actionNotification(){
+
+        if(Yii::$app->queue->push(new QarNotification([
+            'title' => 'This is the title',
+            'body' => 'This is the body',
+        ]))){
+            return "Everything is ok";
+        }else{
+            return "Something went wrong";
+        }
     }
 
 }

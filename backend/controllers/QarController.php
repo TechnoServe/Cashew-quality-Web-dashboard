@@ -16,6 +16,7 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\QarNotification;
 
 /**
  * QarController implements the CRUD actions for Qar model.
@@ -119,7 +120,16 @@ class QarController extends Controller
             $model->purifyInput();
 
             if($model->validate() &&  $model->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+
+                $buyer = User::findOne(['id' => $model->buyer]);
+
+                Yii::$app->queue->push(new QarNotification([
+                    'email' => $buyer->email,
+                    'buyer' => $buyer->first_name ." ". $buyer->last_name,
+                ]));
+
+                    return $this->redirect(['view', 'id' => $model->id]);
+
         }
 
         return $this->render('create', [

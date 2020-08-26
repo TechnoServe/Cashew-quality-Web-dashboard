@@ -17,9 +17,19 @@ return [
     'bootstrap' =>
         [
             ['class' => 'common\helpers\LanguageSwitcher'],
+            'queue'
         ],
 
     'components' => [
+
+        'queue' => [
+            'class' => \yii\queue\file\Queue::class,
+            'as log' => \yii\queue\LogBehavior::class,//The default error log is console/runtime/logs/app.log
+            'path' => '@runtime/queue',
+            'strictJobType' => false,
+            'serializer' => \yii\queue\serializers\JsonSerializer::class,
+            // Other driver options
+        ],
 
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
