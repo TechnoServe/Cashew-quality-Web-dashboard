@@ -4,6 +4,8 @@ namespace api\controllers;
 use api\components\ApiError;
 use api\components\ApiResponse;
 use api\models\User;
+use api\models\ChangePassword;
+use backend\models\form\PasswordResetRequestForm;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
@@ -12,6 +14,9 @@ use yii\filters\AccessControl;
 
 class UserController extends ActiveController
 {
+
+public $email;
+
        public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -30,7 +35,7 @@ class UserController extends ActiveController
                 'rules' => [
 
                     [
-                        'actions' => ['index','save-user','change-password','update'],
+                        'actions' => ['index','save-user','change-password','update','password-reset'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -46,62 +51,69 @@ class UserController extends ActiveController
             'verbs' => [
         'class' => VerbFilter::className(),
         'actions' => [
-            'save-user' => ['POST'],
+            'password-reset' => ['POST'],
             'change-password' => ['POST'],
-            'update' => ['POST'],
 
            
-        ],
-    ],]);    }
+           ],
+       ],
+   ]);    
 
-        public $modelClass = 'common\models\User';
+ }
+
+        public $modelClass = 'api\models\User';
 
 
-       public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+        public function actionChangePassword()
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
+         {   
 
-        public function actionChangepassword($id)
-         {      
-            $model = new User;
+            $user = User::find()->one();
 
-            $model = User::model()->findByAttributes(array('id'=>$id));
-            $model->setScenario('changePwd');
+            $model = new ChangePassword();
 
             $errors = [];
 
-             if(isset($_POST['User'])){
-                    
-                $model->attributes = $_POST['User'];
-                $valid = $model->validate();
-                        
-                if($valid){
-                        
-                  $model->setPassword(new_password);
-                        
-                  if(!$model->save())
+             if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+             
+                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password changed"));
+
+               }else{
+
                     array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Could not be changed. Please try again"));
-            
-                    }
-                }
+
+               }
+
+              return new ApiResponse([], null, true);
+        }
 
 
+        public function actionPasswordReset()
 
+       {
+        
+      $data = Yii::$app->request->post();
 
-        return new ApiResponse([], $null, true);
+      $model = new PasswordResetRequestForm();
 
+      $model->email = $data["email"];
 
-            //$this->render('changepassword',array('model'=>$model)); 
-         }
+        if ($model->validate()) {
+
+            if ($model->sendEmail()) {
+        
+        array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Reset E-mail Sent"));
+        } else {
+
+        array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Could not be changed. Please try again"));
+
+      }
+    
+    return new ApiResponse([], null, true);
+
+     }
+
+   }
 
 
 }
