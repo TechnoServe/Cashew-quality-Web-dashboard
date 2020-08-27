@@ -1,4 +1,5 @@
 <?php
+
 namespace api\controllers;
 
 use api\components\ApiError;
@@ -15,105 +16,108 @@ use yii\filters\AccessControl;
 class UserController extends ActiveController
 {
 
-public $email;
+    public $email;
 
-       public function behaviors()
+    public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
+        $behaviors["authenticator"] = [
             'class' => HttpBasicAuth::class,
             'auth' => function ($username, $password) {
                 $user = User::findByUsername($username);
                 if ($user && $user->validatePassword($password)) {
                     return $user;
                 }
+                return null;
             }
         ];
         return array_merge($behaviors,
-            ['access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
+            [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['password-reset'],
+                            'allow' => true,
+                        ],
 
-                    [
-                        'actions' => ['index','save-user','change-password','update','password-reset'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        [
+                            'actions' => ['change-password'],
+                            'allow' => true,
+                            'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
+                        ],
                     ],
-
-                    [
-                        'allow' => true,
-                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
-                    ],
-
                 ],
-            ],
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'password-reset' => ['POST'],
+                        'change-password' => ['POST'],
+                    ],
+                ],
+            ]);
 
-            'verbs' => [
-        'class' => VerbFilter::className(),
-        'actions' => [
-            'password-reset' => ['POST'],
-            'change-password' => ['POST'],
+    }
 
-           
-           ],
-       ],
-   ]);    
-
- }
-
-        public $modelClass = 'api\models\User';
+    public $modelClass = 'api\models\User';
 
 
-        public function actionChangePassword()
+    /**
+     * Accepts request to change an existing password, knowing the current password
+     * @return ApiResponse
+     */
+    public function actionChangePassword()
+    {
+        $data = Yii::$app->request->post();
+        $model = new ChangePassword();
+        $errors = [];
 
-         {   
+        if (!isset($data['current_password']) || empty($data['current_password']))
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Current password must be provided"));
 
-            $user = User::find()->one();
+        if (!isset($data['new_password']) || empty($data['new_password']))
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "New password must be provided"));
 
-            $model = new ChangePassword();
+        if (!isset($data['password_repeat']) || empty($data['password_repeat']))
+            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password confirmation is not provided"));
 
-            $errors = [];
-
-             if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-             
-                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password changed"));
-
-               }else{
-
-                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Could not be changed. Please try again"));
-
-               }
-
-              return new ApiResponse([], null, true);
+        if (!empty($errors)) {
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse([], $errors, false);
         }
 
+        $model->current_password = $data['current_password'];
+        $model->new_password = $data['new_password'];
+        $model->password_repeat = $data['password_repeat'];
+        $model->_user = Yii::$app->user->getIdentity();
 
-        public function actionPasswordReset()
+        if ($model->validate() && $model->resetPassword()) {
+            return new ApiResponse([], null, true);
+        }
 
-       {
-        
-      $data = Yii::$app->request->post();
-
-      $model = new PasswordResetRequestForm();
-
-      $model->email = $data["email"];
-
-        if ($model->validate()) {
-
-            if ($model->sendEmail()) {
-        
-        array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Reset E-mail Sent"));
-        } else {
-
-        array_push($errors, new ApiError(ApiError::INVALID_DATA, "Password Could not be changed. Please try again"));
-
-      }
-    
-    return new ApiResponse([], null, true);
-
-     }
-
-   }
+        Yii::$app->response->statusCode = 400;
+        return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
+    }
 
 
+    /**
+     * Takes in  an email and send password reset email
+     * @return ApiResponse
+     */
+    public function actionPasswordReset()
+    {
+        $data = Yii::$app->request->post();
+        $model = new PasswordResetRequestForm();
+
+        if (!isset($data['email']) || empty($data['email']))
+            return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Email has to be provided")], false);
+
+        $model->email = $data["email"];
+
+        if ($model->validate() && $model->sendEmail(Yii::$app->params["BACKEND_BASE_URL"])) {
+            return new ApiResponse([], null, true);
+        }
+        Yii::$app->response->statusCode = 400;
+        return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
+    }
 }
