@@ -16,7 +16,7 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\QarNotification;
+use common\models\Notification;
 
 /**
  * QarController implements the CRUD actions for Qar model.
@@ -121,12 +121,12 @@ class QarController extends Controller
 
             if($model->validate() &&  $model->save())
 
-                $buyer = User::findOne(['id' => $model->buyer]);
-
-                Yii::$app->queue->push(new QarNotification([
-                    'email' => $buyer->email,
-                    'buyer' => $buyer->first_name ." ". $buyer->last_name,
-                ]));
+                $formatter = \Yii::$app->formatter;
+            Yii::$app->queue->push(new Notification([
+                'title' => "Qar has been created",
+                'body' => $model->id. ", has been created. it will be on site ".$model->site.", and it is due on ".$formatter->asDate($model->deadline, 'long'),
+                'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            ]));
 
                     return $this->redirect(['view', 'id' => $model->id]);
 
@@ -156,6 +156,14 @@ class QarController extends Controller
             $model->purifyInput();
 
             if($model->validate() &&  $model->save())
+
+                $formatter = \Yii::$app->formatter;
+            Yii::$app->queue->push(new Notification([
+                'title' => "Qar has been created",
+                'body' => $model->id. ", has been created. it will be on site ".$model->site.", and it is due on ".$formatter->asDate($model->deadline, 'long'),
+                'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            ]));
+
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
