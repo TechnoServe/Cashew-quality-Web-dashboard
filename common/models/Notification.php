@@ -12,13 +12,15 @@ use Yii;
 
 
 
-class QarNotification extends Qar implements JobInterface
+class Notification extends Qar implements JobInterface
 {
-    public $email;
-    public $buyer;
+    public $recipients;
+    public $title;
+    public $body;
 
     public function execute($queue)
     {
+
         Yii::$app
             ->mailer
             ->compose(
