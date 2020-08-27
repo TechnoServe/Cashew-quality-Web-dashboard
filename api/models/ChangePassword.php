@@ -11,7 +11,7 @@ class ChangePassword extends Model
     public $new_password;
     public $password_repeat;
     
-    public $_user;
+    private $_user;
         
     public function rules()
     {
@@ -26,8 +26,10 @@ class ChangePassword extends Model
     
     
     public function validatePassword()
-    {
+    {  
+        
         $user = $this->_user;
+
         if (!$user || !$user->validatePassword($this->current_password)) {
             $this->addError('current_password', 'Your old password was incorrectly typed.');
         }
@@ -42,6 +44,7 @@ class ChangePassword extends Model
     {
         $user = $this->_user;
         $user->setPassword($this->new_password);
+
         return $user->save(false);
     }
 }

@@ -37,11 +37,10 @@ class SiteController extends Controller
                 'rules' => [
                     [
                         'actions' => [
-                            'login',
+                            'login',                            
                             'request-password-reset',
                             'reset-password',
                             'verify-email',
-                            'blank'
                         ],
                         'allow' => true,
                         'roles' => ['?'],
@@ -183,13 +182,13 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success',
-                    Yii::t('app','Check your email for further instructions.'));
+                    'Check your email for further instructions.');
 
+                return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('danger',
-                    Yii::t('app', 'Sorry, we are unable to reset password for the provided email address.'));
+                    'Sorry, we are unable to reset password for the provided email address.');
             }
-            return $this->redirect(["site/blank"]);
         }
 
         return $this->render('requestPasswordResetToken', [
@@ -215,8 +214,10 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', Yii::t('app','New password saved successfully.'));
-            return $this->redirect(["site/blank"]);
+            Yii::$app->session->setFlash('success',
+                'New password saved successfully.');
+
+            return $this->goHome();
         }
 
         return $this->render('resetPassword', [
@@ -271,7 +272,7 @@ class SiteController extends Controller
 
         if(!$model){
             Yii::$app->session->setFlash("danger", Yii::t("app", "Invalid verification link"));
-            return $this->redirect(["site/blank"]);
+            return $this->redirect(["site/login"]);
         }
         
         $model->status = User::STATUS_ACTIVE;
@@ -283,7 +284,7 @@ class SiteController extends Controller
             Yii::$app->session->setFlash("success", Yii::t("app", "Could not activate account"));
         }
 
-        return $this->redirect(["site/blank"]);
+        return $this->redirect(["site/login"]);
     }
 
 
@@ -293,10 +294,4 @@ class SiteController extends Controller
 //            'resultCount'=>10
 //        ]);
 //    }
-
-
-    public function actionBlank(){
-        $this->layout = "login";
-        return $this->render("blank");
-    }
 }

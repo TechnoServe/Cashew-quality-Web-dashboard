@@ -4,11 +4,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 
-if (!$baseUrl):
-    $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
-else:
-    $resetLink = $baseUrl . 'site/reset-password?token=' . $user->password_reset_token;
-endif;
+$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
     <tbody>
