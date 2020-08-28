@@ -121,6 +121,7 @@ class QarController extends Controller
 
             if($model->validate() &&  $model->save())
 
+                //Email notification using queue
                 $formatter = \Yii::$app->formatter;
             Yii::$app->queue->push(new Notification([
                 'title' => "Qar has been created",
@@ -157,6 +158,7 @@ class QarController extends Controller
 
             if($model->validate() &&  $model->save())
 
+                //Email notification using queue
                 $formatter = \Yii::$app->formatter;
             Yii::$app->queue->push(new Notification([
                 'title' => "Qar has been created",
@@ -193,6 +195,14 @@ class QarController extends Controller
 
         $model->status = Qar::STATUS_CANCELED;
         $model->save(false);
+
+        //Email notification using queue
+        $formatter = \Yii::$app->formatter;
+        Yii::$app->queue->push(new Notification([
+            'title' => "Qar has been created",
+            'body' => $model->id. ", has been created. it will be on site ".$model->site.", and it is due on ".$formatter->asDate($model->deadline, 'long'),
+            'recipients' => [$model->buyer, $model->field_tech, $model->farmer, Yii::$app->user->identity->email],
+        ]));
         Yii::$app->session->setFlash("success", Yii::t("app", "QAR canceled successfully"));
         return $this->redirect(['qar/view', "id"=>$model->id]);
     }
