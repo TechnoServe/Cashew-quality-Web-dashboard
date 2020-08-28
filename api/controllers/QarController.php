@@ -18,6 +18,7 @@ use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use api\models\QarNotification;
 
 
 class QarController extends ActiveController

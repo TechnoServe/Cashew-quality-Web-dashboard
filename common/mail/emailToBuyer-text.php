@@ -4,5 +4,7 @@
 /* @var $user common\models\User */
 
 ?>
-<?= $body?>
+Hello <?= $buyer?>,
+
+A field tech created a Qar for you
 

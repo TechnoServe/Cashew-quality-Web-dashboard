@@ -129,7 +129,7 @@ class QarController extends Controller
                 'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
             ]));
 
-                    return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
 
         }
 
@@ -166,7 +166,7 @@ class QarController extends Controller
                 'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
             ]));
 
-                return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
