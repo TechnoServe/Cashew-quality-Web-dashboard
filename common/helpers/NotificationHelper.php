@@ -30,11 +30,14 @@ class NotificationHelper extends BaseObject implements JobInterface
 
             print "Recipients array is not empty \n";
 
-            print $this->recipients;
+            $recipientsObjects = [];
+            try {
+                $recipientsObjects = User::findUsersByIdArray($this->recipients);
+            }catch (\Exception $e){
+                print $e->getMessage();
+            }
 
-            $recipientsObjects = User::find()->where(["in", "id", $this->recipients])->asArray()->all();
-
-            print "found number of users" . count($recipientsObjects) ."\n";
+            print "found number of users " . count($recipientsObjects) ."\n";
 
             if(!empty($recipientsObjects)){
                 // Get emails for the notification
@@ -42,7 +45,12 @@ class NotificationHelper extends BaseObject implements JobInterface
                     return $item["email"];
                 }, $recipientsObjects );
                 // Send email notification
-                $this->sendEmailNotification($this->title, $this->body, $emails);
+
+                try {
+                    $this->sendEmailNotification($this->title, $this->body, $emails);
+                } catch (\Exception $e){
+                    print $e->getMessage();
+                }
             }
         }
     }
@@ -53,7 +61,7 @@ class NotificationHelper extends BaseObject implements JobInterface
      * @param $body
      * @param $email
      */
-    public function sendEmailNotification($title, $body, $email){
+    public function sendEmailNotification($title, $body, $emails){
         Yii::$app
             ->mailer
             ->compose(
@@ -61,7 +69,7 @@ class NotificationHelper extends BaseObject implements JobInterface
                 ['body' => $body,]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
-            ->setTo($email)
+            ->setTo($emails)
             ->setSubject($title)
             ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
             ->send();

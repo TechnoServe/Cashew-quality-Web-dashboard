@@ -233,4 +233,8 @@ class User extends \common\models\User
         }
         return $data;
     }
+
+    public  static function findUsersByIdArray($ids){
+        return User::find()->where(["in", "id", $ids])->asArray()->all();
+    }
 }
