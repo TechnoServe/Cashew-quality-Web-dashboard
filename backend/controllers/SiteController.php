@@ -38,16 +38,14 @@ class SiteController extends Controller
                             'reset-password',
                             'verify-email'
                         ],
-                        'allow' => true,
-                        'roles' => ['?'],
+                        'allow' => true
                     ],
                     [
                         'actions' => [
                             'logout',
                             'error',
                             'index',
-                            'switch-user-language',
-                            'search'
+                            'switch-user-language'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -146,6 +144,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        // Logout the user if logged in
+        Yii::$app->user->logout();
 
         $this->layout = "login";
         if ( ! Yii::$app->user->isGuest) {
@@ -173,6 +173,9 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        // Logout the user if logged in
+        Yii::$app->user->logout();
+
         $this->layout = "login";
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -209,11 +212,17 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        // Logout the user if logged in
+        Yii::$app->user->logout();
+
         $this->layout = "login";
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+            return $this->render("blank", [
+                "message" => Yii::t('app','Invalid password reset link'),
+                "type" => "danger"
+            ]);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
@@ -268,6 +277,9 @@ class SiteController extends Controller
      */
     public function actionVerifyEmail($token)
     {
+        // Logout the user if logged in
+        Yii::$app->user->logout();
+
         $this->layout = "login";
 
         $model = User::findOne(["verification_token" => $token, "status"=> User::STATUS_WAITING_FOR_ACTIVATION]);

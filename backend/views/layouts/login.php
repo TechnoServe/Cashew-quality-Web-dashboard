@@ -67,15 +67,15 @@ AppAsset::register($this);
 
                     $languages = [];
                     if(Yii::$app->language != "en") {
-                        $languages = array_merge($languages, ['en' => '<i class="pli-globe"></i> English']);
+                        $languages = array_merge($languages, ['en' => '<i class="flag-icon flag-icon-gb icon-fw"></i> English']);
                     }
 
                     if(Yii::$app->language != "fr") {
-                        $languages = array_merge($languages, ['fr' => '<i class="pli-globe"></i> Français']);
+                        $languages = array_merge($languages, ['fr' => '<i class="flag-icon flag-icon-fr icon-fw"></i> Français']);
                     }
 
                     if(Yii::$app->language != "pt"){
-                        $languages = array_merge($languages, ['pt' => '<i class="pli-globe"></i> Português']);
+                        $languages = array_merge($languages, ['pt' => '<i class="flag-icon flag-icon-pt icon-fw"></i> Português']);
                     }
 
                     $languageItems = new cetver\LanguageSelector\items\MenuLanguageItems([

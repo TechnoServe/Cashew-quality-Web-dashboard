@@ -79,14 +79,24 @@ use yii\helpers\Url;
 
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                         <ul class="head-list">
+                            <?php if(Yii::$app->language != "en"):?>
                             <li>
                                 <a href="<?=Url::to(["site/switch-user-language", "language" => "en"])?>"><i class="flag-icon flag-icon-gb icon-fw"></i> English </a>
                             </li>
+                            <?php endif; ?>
+
+                            <?php if(Yii::$app->language != "fr"):?>
                             <li>
-                                <a href="<?=Url::to(["site/switch-user-language", "language" => "fr"])?>"><i class="flag-icon flag-icon-fr pli-globe icon-fw"></i> Français</a>                                </li>
+                                <a href="<?=Url::to(["site/switch-user-language", "language" => "fr"])?>"><i class="flag-icon flag-icon-fr pli-globe icon-fw"></i> Français</a>
+                            </li>
+                            <?php endif; ?>
+
+                            <?php if(Yii::$app->language != "pt"):?>
                             <li>
                                 <a href="<?=Url::to(["site/switch-user-language", "language" => "pt"])?>"><i class="flag-icon flag-icon-pt pli-globe icon-fw"></i> Português</a>
                             </li>
+                            <?php endif; ?>
+
                         </ul>
                     </div>
                 </li>

@@ -17,6 +17,7 @@ class LoginAsset extends AssetBundle
         'nifty/premium/icon-sets/icons/line-icons/premium-line-icons.min.css',
         'nifty/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css',
         'nifty/css/demo/nifty-demo.css',
+        'nifty/css/flag-icon-css/css/flag-icon.css',
     ];
     public $js = [
         'nifty/js/jquery-1.11.2.min.js',
