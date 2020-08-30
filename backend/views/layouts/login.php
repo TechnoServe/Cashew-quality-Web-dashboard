@@ -60,27 +60,40 @@ AppAsset::register($this);
 
                 <?=$content?>
 
+                <?php if(!(isset($this->params["hideLanguageSelector"]) && $this->params["hideLanguageSelector"])): ?>
+
                 <div class="language-selector" style="font-weight: bold; margin-top: 20px;">
                     <?php
+
+                    $languages = [];
+                    if(Yii::$app->language != "en") {
+                        $languages = array_merge($languages, ['en' => '<i class="pli-globe"></i> English']);
+                    }
+
+                    if(Yii::$app->language != "fr") {
+                        $languages = array_merge($languages, ['fr' => '<i class="pli-globe"></i> Français']);
+                    }
+
+                    if(Yii::$app->language != "pt"){
+                        $languages = array_merge($languages, ['pt' => '<i class="pli-globe"></i> Português']);
+                    }
+
                     $languageItems = new cetver\LanguageSelector\items\MenuLanguageItems([
-                        'languages' => [
-                            'en' => '<i class="pli-globe"></i> English',
-                            'fr' => '<i class="pli-globe"></i> Français',
-                            'pt' => '<i class="pli-globe"></i> Português',
-                        ],
+                        'languages' => $languages,
                         'options' => ['encode' => false],
                     ]);
+
                     echo \yii\widgets\Menu::widget([
                         'options' => ['class' => 'list-inline'],
                         'items' => $languageItems->toArray(),
                     ]);
                     ?>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
-
 
 <?php $this->endBody() ?>
 </body>
