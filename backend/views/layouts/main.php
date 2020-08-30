@@ -48,7 +48,7 @@ AppAsset::register($this);
                 if ($flashMessages) {
                     echo '<div class="flashes" style="list-style-type: none;">';
                     foreach ($flashMessages as $key => $message) {
-                        echo '<p class="alert alert-' . $key . '">' . $message . " </p>";
+                        echo '<p class="text-bold alert alert-' . $key . '">' . $message . " </p>";
                     }
                     echo '</div>';
                 }

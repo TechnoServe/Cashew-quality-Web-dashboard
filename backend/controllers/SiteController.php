@@ -1,7 +1,6 @@
 <?php
 
 namespace backend\controllers;
-
 use backend\helpers\SiteHelper;
 use backend\models\form\ResetPasswordForm;
 use backend\models\form\PasswordResetRequestForm;
@@ -16,9 +15,6 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
-use yii\db\Expression;
-use yii\helpers\Json;
-use yii\web\JsExpression;
 
 /**
  * Site controller
@@ -40,8 +36,7 @@ class SiteController extends Controller
                             'login',
                             'request-password-reset',
                             'reset-password',
-                            'verify-email',
-                            'blank'
+                            'verify-email'
                         ],
                         'allow' => true,
                         'roles' => ['?'],
@@ -181,15 +176,22 @@ class SiteController extends Controller
         $this->layout = "login";
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $message = null;
+            $messageType = null;
+
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success',
-                    Yii::t('app','Check your email for further instructions.'));
+                $message = Yii::t('app','Check your email for further instructions.');
+                $messageType = "success";
 
             } else {
-                Yii::$app->session->setFlash('danger',
-                    Yii::t('app', 'Sorry, we are unable to reset password for the provided email address.'));
+                $message = Yii::t('app', 'Sorry, we are unable to reset password for the provided email address.');
+                $messageType = "danger";
             }
-            return $this->redirect(["site/blank"]);
+            return $this->render("blank", [
+                "message" =>$message,
+                "type" =>$messageType,
+            ]);
         }
 
         return $this->render('requestPasswordResetToken', [
@@ -215,10 +217,11 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', Yii::t('app','New password saved successfully.'));
-            return $this->redirect(["site/blank"]);
+            return $this->render("blank", [
+                "message" => Yii::t('app','New password saved successfully. You can use it and login'),
+                "type" => "success"
+            ]);
         }
-
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
@@ -270,33 +273,29 @@ class SiteController extends Controller
         $model = User::findOne(["verification_token" => $token, "status"=> User::STATUS_WAITING_FOR_ACTIVATION]);
 
         if(!$model){
-            Yii::$app->session->setFlash("danger", Yii::t("app", "Invalid verification link"));
-            return $this->redirect(["site/blank"]);
+            return $this->render("blank", [
+                "message" => Yii::t("app", "Invalid verification link"),
+                "type" => "danger"
+            ]);
         }
 
         $model->status = User::STATUS_ACTIVE;
         $model->verification_token = null;
 
+        $message = null;
+        $messageType = null;
+
         if($model->save(false)){
-            Yii::$app->session->setFlash("success", Yii::t("app", "Account activated successfully, Please consider changing your password!"));
+            $message = Yii::t("app", "Account activated successfully, Please consider changing your password!");
+            $messageType = "success";
         } else {
-            Yii::$app->session->setFlash("success", Yii::t("app", "Could not activate account"));
+            $message = Yii::t("app", "Could not activate account");
+            $messageType = "danger";
         }
 
-        return $this->redirect(["site/blank"]);
-    }
-
-
-//    public function actionSearch($q){
-//        return $this->render("search", [
-//            'q'=>$q,
-//            'resultCount'=>10
-//        ]);
-//    }
-
-
-    public function actionBlank(){
-        $this->layout = "login";
-        return $this->render("blank");
+        return $this->render("blank", [
+            "message" =>$message,
+            "type" =>$messageType,
+        ]);
     }
 }
