@@ -38,3 +38,4 @@ deploy.php
 composer.lock
 
 backend/web/uploads
+common/notifications/queue

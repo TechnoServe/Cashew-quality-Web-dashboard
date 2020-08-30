@@ -8,12 +8,77 @@
 
 namespace common\helpers;
 
+use backend\models\Site;
+use backend\models\User;
+use Yii;
+use yii\base\BaseObject;
 use yii\helpers\Json;
+use yii\queue\JobInterface;
 
 
-class NotificationHelper
+class NotificationHelper extends BaseObject implements JobInterface
 {
-    public static function SendNotification($to, $title, $body,$type)
+
+    public $title;
+    public $body;
+    public $recipients;
+
+
+    public function execute($queue)
+    {
+
+        print "Starting to send queued notification \n";
+
+        if(is_array($this->recipients) && !empty($this->recipients)){
+
+            print "Recipients array is not empty \n";
+
+            print $this->recipients;
+
+            $recipientsObjects = User::find()->where(["in", "id", $this->recipients])->all();
+
+            print "found number of users" . count($recipientsObjects) ."\n";
+
+            if(!empty($recipientsObjects)){
+                // Get emails for the notification
+                $emails = array_map(function($item) {
+                    return $item->email;
+                }, $recipientsObjects );
+                // Send email notification
+                $this->sendEmailNotification($this->title, $this->body, $emails);
+            }
+        }
+    }
+
+    /**
+     * Used to send email notification
+     * @param $title
+     * @param $body
+     * @param $email
+     */
+    public function sendEmailNotification($title, $body, $email){
+        Yii::$app
+            ->mailer
+            ->compose(
+                ['html' => 'emailNotify-html', 'text' => 'emailNotify-text'],
+                ['body' => $body,]
+            )
+            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setTo($email)
+            ->setSubject($title)
+            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->send();
+    }
+
+    /**
+     * Send push notification
+     * @param $to
+     * @param $title
+     * @param $body
+     * @param $type
+     * @return bool
+     */
+    public static function SendPushNotification($to, $title, $body,$type)
     {
         $ch = curl_init();
         $data[] = [

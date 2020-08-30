@@ -6,6 +6,7 @@ use backend\models\Company;
 use backend\models\QarDetail;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
+use common\helpers\QarNotificationHelper;
 use Yii;
 use backend\models\Qar;
 use backend\models\search\QarSearch;
@@ -119,18 +120,10 @@ class QarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->purifyInput();
 
-            if($model->validate() &&  $model->save())
-
-                //Email notification using queue
-                $formatter = \Yii::$app->formatter;
-            Yii::$app->queue->push(new Notification([
-                'title' => "Qar has been created",
-                'body' => $model->id. ", has been created. it will be on site ".$model->site.", and it is due on ".$formatter->asDate($model->deadline, 'long'),
-                'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
-            ]));
-
-            return $this->redirect(['view', 'id' => $model->id]);
-
+            if ($model->validate() && $model->save()) {
+                (new QarNotificationHelper())->constructQarCreationNotification($model);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -156,17 +149,10 @@ class QarController extends Controller
 
             $model->purifyInput();
 
-            if($model->validate() &&  $model->save())
-
-                //Email notification using queue
-                $formatter = \Yii::$app->formatter;
-            Yii::$app->queue->push(new Notification([
-                'title' => "Qar has been created",
-                'body' => $model->id. ", has been created. it will be on site ".$model->site.", and it is due on ".$formatter->asDate($model->deadline, 'long'),
-                'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
-            ]));
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            if($model->validate() &&  $model->save()) {
+                (new QarNotificationHelper())->constructQarUpdateNotification($model);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
