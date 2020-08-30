@@ -26,9 +26,8 @@ return [
             'class' => \yii\queue\file\Queue::class,
             'as log' => \yii\queue\LogBehavior::class,//The default error log is console/runtime/logs/app.log
             'path' => '@common/notifications/queue',
-            'strictJobType' => false,
-            'serializer' => \yii\queue\serializers\JsonSerializer::class,
-            // Other driver options
+            'ttr' => 5 * 60, // Max time for anything job handling
+            'attempts' => 3, // Max number of attempts
         ],
 
         'mailer' => [

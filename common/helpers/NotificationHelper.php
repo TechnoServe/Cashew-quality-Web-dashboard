@@ -7,8 +7,6 @@
  */
 
 namespace common\helpers;
-
-use backend\models\Site;
 use backend\models\User;
 use Yii;
 use yii\base\BaseObject;
@@ -26,7 +24,6 @@ class NotificationHelper extends BaseObject implements JobInterface
 
     public function execute($queue)
     {
-
         print "Starting to send queued notification \n";
 
         if(is_array($this->recipients) && !empty($this->recipients)){
@@ -35,14 +32,14 @@ class NotificationHelper extends BaseObject implements JobInterface
 
             print $this->recipients;
 
-            $recipientsObjects = User::find()->where(["in", "id", $this->recipients])->all();
+            $recipientsObjects = User::find()->where(["in", "id", $this->recipients])->asArray()->all();
 
             print "found number of users" . count($recipientsObjects) ."\n";
 
             if(!empty($recipientsObjects)){
                 // Get emails for the notification
                 $emails = array_map(function($item) {
-                    return $item->email;
+                    return $item["email"];
                 }, $recipientsObjects );
                 // Send email notification
                 $this->sendEmailNotification($this->title, $this->body, $emails);
