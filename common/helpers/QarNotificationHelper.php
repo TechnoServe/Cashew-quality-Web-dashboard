@@ -5,6 +5,7 @@ namespace common\helpers;
 
 
 use backend\models\Site;
+use common\models\Qar;
 use Yii;
 
 class QarNotificationHelper
@@ -40,6 +41,110 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+        ]));
+    }
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructQarCancelNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id . " has been canceled",
+            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id,
+                "site" => Site::findOne($model->site)->site_name,
+                "duedate" => $model->deadline
+            ]),
+            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+        ]));
+    }
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructQarRestoreNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id . " has been restored",
+            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id,
+                "site" => Site::findOne($model->site)->site_name,
+                "duedate" => $model->deadline
+            ]),
+            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+        ]));
+    }
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructQarDeleteNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id . " has been deleted",
+            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id,
+                "site" => Site::findOne($model->site)->site_name,
+                "duedate" => $model->deadline
+            ]),
+            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+        ]));
+    }
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructAPIQarCreateNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id . " has been created",
+            'body' => Yii::t("app","Qar number {number} has been created. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id,
+                "site" => Site::findOne($model->site)->site_name,
+                "duedate" => $model->deadline
+            ]),
+            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+        ]));
+    }
+
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructAPIQarCreateDetailNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id_qar . " has been updated",
+            'body' => Yii::t("app","Qar number {number} has been updated to progress. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id_qar,
+                "site" => Site::findOne(Qar::findOne($model->id_qar)->site)->site_name,
+                "duedate" => Qar::findOne($model->id_qar)->deadline
+            ]),
+            'recipients' => [Qar::findOne($model->id_qar)->buyer, Qar::findOne($model->id_qar)->field_tech, Qar::findOne($model->id_qar)->farmer],
+        ]));
+    }
+
+
+
+    /**
+     * Construct qar common notification and add to queue
+     * @param $model
+     */
+    public function constructAPIQarCreateResultNotification($model){
+        Yii::$app->queue->push(new NotificationHelper([
+            'title' => "QAR" . $model->id_qar . " has been updated",
+            'body' => Yii::t("app","Qar number {number} has been completed. it is on site {site}, and it is due on {duedate}", [
+                "number" => "QAR". $model->id_qar,
+                "site" => Site::findOne(Qar::findOne($model->id_qar)->site)->site_name,
+                "duedate" => Qar::findOne($model->id_qar)->deadline
+            ]),
+            'recipients' => [Qar::findOne($model->id_qar)->buyer, Qar::findOne($model->id_qar)->field_tech, Qar::findOne($model->id_qar)->farmer],
         ]));
     }
 }

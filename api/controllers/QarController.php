@@ -18,7 +18,7 @@ use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use api\models\QarNotification;
+use common\helpers\QarNotificationHelper;
 
 
 class QarController extends ActiveController
@@ -173,7 +173,6 @@ class QarController extends ActiveController
 
     public function actionSaveQar()
     {
-
         $data = Yii::$app->request->post();
 
         $qar = new Qar();
@@ -264,7 +263,9 @@ class QarController extends ActiveController
             return new ApiResponse(null, $errors, false);
         }
 
-        $qar->save();
+        if($qar->save()){
+            (new QarNotificationHelper())->constructAPIQarCreateNotification($qar);
+        }
 
         return new ApiResponse($qar, null, true);
     }
@@ -368,7 +369,11 @@ class QarController extends ActiveController
 
         $transaction->commit();
 
+
+
         Yii::$app->db->createCommand()->update('qar', ['status' => Qar::STATUS_IN_PROGRESS], ['id' => $id_qar])->execute();
+
+        (new QarNotificationHelper())->constructAPIQarCreateDetailNotification($qar_detail);
 
         return new ApiResponse([], null, true);
 
@@ -459,6 +464,8 @@ class QarController extends ActiveController
             $transaction->commit();
 
         Yii::$app->db->createCommand()->update('qar', ['status' => Qar::STATUS_COMPLETED], ['id' => $id_qar])->execute();
+
+        (new QarNotificationHelper())->constructAPIQarCreateResultNotification($qar_result);
 
             return new ApiResponse([], null, true);
 
