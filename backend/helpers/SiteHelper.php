@@ -120,6 +120,29 @@ class SiteHelper
     {
         $series = [];
 
+
+        // Institution Admin
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Institution Admin"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_INSTITUTION_ADMIN),
+                'color' => "#03a9f4"
+            ]
+        );
+
+        // Institution Admin View
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Institution Admin View"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_INSTITUTION_ADMIN_VIEW),
+                'color' => "#aa66cc"
+            ]
+        );
+
         // Buyers
         array_push(
             $series,
@@ -127,7 +150,7 @@ class SiteHelper
                 'type' => 'spline',
                 'name' => Yii::t("app", "Buyers"),
                 'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_BUYER),
-                'color' => "#26a69a"
+                'color' => "#25476a"
             ]
         );
 
@@ -138,9 +161,21 @@ class SiteHelper
                 'type' => 'spline',
                 'name' => Yii::t("app", "FieldTech"),
                 'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_TECH),
-                'color' => "#25476a"
+                'color' => "#ffb300"
             ]
         );
+
+        // Farmers
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Farmers"),
+                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_FARMER),
+                'color' => "#26a69a"
+            ]
+        );
+
         return $series;
 
     }
