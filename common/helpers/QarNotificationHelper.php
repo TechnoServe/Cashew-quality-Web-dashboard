@@ -52,7 +52,7 @@ class QarNotificationHelper
     public function constructQarCancelNotification($model){
         Yii::$app->queue->push(new NotificationHelper([
             'title' => "QAR" . $model->id . " has been canceled",
-            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+            'body' => Yii::t("app","Qar number {number} has been canceled. it was on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id,
                 "site" => Site::findOne($model->site)->site_name,
                 "duedate" => $model->deadline
@@ -69,7 +69,7 @@ class QarNotificationHelper
     public function constructQarRestoreNotification($model){
         Yii::$app->queue->push(new NotificationHelper([
             'title' => "QAR" . $model->id . " has been restored",
-            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+            'body' => Yii::t("app","Qar number {number} which was canceled has been restored. it is on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id,
                 "site" => Site::findOne($model->site)->site_name,
                 "duedate" => $model->deadline
@@ -86,7 +86,7 @@ class QarNotificationHelper
     public function constructQarDeleteNotification($model){
         Yii::$app->queue->push(new NotificationHelper([
             'title' => "QAR" . $model->id . " has been deleted",
-            'body' => Yii::t("app","Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}", [
+            'body' => Yii::t("app","Qar number {number} has been deleted. it was on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id,
                 "site" => Site::findOne($model->site)->site_name,
                 "duedate" => $model->deadline
@@ -138,7 +138,7 @@ class QarNotificationHelper
      */
     public function constructAPIQarCreateResultNotification($model){
         Yii::$app->queue->push(new NotificationHelper([
-            'title' => "QAR" . $model->id_qar . " has been updated",
+            'title' => "QAR" . $model->id_qar . " has been completed",
             'body' => Yii::t("app","Qar number {number} has been completed. it is on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id_qar,
                 "site" => Site::findOne(Qar::findOne($model->id_qar)->site)->site_name,
