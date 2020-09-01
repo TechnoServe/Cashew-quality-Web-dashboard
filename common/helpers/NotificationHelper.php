@@ -20,6 +20,11 @@ class NotificationHelper extends BaseObject implements JobInterface
     public $title;
     public $body;
     public $recipients;
+    public $destinations;
+
+    const DESTINATION_APP = 1;
+    const DESTINATION_EMAIL = 2;
+    const DESTINATION_SMS = 3;
 
 
     public function execute($queue)
@@ -47,7 +52,12 @@ class NotificationHelper extends BaseObject implements JobInterface
                 // Send email notification
 
                 try {
-                    $this->sendEmailNotification($this->title, $this->body, $emails);
+                    if($this->destinations.contains(self::DESTINATION_EMAIL))
+                        $this->sendEmailNotification($this->title, $this->body, $emails);
+
+                    if($this->destinations.contains(self::DESTINATION_APP))
+                        $this->sendEmailNotification($this->title, $this->body, $emails);
+
                 } catch (\Exception $e){
                     print $e->getMessage();
                 }

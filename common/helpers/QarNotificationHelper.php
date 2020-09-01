@@ -24,6 +24,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -41,6 +42,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -58,6 +60,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -75,6 +78,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -92,6 +96,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -109,6 +114,7 @@ class QarNotificationHelper
                 "duedate" => $model->deadline
             ]),
             'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -119,14 +125,18 @@ class QarNotificationHelper
      * @param $model
      */
     public function constructAPIQarCreateDetailNotification($model){
+
+        $qar = Qar::findOne($model->id_qar);
+
         Yii::$app->queue->push(new NotificationHelper([
             'title' => "QAR" . $model->id_qar . " has been updated",
             'body' => Yii::t("app","Qar number {number} has been updated to progress. it is on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id_qar,
-                "site" => Site::findOne(Qar::findOne($model->id_qar)->site)->site_name,
-                "duedate" => Qar::findOne($model->id_qar)->deadline
+                "site" => Site::findOne($qar->site)->site_name,
+                "duedate" => $qar->deadline
             ]),
-            'recipients' => [Qar::findOne($model->id_qar)->buyer, Qar::findOne($model->id_qar)->field_tech, Qar::findOne($model->id_qar)->farmer],
+            'recipients' => [$qar->buyer, $qar->field_tech, $qar->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 
@@ -137,14 +147,18 @@ class QarNotificationHelper
      * @param $model
      */
     public function constructAPIQarCreateResultNotification($model){
+
+        $qar = Qar::findOne($model->id_qar);
+
         Yii::$app->queue->push(new NotificationHelper([
             'title' => "QAR" . $model->id_qar . " has been completed",
             'body' => Yii::t("app","Qar number {number} has been completed. it is on site {site}, and it is due on {duedate}", [
                 "number" => "QAR". $model->id_qar,
-                "site" => Site::findOne(Qar::findOne($model->id_qar)->site)->site_name,
-                "duedate" => Qar::findOne($model->id_qar)->deadline
+                "site" => Site::findOne($qar->site)->site_name,
+                "duedate" => $qar->deadline
             ]),
-            'recipients' => [Qar::findOne($model->id_qar)->buyer, Qar::findOne($model->id_qar)->field_tech, Qar::findOne($model->id_qar)->farmer],
+            'recipients' => [$qar->buyer, $qar->field_tech, $qar->farmer],
+            'destinations' => [NotificationHelper::DESTINATION_EMAIL]
         ]));
     }
 }
