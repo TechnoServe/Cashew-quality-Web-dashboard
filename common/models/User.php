@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string|null $phone
  * @property string|null $address
+ * @property string|null $expo_token
  * @property string|null $language
  * @property int $status
  * @property string $created_at
@@ -80,7 +81,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 'required',
             ],
             [['status', 'role', 'company_id'], 'integer'],
-            [['created_at', 'updated_at', 'pass'], 'safe'],
+            [['created_at', 'updated_at', 'pass', "expo_token"], 'safe'],
             [
                 [
                     'username',
