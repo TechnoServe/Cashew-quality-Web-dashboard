@@ -21,6 +21,7 @@ class NotificationHelper extends BaseObject implements JobInterface
     public $body;
     public $recipients;
     public $destinations;
+    public $type;
 
     const DESTINATION_APP = 1;
     const DESTINATION_EMAIL = 2;
@@ -49,18 +50,25 @@ class NotificationHelper extends BaseObject implements JobInterface
                 $emails = array_map(function($item) {
                     return $item["email"];
                 }, $recipientsObjects );
-                // Send email notification
+
+                // Get tokens for the notification
+                $tokens = array_map(function($item) {
+                    return $item["expo_token"];
+                }, $recipientsObjects );
+
+                // Send email and push notification
 
                 try {
                     if($this->destinations.contains(self::DESTINATION_EMAIL))
                         $this->sendEmailNotification($this->title, $this->body, $emails);
 
                     if($this->destinations.contains(self::DESTINATION_APP))
-                        $this->sendEmailNotification($this->title, $this->body, $emails);
+                        $this->SendPushNotification($tokens, $this->title, $this->body, $this->type);
 
                 } catch (\Exception $e){
                     print $e->getMessage();
                 }
+
             }
         }
     }
@@ -95,6 +103,7 @@ class NotificationHelper extends BaseObject implements JobInterface
      */
     public static function SendPushNotification($to, $title, $body,$type)
     {
+
         $ch = curl_init();
         $data[] = [
             "to" => $to,
@@ -111,7 +120,6 @@ class NotificationHelper extends BaseObject implements JobInterface
         curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
         curl_setopt($ch, CURLOPT_POST, 1);
 
-        var_dump($data);
         $headers = array();
         $headers[] = "Content-Type: application/json";
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -119,8 +127,6 @@ class NotificationHelper extends BaseObject implements JobInterface
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
             $res = 'Error:' . curl_error($ch);
-            //var_dump($res);
-            //die();
             curl_close($ch);
             return false;
         }

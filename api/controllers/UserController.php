@@ -4,7 +4,7 @@ namespace api\controllers;
 
 use api\components\ApiError;
 use api\components\ApiResponse;
-use api\models\User;
+use backend\models\User;
 use api\models\ChangePassword;
 use backend\models\form\PasswordResetRequestForm;
 use Yii;
@@ -37,7 +37,7 @@ class UserController extends ActiveController
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['password-reset'],
+                            'actions' => ['password-reset', 'save-token'],
                             'allow' => true,
                         ],
 
@@ -53,6 +53,7 @@ class UserController extends ActiveController
                     'actions' => [
                         'password-reset' => ['POST'],
                         'change-password' => ['POST'],
+                        'save-token' => ['POST'],
                     ],
                 ],
             ]);
@@ -119,5 +120,41 @@ class UserController extends ActiveController
         }
         Yii::$app->response->statusCode = 400;
         return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
+    }
+
+    public function actionSaveToken()
+    {
+        $data = Yii::$app->request->post();
+
+        $user = new User();
+
+        $errors = [];
+
+        if (isset($data['user_id']) && !empty($data['user_id'])) {
+            $userExists = User::queryByCompany()->andWhere([
+                "id" => $data['user_id']
+            ])->exists();
+            if ($userExists) {
+                if (isset($data['token']) && !empty($data['token'])) {
+                    $user->expo_token = $data['token'];
+
+                     Yii::$app->db->createCommand()->update('user', ['expo_token' => $data['token']], ['id' => $data['user_id']])->execute();
+                }else{
+                    array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide token"));
+                }
+            } else {
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "User Id is invalid"));
+            }
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide user"));
+        }
+
+        // If validation
+        if (!empty($errors)) {
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse(null, $errors, false);
+        }
+
+        return new ApiResponse($user, null, true);
     }
 }
