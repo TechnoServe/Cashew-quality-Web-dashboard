@@ -27,7 +27,8 @@
         "voime/yii2-google-maps": "*",
         "2amigos/yii2-highcharts-widget" : "~1.0",
         "ahsankhatri/firestore-php": "^2.0",
-        "yiisoft/yii2-queue": "^2.3"
+        "yiisoft/yii2-queue": "^2.3",
+        "ext-curl": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

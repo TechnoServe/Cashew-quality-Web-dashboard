@@ -21,7 +21,6 @@ class NotificationHelper extends BaseObject implements JobInterface
     public $body;
     public $recipients;
     public $destinations;
-    public $type;
 
     const DESTINATION_APP = 1;
     const DESTINATION_EMAIL = 2;
@@ -59,11 +58,14 @@ class NotificationHelper extends BaseObject implements JobInterface
                 // Send email and push notification
 
                 try {
-                    if($this->destinations.contains(self::DESTINATION_EMAIL))
-                        $this->sendEmailNotification($this->title, $this->body, $emails);
 
-                    if($this->destinations.contains(self::DESTINATION_APP))
-                        $this->SendPushNotification($tokens, $this->title, $this->body, $this->type);
+                    print "Attempting to send email notification to " . count($recipientsObjects) ."\n";
+
+//                    if(in_array( self::DESTINATION_EMAIL, $this->destinations))
+//                        $this->sendEmailNotification($this->title, $this->body, $emails);
+
+                    if(in_array( self::DESTINATION_APP, $this->destinations))
+                        $this->SendPushNotification($this->title, $this->body, $tokens);
 
                 } catch (\Exception $e){
                     print $e->getMessage();
@@ -98,40 +100,48 @@ class NotificationHelper extends BaseObject implements JobInterface
      * @param $to
      * @param $title
      * @param $body
-     * @param $type
      * @return bool
      */
-    public static function SendPushNotification($to, $title, $body,$type)
+    public static function SendPushNotification($title, $body, $to)
     {
+        $to = array_filter($to);
 
-        $ch = curl_init();
-        $data[] = [
-            "to" => $to,
-            "data"=> [
-                "type"=>$type,
-            ],
-            "title" => $title,
-            "body" => $body,
+        if(!empty($to)) {
 
-        ];
+            try {
 
-        curl_setopt($ch, CURLOPT_URL, "https://exp.host/--/api/v2/push/send");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
-        curl_setopt($ch, CURLOPT_POST, 1);
+            $ch = curl_init();
+            $data = [
+                "to" => $to,
+                "title" => $title,
+                "body" => $body,
+            ];
 
-        $headers = array();
-        $headers[] = "Content-Type: application/json";
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            var_dump(Json::encode($data));
 
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            $res = 'Error:' . curl_error($ch);
+            curl_setopt($ch, CURLOPT_URL, "https://exp.host/--/api/v2/push/send");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
+            curl_setopt($ch, CURLOPT_POST, 1);
+
+            $headers = array();
+            $headers[] = "Content-Type: application/json";
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $result = curl_exec($ch);
+            if (curl_errno($ch)) {
+                $res = 'Error:' . curl_error($ch);
+                curl_close($ch);
+                return false;
+            }
             curl_close($ch);
-            return false;
+
+            } catch (\Exception $exception){
+                print $exception->getMessage(). "\n";
+            }
+        }else{
+            print "No tokens are supplied \n";
         }
-        curl_close($ch);
         return true;
     }
-
 }
