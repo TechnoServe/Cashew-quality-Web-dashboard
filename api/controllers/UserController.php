@@ -37,12 +37,12 @@ class UserController extends ActiveController
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['password-reset', 'save-token'],
+                            'actions' => ['password-reset'],
                             'allow' => true,
                         ],
 
                         [
-                            'actions' => ['change-password'],
+                            'actions' => ['change-password', 'save-token'],
                             'allow' => true,
                             'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
                         ],
@@ -122,11 +122,15 @@ class UserController extends ActiveController
         return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
     }
 
+
+    /**
+     * Helps to capture user expo notification token
+     * @return ApiResponse
+     * @throws \yii\db\Exception
+     */
     public function actionSaveToken()
     {
         $data = Yii::$app->request->post();
-
-        $user = new User();
 
         $errors = [];
 
@@ -136,8 +140,6 @@ class UserController extends ActiveController
             ])->exists();
             if ($userExists) {
                 if (isset($data['token']) && !empty($data['token'])) {
-                    $user->expo_token = $data['token'];
-
                      Yii::$app->db->createCommand()->update('user', ['expo_token' => $data['token']], ['id' => $data['user_id']])->execute();
                 }else{
                     array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide token"));
@@ -155,6 +157,6 @@ class UserController extends ActiveController
             return new ApiResponse(null, $errors, false);
         }
 
-        return new ApiResponse($user, null, true);
+        return new ApiResponse($data["token"], null, true);
     }
 }
