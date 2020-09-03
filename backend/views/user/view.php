@@ -18,7 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <div class="panel-heading bg-primary">
-        <h3 class="panel-title"><?=Yii::t("app", "User details")?></h3>
+        <?php if($model->id != Yii::$app->user->getId()): ?>
+            <h3 class="panel-title"><?=Yii::t("app", "User profile")?></h3>
+        <?php else: ?>
+            <h3 class="panel-title"><?=Yii::t("app", "My profile")?></h3>
+        <?php endif; ?>
     </div>
 
     <div class="panel-body">
@@ -27,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']) ?>
 
-            <?php if($model->status == User::STATUS_ACTIVE): ?>
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
+            <?php if($model->status == User::STATUS_ACTIVE && $model->id != Yii::$app->user->getId()): ?>
+            <?= Html::a(Yii::t('app', 'Deactivate'), ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-danger',
                     'data' => [
