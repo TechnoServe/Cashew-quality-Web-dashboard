@@ -7,7 +7,9 @@
  */
 
 namespace common\helpers;
+
 use backend\models\User;
+use linslin\yii2\curl\Curl;
 use Yii;
 use yii\base\BaseObject;
 use yii\helpers\Json;
@@ -31,43 +33,43 @@ class NotificationHelper extends BaseObject implements JobInterface
     {
         print "Starting to send queued notification \n";
 
-        if(is_array($this->recipients) && !empty($this->recipients)){
+        if (is_array($this->recipients) && !empty($this->recipients)) {
 
             print "Recipients array is not empty \n";
 
             $recipientsObjects = [];
             try {
                 $recipientsObjects = User::findUsersByIdArray($this->recipients);
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 print $e->getMessage();
             }
 
-            print "found number of users " . count($recipientsObjects) ."\n";
+            print "found number of users " . count($recipientsObjects) . "\n";
 
-            if(!empty($recipientsObjects)){
+            if (!empty($recipientsObjects)) {
                 // Get emails for the notification
-                $emails = array_map(function($item) {
+                $emails = array_map(function ($item) {
                     return $item["email"];
-                }, $recipientsObjects );
+                }, $recipientsObjects);
 
                 // Get tokens for the notification
-                $tokens = array_map(function($item) {
+                $tokens = array_map(function ($item) {
                     return $item["expo_token"];
-                }, $recipientsObjects );
+                }, $recipientsObjects);
 
                 // Send email and push notification
 
                 try {
 
-                    print "Attempting to send email notification to " . count($recipientsObjects) ."\n";
+                    if(in_array( self::DESTINATION_EMAIL, $this->destinations)) {
+                        $this->sendEmailNotification($this->title, $this->body, $emails);
+                    }
 
-//                    if(in_array( self::DESTINATION_EMAIL, $this->destinations))
-//                        $this->sendEmailNotification($this->title, $this->body, $emails);
-
-                    if(in_array( self::DESTINATION_APP, $this->destinations))
+                    if (in_array(self::DESTINATION_APP, $this->destinations)) {
                         $this->SendPushNotification($this->title, $this->body, $tokens);
+                    }
 
-                } catch (\Exception $e){
+                } catch (\Exception $e) {
                     print $e->getMessage();
                 }
 
@@ -81,7 +83,10 @@ class NotificationHelper extends BaseObject implements JobInterface
      * @param $body
      * @param $email
      */
-    public function sendEmailNotification($title, $body, $emails){
+    public function sendEmailNotification($title, $body, $emails)
+    {
+        print "Attempting to send email notification to " . count($emails) . "\n";
+
         Yii::$app
             ->mailer
             ->compose(
@@ -106,40 +111,37 @@ class NotificationHelper extends BaseObject implements JobInterface
     {
         $to = array_filter($to);
 
-        if(!empty($to)) {
+        if (!empty($to)) {
+
+            print "Attempting to send push notification to " . count($to) . " tokens\n";
 
             try {
 
-            $ch = curl_init();
-            $data = [
-                "to" => $to,
-                "title" => $title,
-                "body" => $body,
-            ];
+                $data = [
+                    "to" => $to,
+                    "title" => $title,
+                    "body" => $body,
+                ];
 
-            var_dump(Json::encode($data));
+                $curl = new Curl();
 
-            curl_setopt($ch, CURLOPT_URL, "https://exp.host/--/api/v2/push/send");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
-            curl_setopt($ch, CURLOPT_POST, 1);
+                print "Sending push notification to " . count($to) . " tokens\n";
 
-            $headers = array();
-            $headers[] = "Content-Type: application/json";
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                $response = $curl
+                    ->setRequestBody(json_encode($data))
+                    ->setHeaders([
+                        'Content-Type' => 'application/json',
+                    ])
+                    ->setOption(CURLOPT_RETURNTRANSFER, 1)
+                    ->setOption(CURLOPT_POST, 1)
+                    ->post("https://exp.host/--/api/v2/push/send");
 
-            $result = curl_exec($ch);
-            if (curl_errno($ch)) {
-                $res = 'Error:' . curl_error($ch);
-                curl_close($ch);
-                return false;
+                var_dump($response);
+
+            } catch (\Exception $exception) {
+                print $exception->getMessage() . "\n";
             }
-            curl_close($ch);
-
-            } catch (\Exception $exception){
-                print $exception->getMessage(). "\n";
-            }
-        }else{
+        } else {
             print "No tokens are supplied \n";
         }
         return true;
