@@ -12,7 +12,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
 <div class="site-index">
 
-    <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "/"]) ?>
+    <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'country_code' => $country_code , 'url' => "/"]) ?>
 
     <div class="panel">
         <div class="panel-heading bg-primary">
