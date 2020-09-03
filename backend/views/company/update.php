@@ -13,6 +13,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="panel">
+    <div class="panel-heading bg-primary">
+        <h3 class="panel-title"><?= Yii::t("app", "Company") ?> • <?= Yii::t("app", "Update form") ?></h3>
+    </div>
+
     <div class="panel-body">
         <?= $this->render('_form', [
             'model' => $model,

@@ -484,4 +484,61 @@ class CashewAppHelper
             'ZW' => 'Zimbabwe',
         ];
     }
+
+
+    /**
+     * Calculates number of chunks in the given time period
+     * @param $date1
+     * @param $date2
+     * @param $periodInSeconds
+     * @return float
+     */
+    private function numberOfChunksBetween2Dates($date1, $date2, $periodInSeconds){
+        return round((strtotime($date2) - strtotime($date1))/($periodInSeconds));
+    }
+
+
+    /**
+     * helps to Calculate the 2 reminders for a qar
+     * @param $startDate
+     * @param $endDate
+     * @return array|null[]
+     */
+    public function calculateNotificationTimeForQar($startDate, $endDate)
+    {
+        $numberOfChunks = $this->numberOfChunksBetween2Dates($startDate, $endDate, 60);
+        print "chuncks for this QAR ". $numberOfChunks . "\n";
+
+        if($numberOfChunks <= 0) {
+            return [null, null];
+        }
+
+        $quarter = floor(($numberOfChunks/4));
+
+        if($quarter == 0 ) {
+            return [null, null];
+        }
+
+
+        $notification1 = null;
+        $notification2 = null;
+
+        if($quarter < 60){
+            $notification1 = date("Y-m-d H:i:s", strtotime('+'. ($quarter*2) .' minutes', strtotime($startDate)));
+            $notification2 = date("Y-m-d H:i:s", strtotime('+'. ($quarter*3) .' minutes', strtotime($startDate)));
+        } else
+
+            if($quarter > 60 && $quarter < 120 ){
+                $notification1 = date("Y-m-d H:i:s", strtotime('+'. ($quarter*3) .' minutes', strtotime($startDate)));
+                $notification2 = date("Y-m-d H:i:s", strtotime('+'. ($quarter*3 + 30) .' minutes', strtotime($startDate)));
+            }
+
+            else {
+
+                $notification1 = date("Y-m-d H:i:s", strtotime('- 120 minutes', strtotime($endDate)));
+                $notification2 = date("Y-m-d H:i:s", strtotime('- 60 minutes', strtotime($endDate)));
+            }
+
+        return [$notification1, $notification2];
+    }
 }

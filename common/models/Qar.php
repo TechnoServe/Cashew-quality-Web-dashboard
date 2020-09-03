@@ -16,6 +16,8 @@ use Yii;
  * @property string|null $audit_quantity
  * @property string $created_at
  * @property string $updated_at
+ * @property string $reminder1
+ * @property string $reminder2
  *
  * @property User $buyer0
  * @property User $farmer0
@@ -42,7 +44,7 @@ class Qar extends \yii\db\ActiveRecord
             [['buyer', 'field_tech', 'farmer', 'initiator', 'site'], 'integer'],
             [['number_of_bags','volume_of_stock'], 'number'],
             [['initiator', 'site', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
-            [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags'], 'safe'],
+            [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags', 'reminder1', 'reminder2'], 'safe'],
             [['buyer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['buyer' => 'id']],
             [['farmer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['farmer' => 'id']],
             [['field_tech'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['field_tech' => 'id']],

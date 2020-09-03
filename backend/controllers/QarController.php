@@ -119,7 +119,15 @@ class QarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->purifyInput();
 
-            if ($model->validate() && $model->save()) {
+
+            if ($model->validate()) {
+
+                list($reminder1, $reminder2) = (new CashewAppHelper())->calculateNotificationTimeForQar(date("Y-m-d H:i:s", strtotime("now")), $model->deadline." 18:00:00");
+                $model->reminder1 = $reminder1;
+                $model->reminder2 = $reminder2;
+
+                $model->save();
+
                 (new QarNotificationHelper())->constructQarCreationNotification($model);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -148,7 +156,14 @@ class QarController extends Controller
 
             $model->purifyInput();
 
-            if($model->validate() &&  $model->save()) {
+            if($model->validate()) {
+
+                list($reminder1, $reminder2) = (new CashewAppHelper())->calculateNotificationTimeForQar($model->created_at, $model->deadline." 18:00:00");
+                $model->reminder1 = $reminder1;
+                $model->reminder2 = $reminder2;
+
+                $model->save();
+
                 (new QarNotificationHelper())->constructQarUpdateNotification($model);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
