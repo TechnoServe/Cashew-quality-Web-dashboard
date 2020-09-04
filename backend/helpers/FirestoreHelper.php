@@ -15,6 +15,7 @@ class FirestoreHelper
     const USERS_COLLECTION_NAME = "users";
     const QAR_COLLECTION_NAME = "qar_listing";
     const QAR_RESULT_COLLECTION_NAME = "qar_results";
+    const QAR_PROCESSING_COLLECTION_NAME = "qap_data";
     const SITES_COLLECTION_NAME = "sites";
     const SYNC_TIME_SETTING = "fireStoreSyncTime";
 
@@ -89,6 +90,15 @@ class FirestoreHelper
             */
             $updateUserDocuments = $this->saveFreeVersionQarResultList();
             $this->cleanFreeVersionQarResult($updateUserDocuments);
+            /*
+             * End save qars result
+             */
+
+
+            /*
+            * Save qars result location data
+            */
+            $this->saveFreeVersionQarProcessingList();
             /*
              * End save qars result
              */
@@ -295,6 +305,48 @@ class FirestoreHelper
         }
 
         return $foundDocumentIds;
+    }
+
+
+
+    public function saveFreeVersionQarProcessingList(){
+
+        $qarProcessingFromFirebase = $this->listDocumentsInACollection(self::QAR_PROCESSING_COLLECTION_NAME);
+
+        var_dump(count($qarProcessingFromFirebase['documents']));
+
+        foreach ($qarProcessingFromFirebase['documents'] as $item){
+
+            $qar_id = $this->getDocumentKey($item, "request_id");
+            $good_kernel = $this->getDocumentKey($item, "good_kernel");
+
+            $location_array = [];
+
+            try {
+                if(isset($good_kernel[0]["location"])){
+                    $locationData = $good_kernel[0]["location"]->getData();
+                    $locationCoordinates = $locationData[0]["coords"]->getData();
+                    $location_array = $locationCoordinates[0];
+                }
+            } catch (\Exception $exception){
+                Yii::error("Could not fetch location data");
+            }
+
+
+            if(!empty($location_array)){
+                $result = FreeQarResult::find()->where(["qar"=>$qar_id])->one();
+
+                if($result){
+                    $result->location_accuracy = $location_array["accuracy"];
+                    $result->location_altitude = $location_array["altitude"];
+                    $result->location_lat = $location_array["latitude"];
+                    $result->location_lon = $location_array["longitude"];
+                    if(!$result->save(false)){
+                        Yii::error($result->getErrors());
+                    }
+                }
+            }
+        }
     }
 
 

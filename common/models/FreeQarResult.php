@@ -18,6 +18,10 @@ use Yii;
  * @property float|null $total_volume_of_stock
  * @property string|null $created_at
  * @property string|null $updated_at
+ * @property integer|null $location_accuracy
+ * @property integer|null $location_altitude
+ * @property float|null $location_lat
+ * @property float|null $location_lon
  */
 class FreeQarResult extends \yii\db\ActiveRecord
 {
@@ -37,7 +41,7 @@ class FreeQarResult extends \yii\db\ActiveRecord
         return [
             [['document_id'], 'required'],
             [['kor', 'defective_rate', 'foreign_material_rate', 'moisture_content', 'nut_count', 'useful_kernel', 'total_volume_of_stock'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'location_accuracy', 'location_altitude', 'location_lat', 'location_lon'], 'safe'],
             [['document_id', 'qar'], 'string', 'max' => 255],
             [['document_id'], 'unique'],
         ];
