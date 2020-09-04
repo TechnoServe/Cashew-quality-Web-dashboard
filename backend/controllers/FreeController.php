@@ -122,6 +122,10 @@ class FreeController extends Controller
             Yii::t('app', 'Nut count'),
             Yii::t('app', 'Useful kernel'),
             Yii::t('app', 'Total volume of stock'),
+            Yii::t('app', '[Location] Altitude'),
+            Yii::t('app', '[Location] Latitude'),
+            Yii::t('app', '[Location] Longitude'),
+            Yii::t('app', '[Location] Accuracy'),
             Yii::t('app', 'Audit completed at')
         ]);
 
@@ -156,6 +160,10 @@ class FreeController extends Controller
                 $result['nut_count'],
                 $result['useful_kernel'],
                 $result['total_volume_of_stock'],
+                $result['location_altitude'],
+                $result['location_lat'],
+                $result['location_lon'],
+                $result['location_accuracy'],
                 $result['created_at'],
             ]);
         }
