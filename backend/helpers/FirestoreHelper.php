@@ -220,21 +220,21 @@ class FirestoreHelper
 
             $siteDocumentId = null;
             try {
-                $freeVersionQar->site = $this->getDocumentKey($item, "site")[0]['id'];
+                $freeVersionQar->site = $this->getDocumentKey($item, "site");
             } catch (\Exception $e){
                 Yii::error("could not extract site document id");
             }
 
             $fieldTechDocumentId = null;
             try {
-                $freeVersionQar->field_tech = $this->getDocumentKey($item, "field_tech")[0]['id'];
+                $freeVersionQar->field_tech = $this->getDocumentKey($item, "field_tech");
             } catch (\Exception $e){
                 Yii::error("could not extract field_tech document id");
             }
 
 
             try {
-                $freeVersionQar->buyer = $this->getDocumentKey($item, "buyer")[0]['id'];
+                $freeVersionQar->buyer = $this->getDocumentKey($item, "buyer");
             } catch (\Exception $e){
                 Yii::error("could not extract buyer document id");
             }
@@ -280,7 +280,7 @@ class FirestoreHelper
 
             $freeVersionQarResult->qar = self::convertLongDocumentNameToSmall($this->getDocumentKey($item, "request_id"));
 
-            $freeVersionQarResult->kor = $this->getDocumentKey($item, "KOR");
+            $freeVersionQarResult->kor = $this->getDocumentKey($item, "kor");
             $freeVersionQarResult->defective_rate = $this->getDocumentKey($item, "defective_rate");
             $freeVersionQarResult->foreign_material_rate = $this->getDocumentKey($item, "foreign_mat_rate");
             $freeVersionQarResult->moisture_content = $this->getDocumentKey($item, "moisture_content");

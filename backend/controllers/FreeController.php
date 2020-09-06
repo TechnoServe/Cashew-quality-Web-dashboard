@@ -95,6 +95,7 @@ class FreeController extends Controller
             'totalSites' => FreeSite::countByPeriod($endDate),
             'totalUsers' => FreeUser::countByPeriod($endDate),
             'totalQar' => FreeQar::countByPeriod($startDate, $endDate),
+            'siteKorMarkers' =>FreeQar::getKorsAndSiteLocations($startDate, $endDate),
         ]);
     }
 

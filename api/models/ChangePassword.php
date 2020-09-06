@@ -10,8 +10,7 @@ class ChangePassword extends Model
     public $current_password;
     public $new_password;
     public $password_repeat;
-    
-    private $_user;
+    public $_user;
         
     public function rules()
     {

@@ -28,7 +28,8 @@
         "2amigos/yii2-highcharts-widget" : "~1.0",
         "ahsankhatri/firestore-php": "^2.0",
         "yiisoft/yii2-queue": "^2.3",
-        "linslin/yii2-curl": "^1.4"
+        "linslin/yii2-curl": "^1.4",
+        "2amigos/yii2-google-maps-library": "^1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

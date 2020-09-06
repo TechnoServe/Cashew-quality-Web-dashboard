@@ -22,6 +22,18 @@ return [
 
     'components' => [
 
+        'assetManager' => [
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+                        'key' => 'AIzaSyCLny8ED_h-OHFmwIRKikex9DNm41bEBiI',
+                        'language' => Yii::$app->language,
+                        'version' => '3.1.18'
+                    ]
+                ]
+            ]
+        ],
+
         'queue' => [
             'class' => \yii\queue\file\Queue::class,
             'as log' => \yii\queue\LogBehavior::class,//The default error log is console/runtime/logs/app.log
