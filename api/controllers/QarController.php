@@ -267,6 +267,13 @@ class QarController extends ActiveController
             (new QarNotificationHelper())->constructAPIQarCreateNotification($qar);
         }
 
+        // Add dependent objects
+        $qar = $qar->toArray();
+        $qar["buyer"] = \api\models\User::findOne($qar["buyer"]);
+        $qar["field_tech"] = \api\models\User::findOne($qar["field_tech"]);
+        $qar["site"] = Site::findOne($qar["site"]);
+        $qar["company_id"] = Company::findOne($qar["company_id"])->name;
+
         return new ApiResponse($qar, null, true);
     }
 
