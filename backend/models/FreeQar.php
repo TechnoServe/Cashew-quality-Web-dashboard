@@ -47,24 +47,40 @@ class FreeQar extends \common\models\FreeQar
         $data =  self::find()
             ->innerJoin("free_qar_result", "free_qar_result.qar = free_qar.document_id")
             ->leftJoin("free_sites", "free_sites.document_id = free_qar.site")
-            ->select(["free_qar.document_id", "free_qar_result.kor", "free_qar_result.location_lat", "free_qar_result.location_lon", "free_sites.name"])
+            ->select(["free_qar.document_id", "free_qar_result.kor", "free_qar_result.location_lat", "free_qar_result.location_lon",  "free_qar_result.location_accuracy", "free_sites.name"])
             ->where([">=", "DATE(free_qar.created_at)" , date('Y-m-d', strtotime($startDate))])
             ->andWhere(["<=", "DATE(free_qar.created_at)", date('Y-m-d', strtotime($endDate))])
             ->asArray()->all();
 
         $rtn = [];
-        foreach ($data as $row){
-            array_push($rtn, [
-                "position" => [(double)$row["location_lat"], (double)$row["location_lon"]],
-                "title" => $row["name"],
-                "draggable" => true,
-                "raiseOnDrag"=>true,
-                "labelContent"=>"lable",
-                "labelAnchor"=>new JsExpression("new google.maps.Point(3, 30)"),
-                "labelClass"=>"labels",
-                "labelInBackground"=>false
-            ]);
+
+
+        $lat_array = array_filter(array_map(function ($item){
+            return $item["location_lat"];
+        }, $data));
+
+        $lon_array = array_filter(array_map(function ($item){
+            return $item["location_lon"];
+        }, $data));
+
+        if($lat_array && $lon_array) {
+
+            //Center for all markers
+            $rtn ["center"] = [min(array_filter($lat_array)), max(array_filter($lon_array))];
+
+            $rtn ["markers"] = [];
+            foreach ($data as $row) {
+                array_push($rtn["markers"], [
+                    "position" => [(double)$row["location_lat"], (double)$row["location_lon"]],
+                    "title" => $row["name"],
+                    "kor" => $row["kor"],
+                    "lon" => $row["location_lon"],
+                    "lat" => $row["location_lat"],
+                    "acc" => $row["location_accuracy"]
+                ]);
+            }
         }
+
         return $rtn;
     }
 }

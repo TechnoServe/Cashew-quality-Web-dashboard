@@ -1,13 +1,11 @@
 <?php
 
-use backend\models\Company;
 use backend\widgets\AnalyticsPeriodPicker;
-use voime\GoogleMaps\Map;
+use dosamigos\google\maps\LatLng;
+use dosamigos\google\maps\Map;
+use dosamigos\google\maps\overlays\Marker;
 use yii\helpers\Html;
 use yii\web\JsExpression;
-use yii\web\View;
-use yii\widgets\DetailView;
-use yii2mod\google\maps\markers\GoogleMaps;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Site */
@@ -55,16 +53,31 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if(!empty($model->map_location)): ?>
     <div id="map">
 
-        <?= Map::widget([
-            'zoom' => 15,
-            'center' => [(double)$model->latitude, (double)$model->longitude],
-            'markers' => [
-                ['position' => [(double)$model->latitude, (double)$model->longitude]],
-            ],
-            'height' => '400px',
-            'mapType' => Map::MAP_TYPE_HYBRID,
+        <?php
+
+        $map = new Map([
+            'center' => new LatLng([ "lat" =>(double)$model->latitude, "lng" => (double)$model->longitude]),
+            'zoom' => 18,
+            'width' => '100%',
+            "mapTypeId" => new \yii\web\JsExpression("google.maps.MapTypeId.HYBRID")
         ]);
+
+        $marker = new Marker([
+            'position' => new LatLng([ "lat" => (double)$model->latitude, "lng" => (double)$model->longitude]),
+            'title' => $model->site_name,
+            "optimized" => false
+        ]);
+
+        // Add marker to the map
+        $map->addOverlay($marker);
+
+
+        // Display the map -finally :)
+        echo $map->display();
         ?>
+
+
+
     </div>
 
         <?php endif; ?>
