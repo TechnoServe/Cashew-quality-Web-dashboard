@@ -6,8 +6,10 @@ namespace backend\helpers;
 use backend\models\Department;
 use backend\models\Qar;
 use backend\models\User;
+use yii\helpers\Json;
 use yii\web\JsExpression;
 use Yii;
+use function foo\func;
 
 class SiteHelper
 {
@@ -114,6 +116,53 @@ class SiteHelper
             $series.= $row;
         }
        return $series. "]";
+    }
+
+
+    public static function getSitesKorWithLocationChart($startDate = null, $endDate= null, $siteId = null, $countryCode = null)
+    {
+
+        $series  = '[' ;
+
+        $departments = Department::find()->where(["country_code" => $countryCode])->asArray()->all();
+
+
+
+        $rtn_array = [];
+
+        foreach($departments as $key => $department) {
+
+            $data = Qar::getKorAndLocationByPeriodStartDateAndEndDate($startDate, $endDate, $siteId, $department["id"]);
+
+            $samples = array_map(function($item){
+                return $item["sample_number"];
+            }, $data);
+
+            foreach (array_unique($samples) as $key=>$sample){
+
+                $dataOfThisSample = array_filter($data, function($item) use ($sample){
+                   return $item["sample_number"]  == $sample;
+                });
+
+                $korArray = array_filter($dataOfThisSample, function ($item){
+                    return $item["key"] == Qar::RESULT_KOR;
+                });
+
+                $lat_array = array_filter($dataOfThisSample, function ($item){
+                    return $item["key"] == Qar::FIELD_LOCATION_LATITUDE;
+                });
+
+                $long_array = array_filter($dataOfThisSample, function ($item){
+                    return $item["key"] == Qar::FIELD_LOCATION_LONGITUDE;
+                });
+
+                if(!empty($korArray) && !empty($lat_array) && !empty($long_array)){
+                    $series .= '{\'name\' : \''. array_values($korArray)[0] ["site_name"]. '\','. '\'kor\' :'. (array_values($korArray)[0] ["value"]) .', ' . '\'lat\':'. (array_values($lat_array)[0] ["value"]). ','. '\'lon\':'. (array_values($long_array)[0] ["value"]). "},";
+                }
+            }
+        }
+
+        return $series ."]";
     }
 
     public static function getUsersChart($period)

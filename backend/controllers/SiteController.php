@@ -130,6 +130,7 @@ class SiteController extends Controller
             'categories' => $categories,
             'qarSeries' => $qarSeries,
             'siteSeries' => $siteSeries,
+            'korLocations' => SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code),
             'country_code'=> $country_code,
             'userSeries' => $userSeries
         ]);

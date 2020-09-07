@@ -22,6 +22,20 @@ use yii\helpers\Html;
 
     <div class="col-md-9 col-sm-6 col-xs-12">
         <form class="form-inline pull-right">
+            <?php if($predefinedPeriod): ?>
+            <input name="predefinedPeriod" type="hidden" value="<?=$predefinedPeriod?>">
+            <?php endif; ?>
+
+            <?php if($startDate): ?>
+                <input name="startDate" type="hidden" value="<?=$startDate?>">
+            <?php endif; ?>
+
+            <?php if($endDate): ?>
+                <input name="endDate" type="hidden" value="<?=$endDate?>">
+            <?php endif; ?>
+
+            <input type="hidden" >
+            <input type="hidden" >
             <div class="form-group" style="min-width: 200px;">
                 <?= Select2::widget([
                     'name' => 'country_code',

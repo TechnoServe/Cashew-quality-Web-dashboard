@@ -50,16 +50,26 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
         <div class="panel-body">
             <?= $this->render('//sites/_stat', [
                 'totalSites' => $totalSites,
-                'country_code' => $country_code
+                'country_code' => $country_code,
+                'predefinedPeriod' => $predefinedPeriod,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
             ]); ?>
         </div>
 
         <div class="panel-body">
             <?= $this->render('//sites/_mini_heatmap', [
-                'totalSites' => $totalSites,
-                'categories' => $categories,
-                'siteSeries' => $siteSeries,
+
                 'country_code' => $country_code
+            ]); ?>
+        </div>
+
+
+        <div class="panel-body">
+            <?= $this->render('//sites/_mini_heatmap_2', [
+                'korLocations' => $korLocations,
+                'country_code' => $country_code,
+                'siteSeries' => $siteSeries
             ]); ?>
         </div>
     </div>

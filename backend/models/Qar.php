@@ -42,6 +42,9 @@ class Qar extends \common\models\Qar
     const FIELD_LOT_INFO='lot_info';
     const FIELD_REQUEST_ID= 'request_id';
     const FIELD_CREATED_AT= 'created_at';
+    const FIELD_LOCATION_LONGITUDE= 'location_longitude';
+    const FIELD_LOCATION_LATITUDE= 'location_latitude';
+    const FIELD_LOCATION_ACCURACY= 'location_accuracy';
     /**
      *
      */
@@ -312,5 +315,31 @@ class Qar extends \common\models\Qar
                 ->andWhere(["qar_detail.key" => Qar::RESULT_KOR])
                 ->andWhere(["qar_detail.result" => 1])->average("qar_detail.value");
         
+    }
+
+
+    public static function getKorAndLocationByPeriodStartDateAndEndDate($startDate, $endDate, $siteId = null, $departmentId = null)
+    {
+        $q = self::queryByCompany()->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar");
+
+        if ($departmentId)
+            $q->innerJoin(Site::tableName(), "qar.site = site.id");
+
+        if ($siteId)
+            $q->andWhere(["qar.site" => $siteId]);
+
+        if ($departmentId)
+            $q->andWhere(["site.department_id" => $departmentId]);
+
+        return  $q->select(["qar_detail.sample_number" , "qar_detail.id_qar", "site.site_name", "qar_detail.key", "qar_detail.value"]) ->andWhere([">=", "DATE(qar.created_at)", date('Y-m-d', strtotime($startDate))])
+            ->andWhere(["<=", "DATE(qar.created_at)", date('Y-m-d', strtotime($endDate))])
+            ->andWhere(["qar.status" => Qar::STATUS_COMPLETED])
+            ->andWhere(["or",
+                ["qar_detail.key" => Qar::RESULT_KOR],
+                ["qar_detail.key" => Qar::FIELD_LOCATION_ACCURACY],
+                ["qar_detail.key" => Qar::FIELD_LOCATION_LATITUDE],
+                ["qar_detail.key" => Qar::FIELD_LOCATION_LONGITUDE],
+            ])
+            ->asArray()->all();
     }
 }
