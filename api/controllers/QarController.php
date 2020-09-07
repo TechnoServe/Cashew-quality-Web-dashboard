@@ -400,6 +400,7 @@ class QarController extends ActiveController
 
         $id_qar = 0;
 
+        $qar_exist = false;
         if (isset($data['id']) && !empty($data['id'])) {
             $qar_exist = QAR::queryByCompany()->andWhere(["id" => $data["id"]])->andWhere(["status" => Qar::STATUS_IN_PROGRESS])->exists();
             if ($qar_exist) {
@@ -420,8 +421,6 @@ class QarController extends ActiveController
             Qar::RESULT_USEFUL_KERNEL
         ];
 
-        //$qar = new Qar();
-
         $transaction = Yii::$app->db->beginTransaction();
 
         if ($qar_exist) {
@@ -440,6 +439,12 @@ class QarController extends ActiveController
                     array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Missing required parameters"));
                 }
 
+                $sample_number = 0;
+                if (!is_numeric($datum['sample_number']) || !QarDetail::find()->where(["id_qar" =>$id_qar, "sample_number" => $datum['sample_number']])->exists()) {
+                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Sample number ". $datum['sample_number']  ." is not valid"));
+                } else {
+                    $sample_number = $datum['sample_number'];
+                }
                 foreach ($datum as $key => $value) {
                     if (in_array($key, $result_keys)) {
                         $qar_result = new QarDetail();
@@ -451,12 +456,8 @@ class QarController extends ActiveController
                             $qar_result->value = (float)$value;
                         }
 
-                        if (!is_numeric($datum['sample_number'])) {
-                            array_push($errors, new ApiError(ApiError::INVALID_DATA, "Sample number is not valid"));
-                        } else {
-                            $qar_result->sample_number = isset($datum['sample_number']) && !empty($datum['sample_number']) && $datum['sample_number'] > 0 ? $datum['sample_number'] : 1;
-                        }
                         $qar_result->id_qar = $id_qar;
+                        $qar_result->sample_number = $sample_number;
                         $qar_result->result = 1;
 
                         if (!$qar_result->save()) {
