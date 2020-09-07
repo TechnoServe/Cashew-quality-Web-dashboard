@@ -247,9 +247,9 @@ class FreeController extends Controller
     public function actionPullFireStore(){
         $dbUpdated = $this->fireStoreHelper->updateFreeVersionDb();
         if($dbUpdated){
-            \Yii::$app->session->setFlash("success", "Successfully updated free version data");
+            \Yii::$app->session->setFlash("success", Yii::t("app", "Successfully updated free version data"));
         }else{
-            \Yii::$app->session->setFlash("danger", "Successfully updated free version data");
+            \Yii::$app->session->setFlash("danger",  Yii::t("app","Could not update free version data"));
         }
         return $this->redirect(["free/index"]);
     }
