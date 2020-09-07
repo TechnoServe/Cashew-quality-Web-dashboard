@@ -17,9 +17,9 @@ $this->title = $name;
     <p class="h4 text-uppercase text-bold"><?= nl2br(Html::encode($message)) ?></p>
     <div class="pad-btm">
         <p>
-            The above error occurred while the Web server was processing your request.
+            <?= Yii::t("app", "The above error occurred while the Web server was processing your request.") ?>
             <br>
-            Please contact your administrator if you think this is a server error. Thank you.
+            <?= Yii::t("app", "Please contact your administrator if you think this is a server error. Thank you.") ?>
         </p>
     </div>
     <div class="pad-top">

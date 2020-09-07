@@ -18,5 +18,5 @@ return [
     ],
     'format' => 'php',
     'messagePath' => __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .      'messages',
-    'overwrite' => false,
+    'overwrite' => true,
 ];

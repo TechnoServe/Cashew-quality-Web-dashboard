@@ -64,7 +64,7 @@ $this->registerJsFile("https://code.highcharts.com/mapdata/countries/" . strtolo
 
             series: [{
                 data: " . $siteSeries . ",
-                name: 'Average of KOR',
+                name: '".Yii::t("app", 'Average KOR')."',
                 states: {
                     hover: {
                         color: '#BADA55'
@@ -98,7 +98,7 @@ $this->registerJsFile("https://code.highcharts.com/mapdata/countries/" . strtolo
             },
             tooltip: {
                 headerFormat: '',
-                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}<br>Average KOR: <b>{point.kor:.2f}</b>'
+                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}<br>".Yii::t("app", 'Average KOR').": <b>{point.kor:.2f}</b>'
             },
             colorAxis: {
                 min: 0,

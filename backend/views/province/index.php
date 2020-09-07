@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?= Html::a('Create Province', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t("app", "Create Province"), ['create'], ['class' => 'btn btn-success']) ?>
         </p>
         <h3 class="panel-title"><?= Yii::t("app", "Search results") ?></h3>
     </div>

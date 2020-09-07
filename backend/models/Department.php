@@ -44,12 +44,12 @@ class Department extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'country_code' => 'Country Code',
-            'name' => 'Name',
-            'postal_code' => 'Postal Code',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'id' => Yii::t("app",'ID'),
+            'country_code' => Yii::t("app",'Country Code'),
+            'name' => Yii::t("app",'Name'),
+            'postal_code' => Yii::t("app",'Postal Code'),
+            'created_at' => Yii::t("app",'Created At'),
+            'updated_at' => Yii::t("app",'Updated At'),
         ];
     }
 
