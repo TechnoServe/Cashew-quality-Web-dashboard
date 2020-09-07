@@ -59,14 +59,6 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 
         <div class="panel-body">
             <?= $this->render('//sites/_mini_heatmap', [
-
-                'country_code' => $country_code
-            ]); ?>
-        </div>
-
-
-        <div class="panel-body">
-            <?= $this->render('//sites/_mini_heatmap_2', [
                 'korLocations' => $korLocations,
                 'country_code' => $country_code,
                 'siteSeries' => $siteSeries
