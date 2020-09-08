@@ -37,11 +37,6 @@ class UserController extends ActiveController
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['password-reset'],
-                            'allow' => true,
-                        ],
-
-                        [
                             'actions' => ['change-password', 'save-token'],
                             'allow' => true,
                             'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
@@ -101,26 +96,26 @@ class UserController extends ActiveController
     }
 
 
-    /**
-     * Takes in  an email and send password reset email
-     * @return ApiResponse
-     */
-    public function actionPasswordReset()
-    {
-        $data = Yii::$app->request->post();
-        $model = new PasswordResetRequestForm();
-
-        if (!isset($data['email']) || empty($data['email']))
-            return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Email has to be provided")], false);
-
-        $model->email = $data["email"];
-
-        if ($model->validate() && $model->sendEmail(Yii::$app->params["BACKEND_BASE_URL"])) {
-            return new ApiResponse([], null, true);
-        }
-        Yii::$app->response->statusCode = 400;
-        return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
-    }
+//    /**
+//     * Takes in  an email and send password reset email
+//     * @return ApiResponse
+//     */
+//    public function actionPasswordReset()
+//    {
+//        $data = Yii::$app->request->post();
+//        $model = new PasswordResetRequestForm();
+//
+//        if (!isset($data['email']) || empty($data['email']))
+//            return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Email has to be provided")], false);
+//
+//        $model->email = $data["email"];
+//
+//        if ($model->validate() && $model->sendEmail(Yii::$app->params["BACKEND_BASE_URL"])) {
+//            return new ApiResponse([], null, true);
+//        }
+//        Yii::$app->response->statusCode = 400;
+//        return new ApiResponse([], [new ApiError(ApiError::INVALID_DATA, "Password could not be changed")], false);
+//    }
 
 
     /**
