@@ -38,15 +38,10 @@ class BuyerController extends ActiveController
             ]);
     }
 
-    public $modelClass = 'api\models\User';
-    // Some reserved attributes like maybe 'q' for searching all fields at once
-    // or 'sort' which is already supported by Yii RESTful API
-   // public $reservedParams = ['sort','q'];
 
     public function actions()
     {
         $actions = parent::actions();
-      //  $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
        unset($actions['index']);
        unset($actions['view']);
         return $actions;
@@ -61,7 +56,7 @@ class BuyerController extends ActiveController
     public function actionIndex() {
 
         // Initiate search query
-        $query = $this->modelClass::queryByCompany(Yii::$app->user->identity);
+        $query = User::queryByCompany(Yii::$app->user->identity);
 
         // Search has to be performed on active buyers
         $query->andWhere(["role" => User::ROLE_FIELD_BUYER]) ->andWhere(["status" => User::STATUS_ACTIVE]);
@@ -97,7 +92,7 @@ class BuyerController extends ActiveController
      */
     public function actionView($id)
     {
-        $buyer = $this->modelClass::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_BUYER])->one();
+        $buyer = User::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => User::ROLE_FIELD_BUYER])->one();
 
         if ($buyer) {
             return new ApiResponse($buyer, null, true);

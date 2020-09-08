@@ -489,17 +489,4 @@ class QarController extends ActiveController
         return isset($array[$key]) && !empty($array[$key]);
     }
 
-    public function actionNotification()
-    {
-
-        if (Yii::$app->queue->push(new QarNotification([
-            'title' => 'This is the title',
-            'body' => 'This is the body',
-        ]))) {
-            return "Everything is ok";
-        } else {
-            return "Something went wrong";
-        }
-    }
-
 }
