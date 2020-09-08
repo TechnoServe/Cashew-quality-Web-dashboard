@@ -6,7 +6,7 @@
             ],
 
             'title' => [
-                'text' => 'Users chart'
+                'text' => null
             ],
 
             'credits' => [

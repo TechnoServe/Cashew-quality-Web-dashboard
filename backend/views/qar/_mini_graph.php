@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
             ],
 
             'title' => [
-                'text' => 'QARs chart'
+                'text' => null
             ],
 
             'credits' => [
