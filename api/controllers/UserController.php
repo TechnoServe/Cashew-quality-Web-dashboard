@@ -6,7 +6,6 @@ use api\components\ApiError;
 use api\components\ApiResponse;
 use backend\models\User;
 use api\models\ChangePassword;
-use backend\models\form\PasswordResetRequestForm;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
@@ -46,7 +45,6 @@ class UserController extends ActiveController
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'password-reset' => ['POST'],
                         'change-password' => ['POST'],
                         'save-token' => ['POST'],
                     ],
@@ -129,21 +127,10 @@ class UserController extends ActiveController
 
         $errors = [];
 
-        if (isset($data['user_id']) && !empty($data['user_id'])) {
-            $userExists = User::queryByCompany()->andWhere([
-                "id" => $data['user_id']
-            ])->exists();
-            if ($userExists) {
-                if (isset($data['token']) && !empty($data['token'])) {
-                     Yii::$app->db->createCommand()->update('user', ['expo_token' => $data['token']], ['id' => $data['user_id']])->execute();
-                }else{
-                    array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide token"));
-                }
-            } else {
-                array_push($errors, new ApiError(ApiError::INVALID_DATA, "User Id is invalid"));
-            }
-        } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide user"));
+        $user = \api\models\User::findOne(Yii::$app->getUser()->getId());
+
+        if (!isset($data['token']) || empty($data['token'])) {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide token"));
         }
 
         // If validation
@@ -152,6 +139,13 @@ class UserController extends ActiveController
             return new ApiResponse(null, $errors, false);
         }
 
-        return new ApiResponse($data["token"], null, true);
+        try {
+            $user->expo_token = $data['token'];
+            $user->save(false);
+        } catch (\Exception $exception) {
+            return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, $exception->getMessage())], false);
+        }
+
+        return new ApiResponse($user, null, true);
     }
 }
