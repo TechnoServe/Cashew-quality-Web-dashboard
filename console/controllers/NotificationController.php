@@ -13,11 +13,14 @@ class NotificationController extends Controller
     /**
      *
      */
-    public function actionIndex(){
-        print "Controller for sending notifications \n";
-        $this->findOverdueQars();
-
+    public function actionReminders(){
+        print "Sending reminders \n";
         $this->findQarForReminders();
+    }
+
+    public function actionAlerts(){
+        print "Sending alerts \n";
+        $this->findOverdueQars();
     }
 
     /**
