@@ -211,10 +211,10 @@ class User extends \common\models\User
                  'pass' => $pass,
                  ]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->setTo($this->email)
             ->setSubject('Account activation for ' . $user->username)
-            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->send();
     }
 

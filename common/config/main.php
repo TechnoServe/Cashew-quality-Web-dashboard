@@ -27,7 +27,6 @@ return [
                 'dosamigos\google\maps\MapAsset' => [
                     'options' => [
                         'key' => 'AIzaSyCLny8ED_h-OHFmwIRKikex9DNm41bEBiI',
-                        'language' => Yii::$app->language,
                         'version' => '3.1.18'
                     ]
                 ]

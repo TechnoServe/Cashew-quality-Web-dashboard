@@ -12,15 +12,18 @@ use backend\models\User;
 use linslin\yii2\curl\Curl;
 use Yii;
 use yii\base\BaseObject;
-use yii\helpers\Json;
 use yii\queue\JobInterface;
 
 
 class NotificationHelper extends BaseObject implements JobInterface
 {
 
-    public $title;
-    public $body;
+    public $title_en;
+    public $title_fr;
+    public $title_pt;
+    public $body_en;
+    public $body_fr;
+    public $body_pt;
     public $recipients;
     public $destinations;
 
@@ -47,26 +50,15 @@ class NotificationHelper extends BaseObject implements JobInterface
             print "found number of users " . count($recipientsObjects) . "\n";
 
             if (!empty($recipientsObjects)) {
-                // Get emails for the notification
-                $emails = array_map(function ($item) {
-                    return $item["email"];
-                }, $recipientsObjects);
-
-                // Get tokens for the notification
-                $tokens = array_map(function ($item) {
-                    return $item["expo_token"];
-                }, $recipientsObjects);
-
-                // Send email and push notification
 
                 try {
 
                     if(in_array( self::DESTINATION_EMAIL, $this->destinations)) {
-                        $this->sendEmailNotification($this->title, $this->body, $emails);
+                        $this->sendEmailNotification($recipientsObjects);
                     }
 
                     if (in_array(self::DESTINATION_APP, $this->destinations)) {
-                        $this->SendPushNotification($this->title, $this->body, $tokens);
+                        $this->SendPushNotification($recipientsObjects);
                     }
 
                 } catch (\Exception $e) {
@@ -79,71 +71,83 @@ class NotificationHelper extends BaseObject implements JobInterface
 
     /**
      * Used to send email notification
-     * @param $title
-     * @param $body
-     * @param $email
+     * @param $recipientsObjects
      */
-    public function sendEmailNotification($title, $body, $emails)
+    public function sendEmailNotification($recipientsObjects)
     {
-        print "Attempting to send email notification to " . count($emails) . "\n";
+        print "Attempting to send email notification to " . count($recipientsObjects) . "\n";
 
-        Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailNotify-html', 'text' => 'emailNotify-text'],
-                ['body' => $body,]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
-            ->setTo($emails)
-            ->setSubject($title)
-            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
-            ->send();
+        foreach ($recipientsObjects as $recipientsObject){
+
+            $locale = $this->getRecipientLocale($recipientsObject["language"]);
+            $title = "title_".$locale;
+            $body = "body_".$locale;
+            Yii::$app
+                ->mailer
+                ->compose(
+                    ['html' => 'emailNotify-html', 'text' => 'emailNotify-text'],
+                    [
+                        "recipient" => $recipientsObject,
+                        "body" => $this->$body,
+                        "locale" => $locale
+                    ]
+                )
+                ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
+                ->setTo($recipientsObject["email"])
+                ->setSubject($this->$title)
+                ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
+                ->send();
+        }
     }
 
     /**
      * Send push notification
-     * @param $to
-     * @param $title
-     * @param $body
+     * @param $recipientsObjects
      * @return bool
      */
-    public static function SendPushNotification($title, $body, $to)
+    public function SendPushNotification($recipientsObjects)
     {
-        $to = array_filter($to);
+        print "Attempting to send push notification to " . count($recipientsObjects) . " tokens\n";
 
-        if (!empty($to)) {
+        foreach ($recipientsObjects as $recipientsObject) {
 
-            print "Attempting to send push notification to " . count($to) . " tokens\n";
+            if(trim($recipientsObject["expo_token"])) {
 
-            try {
+                $locale = $this->getRecipientLocale($recipientsObject["language"]);
+                $title = "title_" . $locale;
+                $body = "body_" . $locale;
 
-                $data = [
-                    "to" => $to,
-                    "title" => $title,
-                    "body" => $body,
-                ];
+                try {
 
-                $curl = new Curl();
+                    $data = [
+                        "to" => $recipientsObject["expo_token"],
+                        "title" => $this->$title,
+                        "body" => $this->$body,
+                    ];
 
-                print "Sending push notification to " . count($to) . " tokens\n";
+                    $curl = new Curl();
 
-                $response = $curl
-                    ->setRequestBody(json_encode($data))
-                    ->setHeaders([
-                        'Content-Type' => 'application/json',
-                    ])
-                    ->setOption(CURLOPT_RETURNTRANSFER, 1)
-                    ->setOption(CURLOPT_POST, 1)
-                    ->post("https://exp.host/--/api/v2/push/send");
+                    $response = $curl
+                        ->setRequestBody(json_encode($data))
+                        ->setHeaders([
+                            'Content-Type' => 'application/json',
+                        ])
+                        ->setOption(CURLOPT_RETURNTRANSFER, 1)
+                        ->setOption(CURLOPT_POST, 1)
+                        ->post("https://exp.host/--/api/v2/push/send");
 
-                var_dump($response);
+                    var_dump($response);
 
-            } catch (\Exception $exception) {
-                print $exception->getMessage() . "\n";
+                } catch (\Exception $exception) {
+                    print $exception->getMessage() . "\n";
+                }
             }
-        } else {
-            print "No tokens are supplied \n";
         }
         return true;
+    }
+
+    private function getRecipientLocale($language)
+    {
+        return ($language != "en" && $language != "fr" && $language != "pt") ? "en" : $language;
     }
 }

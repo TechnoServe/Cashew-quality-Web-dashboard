@@ -60,10 +60,10 @@ class PasswordResetRequestForm extends Model
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user, "baseUrl" => $baseUrl]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->setTo($this->email)
             ->setSubject('Password reset for ' . $user->username)
-            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsApp - TNS"])
+            ->setReplyTo([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->send();
     }
 }
