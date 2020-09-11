@@ -2,6 +2,7 @@
 
 use backend\models\Company;
 use backend\models\Department;
+use backend\models\Qar;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -103,6 +104,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'site_location:ntext',
                     'map_location',
+                    [
+                        'attribute' => 'average_kor',
+                        'value' => function ($model) {
+                            $average = Qar::getAverageKorBySite($model->id);
+                            return $average;
+                        }
+                    ],
                     'created_at',
                     'updated_at',
 

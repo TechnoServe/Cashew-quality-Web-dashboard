@@ -19,21 +19,25 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <?= $form->field($model, 'site_name') ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <?= $form->field($model, 'site_location') ?>
         </div>
     </div>
 
-    <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
     <div class="row">
+        <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
+            <div class="col-md-6">
+                <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company', "company_id",  Yii::t('app', 'Select Company'))) ?>
+            </div>
+        <?php endif; ?>
         <div class="col-md-6">
-            <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company',"company_id",  Yii::t('app', 'Select Company'))) ?>
+            <?= $form->field($model, 'average_kor') ?>
         </div>
     </div>
-    <?php endif; ?>
+
 
 
     <div class="form-group">

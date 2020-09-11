@@ -11,6 +11,9 @@ use backend\models\Site;
  */
 class SiteSearch extends Site
 {
+
+    public $average_kor;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +21,7 @@ class SiteSearch extends Site
     {
         return [
             [['id'], 'integer'],
-            [['site_name', 'site_location', 'created_at', 'updated_at', 'company_id'], 'safe'],
+            [['site_name', 'site_location', 'created_at', 'updated_at', 'company_id', 'average_kor'], 'safe'],
         ];
     }
 
@@ -62,7 +65,8 @@ class SiteSearch extends Site
         ]);
 
         $query->andFilterWhere(['like', 'site_name', $this->site_name])
-            ->andFilterWhere(['like', 'site_location', $this->site_location]);
+            ->andFilterWhere(['like', 'site_location', $this->site_location])
+            ->andFilterWhere(['like', 'average_kor', $this->average_kor]);
 
         return $dataProvider;
     }

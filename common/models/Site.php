@@ -50,6 +50,7 @@ class Site extends \yii\db\ActiveRecord
             'company_id' => Yii::t('app', 'Company'),
             'department_id' => Yii::t('app', 'Province'),
             'map_location' => Yii::t('app', 'Map Coordinates'),
+            'average_kor' => Yii::t('app', 'Average KOR'),
         ];
     }
 }

@@ -342,4 +342,15 @@ class Qar extends \common\models\Qar
             ])
             ->asArray()->all();
     }
+
+    public static function getAverageKorBySite($siteId = null)
+    {
+        $q = self::queryByCompany()->innerJoin(QarDetail::tableName(), "qar.id = qar_detail.id_qar");
+
+        return $q->andWhere(["qar.status" => Qar::STATUS_COMPLETED])
+                ->andWhere(["qar.site" => $siteId])
+                ->andWhere(["qar_detail.key" => Qar::RESULT_KOR])
+                ->andWhere(["qar_detail.result" => 1])
+                ->average("qar_detail.value");
+    }
 }
