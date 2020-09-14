@@ -33,9 +33,6 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company', "company_id",  Yii::t('app', 'Select Company'))) ?>
             </div>
         <?php endif; ?>
-        <div class="col-md-6">
-            <?= $form->field($model, 'average_kor') ?>
-        </div>
     </div>
 
 
