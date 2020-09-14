@@ -5,9 +5,7 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'user.passwordResetTokenExpire' => 3600,
-    'FIREBASE_PROJECT_ID' => 'cashew-nut-quality-app-4060e',
     'FIREBASE_API_KEY' => 'AIzaSyDhzc03LpO-9vuHhNsQGPDg-LRHHn3ITDY',
-
     'icon' => 'images/icon.png',
     'logo' => 'images/logo.png',
     'green_color' => '#45B39D',
