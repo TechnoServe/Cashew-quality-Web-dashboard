@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading">
         <p class="pull-right pad-all">
-            <?= Html::a( '<i class="pli-file-csv icon-fw"></i>' .
+            <?= Html::a('<i class="pli-file-csv icon-fw"></i>' .
                 Yii::t('app', 'Export to CSV'),
                 ['export-csv'],
                 [
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'company_id',
                         'value' => function ($model) {
                             $company = Company::findOne($model->company_id);
-                            return $company ?  $company->name : null;
+                            return $company ? $company->name : null;
                         }
                     ],
                     [
@@ -105,10 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'site_location:ntext',
                     'map_location',
                     [
-                        'attribute' => 'average_kor',
+                        "label" => Yii::t("app", "Average KOR"),
                         'value' => function ($model) {
                             $average = Qar::getAverageKorBySite($model->id);
-                            return $average;
+                            return number_format($average, 2,','," ");
                         }
                     ],
                     'created_at',
@@ -119,8 +119,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{view}',
                         'buttons' => [
                             'view' => function ($url, $model) {
-                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>' ,
-                                    ["sites/view","id" => $model->id], ['title' => Yii::t('app', 'Details'),]);
+                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
+                                    ["sites/view", "id" => $model->id], ['title' => Yii::t('app', 'Details'),]);
                             },
                         ],
                     ],

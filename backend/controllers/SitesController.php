@@ -314,6 +314,7 @@ class SitesController extends Controller
             Yii::t('app', 'Site Name'),
             Yii::t('app', 'Site Location'),
             Yii::t('app', 'Map Coordinates'),
+            Yii::t('app', 'Average KOR'),
             Yii::t('app', 'Created At')
         ]);
 
@@ -323,6 +324,7 @@ class SitesController extends Controller
                 $row['site_name'],
                 $row['site_location'],
                 $row['map_location'],
+                Qar::getAverageKorBySite($row['id']),
                 $row['created_at']
             ]);
         }
