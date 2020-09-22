@@ -26,6 +26,7 @@ class AppAsset extends AssetBundle
         'nifty/js/bootstrap.min.js',
         'nifty/js/nifty.min.js',
         'nifty/js/pace.min.js',
+        'js/form.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

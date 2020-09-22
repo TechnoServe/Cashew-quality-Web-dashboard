@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'status')->dropDownList( array_merge([0 => Yii::t('app', 'All')], \backend\models\User::getUserStatus())) ?>
+            <?= $form->field($model, 'status')->dropDownList(  \backend\models\User::getUserStatus(), ["prompt"=>Yii::t('app', 'All')]) ?>
         </div>
 
         <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
@@ -54,7 +54,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t("app",'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t("app",'Reset'), ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::button(Yii::t("app",'Reset'), ['class' => 'btn btn-outline-secondary form-reset-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

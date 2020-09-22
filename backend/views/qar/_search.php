@@ -71,14 +71,14 @@ use yii\widgets\ActiveForm;
     <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW): ?>
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company',"company_id",  Yii::t('app', 'Select Company'))) ?>
+            <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company',"company_id",  Yii::t('app', 'All'))) ?>
         </div>
     </div>
     <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::button(Yii::t('app', 'Reset'), ['class' => 'btn btn-outline-secondary form-reset-button']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
