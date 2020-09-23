@@ -30,10 +30,42 @@ use yii\widgets\ActiveForm;
 
             'yAxis' => [
                 'title' => [
+                    'text' => 'Total Qars'
+                ]
+            ],
+
+            'series' => $qarPieSeries
+        ]
+    ]);
+?>
+
+<?=
+    \dosamigos\highcharts\HighCharts::widget([
+        'clientOptions' => [
+            'chart' => [
+                'type' => 'column'
+            ],
+
+            'title' => [
+                'text' => null
+            ],
+
+            'credits' => [
+                'enabled' => false
+            ],
+
+            'xAxis' => [
+                'categories' => $categories
+            ],
+
+            'yAxis' => [
+                'title' => [
                     'text' => 'Qars'
                 ]
             ],
-            
+
             'series' => $qarSeries
         ]
     ]);
+?>
+

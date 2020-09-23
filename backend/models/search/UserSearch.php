@@ -57,11 +57,11 @@ class UserSearch extends User
         }
 
 
-        if($this->status == null)
-            $this->status = User::STATUS_ACTIVE;
+        // if($this->status == null)
+        //     $this->status = User::STATUS_ACTIVE;
 
-        else if ($this->status == 0 )
-            $this->status = null;
+        // else if ($this->status == 0 )
+        //     $this->status = null;
 
 
         // grid filtering conditions

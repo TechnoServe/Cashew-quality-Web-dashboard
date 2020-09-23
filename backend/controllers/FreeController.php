@@ -89,6 +89,7 @@ class FreeController extends Controller
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => array_map( function ($date){ return $date["generic"];}, $datesPeriod),
             'qarSeries' => FreeVersionDataHelper::getQarChartData($datesPeriod),
+            'qarPieSeries' => FreeVersionDataHelper::getQarPieChartData($datesPeriod),
             'userSeries' => FreeVersionDataHelper::getUsersChartData($datesPeriod),
             'topSitesPerKor' => FreeSite::findBestSitesPerAverageQarByTimePeriod($startDate, $endDate),
             'topSitesPerQar' => FreeSite::findBestSitesPerNumberOfQarsByTimePeriod($startDate, $endDate),

@@ -105,12 +105,14 @@ class SiteController extends Controller
 
         $categories = array_map( function ($date){ return $date["generic"];}, $period);
         $qarSeries = SiteHelper::getQarChart($period);
+        $qarPieSeries = SiteHelper::getQarPieChart($period);
 
 
         if(!$country_code) {
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
         }
         $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
+        $korLocations = SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code);
 
         $userSeries = SiteHelper::getUsersChart($period);
 
@@ -129,8 +131,9 @@ class SiteController extends Controller
             'predefinedPeriod' => $predefinedPeriod,
             'categories' => $categories,
             'qarSeries' => $qarSeries,
+            'qarPieSeries' => $qarPieSeries,
             'siteSeries' => $siteSeries,
-            'korLocations' => SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code),
+            'korLocations' => $korLocations,
             'country_code'=> $country_code,
             'userSeries' => $userSeries
         ]);

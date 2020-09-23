@@ -23,7 +23,7 @@ class SiteHelper
         array_push(
             $series,
             [
-                'type' => 'column',
+                //'type' => 'column',
                 'name' => Yii::t("app", "To Be Done"),
                 'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1),
                 'color' => "#ffb300"
@@ -34,7 +34,7 @@ class SiteHelper
         array_push(
             $series,
             [
-                'type' => 'column',
+                //'type' => 'column',
                 'name' => Yii::t("app", "In Progress"),
                 'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2),
                 'color' => "#03a9f4"
@@ -46,7 +46,7 @@ class SiteHelper
         array_push(
             $series,
             [
-                'type' => 'column',
+                //'type' => 'column',
                 'name' => Yii::t("app", "Completed"),
                 'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3),
                 "color" => "#26a69a"
@@ -95,6 +95,106 @@ class SiteHelper
                 ],
                 'center' => [30, 30],
                 'size' => 100,
+                'showInLegend' => false,
+                'dataLabels' => [
+                    'enabled' => false
+                ],
+                'visible' => false
+            ]
+        );
+
+        return $series;
+    }
+
+    public static function getQarPieChart($period, $siteId = null)
+    {
+
+        $series  = [];
+
+        // QARs To-Be Done
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "To Be Done"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 1),
+                'color' => "#ffb300",
+                'visible' => false,
+                'showInLegend' => false
+            ]
+        );
+
+        // QARs In Progress
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "In Progress"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 2),
+                'color' => "#03a9f4",
+                'visible' => false,
+                'showInLegend' => false
+            ]
+        );
+
+
+        // QARs Completed
+        array_push(
+            $series,
+            [
+                'type' => 'column',
+                'name' => Yii::t("app", "Completed"),
+                'data' => Qar::getQarCountsByStatusAndTimePeriod($period, 3),
+                "color" => "#26a69a",
+                'visible' => false,
+                'showInLegend' => false
+            ]
+        );
+
+        // QARs Average
+        array_push(
+            $series,
+            [
+                'type' => 'spline',
+                'name' => Yii::t("app", "Average QAR"),
+                'data' => Qar::getAverageQarByTimePeriod($period),
+                'marker' => [
+                    'lineWidth' => 2,
+                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                    'fillColor' => 'white'
+                ],
+                'visible' => false,
+                'showInLegend' => false
+            ]
+        );
+
+
+        // Pie chart
+        array_push(
+            $series,
+            [
+                'type' => 'pie',
+                'name' => 'Total QARs',
+                'title' => false,
+                'data' => [
+                    [
+                        'name' => Yii::t("app", "To Be Done") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[0]['data']),
+                        'color' => "#ffb300"
+                    ],
+                    [
+                        'name' => Yii::t("app", "In Progress") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[1]['data']),
+                        'color' => "#03a9f4"
+                    ],
+                    [
+                        'name' => Yii::t("app", "Completed") . "(" . Yii::t("app", "Total") . ")",
+                        'y' => array_sum($series[2]['data']),
+                        'color' => "#26a69a"
+                    ],
+                ],
+                //'center' => [30, 30],
+                'size' => 200,
                 'showInLegend' => true,
                 'dataLabels' => [
                     'enabled' => false

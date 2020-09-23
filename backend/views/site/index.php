@@ -37,7 +37,8 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'endDate' => $endDate,
                 'predefinedPeriod' => $predefinedPeriod,
                 'categories' => $categories,
-                'qarSeries' => $qarSeries
+                'qarSeries' => $qarSeries,
+                'qarPieSeries' => $qarPieSeries
             ]) ?>
         </div>
     </div>

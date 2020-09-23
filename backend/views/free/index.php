@@ -145,12 +145,69 @@ $this->params['breadcrumbs'][] = $this->title;
                         'enabled' => true
                     ],
                     'title' => [
-                            "text" => null
+                        "text" => null
+                    ]
+                ],
+                'series' => $qarPieSeries
+            ]
+        ]); ?>
+
+        <?= \dosamigos\highcharts\HighCharts::widget([
+            'clientOptions' => [
+                'title' => [
+                    'text' => false
+                ],
+
+                'credits' => [
+                    'enabled' => false
+                ],
+
+                'chart' => [
+                    'type' => 'Combination chart'
+                ],
+
+                'exporting' => [
+                    'filename' => 'free_version_qars',
+                    'buttons' => [
+                        'contextButton' => [
+                            'menuItems' => [
+                                [
+                                    'textKey' => 'printChart',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-printer"></i> ' . Yii::t("app", "Print Chart") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.print();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"><i class="pli-file-jpg"></i> ' . Yii::t("app", "Download PNG Image") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart();}")
+                                ],
+                                [
+                                    'textKey' => 'downloadPNG',
+                                    'text' => '<span style="font-size: 1.2em;"> <i class="pli-file-text-image"></i> ' . Yii::t("app", "Download PDF Document") . "</span>",
+                                    'onclick' => new JsExpression("function () {this.exportChart({type: 'application/pdf'});}")
+                                ],
+                            ],
+                        ]
+
+                    ],
+                ],
+
+                'xAxis' => [
+                    'categories' => $categories,
+                    'text' => false
+                ],
+
+                'yAxis' => [
+                    'labels' => [
+                        'enabled' => true
+                    ],
+                    'title' => [
+                        "text" => null
                     ]
                 ],
                 'series' => $qarSeries
             ]
-        ]);?>
+        ]); ?>
     </div>
 </div>
 
@@ -159,88 +216,88 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading bg-primary">
         <h3 class="panel-title">
-            <?=Yii::t("app", "Top sites per average KOR in the selected period")?>
+            <?= Yii::t("app", "Top sites per average KOR in the selected period") ?>
         </h3>
     </div>
 
     <div class="panel-body">
-        <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Total Sites")?>: <?=number_format($totalSites, 0, 0, " ")?></p>
+        <p class="text-semibold text-uppercase text-main"><?= Yii::t("app", "Total Sites") ?>: <?= number_format($totalSites, 0, 0, " ") ?></p>
     </div>
 
     <div class="panel-body">
 
         <div class="row">
             <div class="col-lg-6 bord-rgt">
-                <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Top sites by average KOR")?></p>
+                <p class="text-semibold text-uppercase text-main"><?= Yii::t("app", "Top sites by average KOR") ?></p>
                 <table class="table table-hover table-vcenter">
                     <thead>
                         <tr>
-                            <th> <?=Yii::t("app", "Site Name")?></th>
-                            <th class="text-center"><?=Yii::t("app", "Average KOR")?> <br> <small class="text-muted"><?=$startDate?> / <?=$endDate?></small></th>
+                            <th> <?= Yii::t("app", "Site Name") ?></th>
+                            <th class="text-center"><?= Yii::t("app", "Average KOR") ?> <br> <small class="text-muted"><?= $startDate ?> / <?= $endDate ?></small></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($topSitesPerKor as $topSite): ?>
-                        <tr>
-                            <td>
-                                <span class="text-main text-semibold"><?=$topSite["name"]?></span>
-                                <br>
-                                <i class="pli-location-2 icon-1x"></i>
-                                <small class="text-muted"><?=$topSite["location"]?></small>
-                            </td>
-                            <td class="text-center"><span class="text-primary text-semibold"><?=number_format($topSite["average_kor"], 2, null, " ")?></span></td>
-                        </tr>
+                        <?php foreach ($topSitesPerKor as $topSite) : ?>
+                            <tr>
+                                <td>
+                                    <span class="text-main text-semibold"><?= $topSite["name"] ?></span>
+                                    <br>
+                                    <i class="pli-location-2 icon-1x"></i>
+                                    <small class="text-muted"><?= $topSite["location"] ?></small>
+                                </td>
+                                <td class="text-center"><span class="text-primary text-semibold"><?= number_format($topSite["average_kor"], 2, null, " ") ?></span></td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
 
             <div class="col-lg-6">
-                <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Top sites by number of QARs")?></p>
+                <p class="text-semibold text-uppercase text-main"><?= Yii::t("app", "Top sites by number of QARs") ?></p>
                 <table class="table table-hover table-vcenter">
                     <thead>
-                    <tr>
-                        <th> <?=Yii::t("app", "Site Name")?></th>
-                        <th class="text-center"><?=Yii::t("app", "Number of QARs")?> <br> <small class="text-muted"><?=$startDate?> / <?=$endDate?></small></th>
-                    </tr>
+                        <tr>
+                            <th> <?= Yii::t("app", "Site Name") ?></th>
+                            <th class="text-center"><?= Yii::t("app", "Number of QARs") ?> <br> <small class="text-muted"><?= $startDate ?> / <?= $endDate ?></small></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($topSitesPerQar as $topSite): ?>
-                        <tr>
-                            <td>
-                                <span class="text-main text-semibold"><?=$topSite["name"]?></span>
-                                <br>
-                                <i class="pli-location-2 icon-1x"></i>
-                                <small class="text-muted"><?=$topSite["location"]?></small>
-                            </td>
-                            <td class="text-center"><span class="text-primary text-semibold"><?=number_format($topSite["number_qar"], 0, null, " ")?></span></td>
-                        </tr>
-                    <?php endforeach; ?>
+                        <?php foreach ($topSitesPerQar as $topSite) : ?>
+                            <tr>
+                                <td>
+                                    <span class="text-main text-semibold"><?= $topSite["name"] ?></span>
+                                    <br>
+                                    <i class="pli-location-2 icon-1x"></i>
+                                    <small class="text-muted"><?= $topSite["location"] ?></small>
+                                </td>
+                                <td class="text-center"><span class="text-primary text-semibold"><?= number_format($topSite["number_qar"], 0, null, " ") ?></span></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
 
         </div>
-</div>
-</div>
-
-
-<?php if(!empty($siteKorMarkers)): ?>
-
-<div class="panel">
-
-    <div class="panel-heading bg-primary">
-        <h3 class="panel-title">
-            <?=Yii::t("app", "KORS Map")?>
-        </h3>
     </div>
+</div>
 
-    <div class="panel-body">
-        <?=$this->render("_free_kor_map", [
+
+<?php if (!empty($siteKorMarkers)) : ?>
+
+    <div class="panel">
+
+        <div class="panel-heading bg-primary">
+            <h3 class="panel-title">
+                <?= Yii::t("app", "KORS Map") ?>
+            </h3>
+        </div>
+
+        <div class="panel-body">
+            <?= $this->render("_free_kor_map", [
                 "siteKorMarkers" => $siteKorMarkers
-        ]) ?>
+            ]) ?>
+        </div>
     </div>
-</div>
 
 <?php endif; ?>
 
@@ -248,12 +305,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-heading bg-primary">
         <h3 class="panel-title">
-            <?=Yii::t("app", "Users growth against time")?>
+            <?= Yii::t("app", "Users growth against time") ?>
         </h3>
     </div>
 
     <div class="panel-body">
-        <p class="text-semibold text-uppercase text-main"><?=Yii::t("app", "Total users")?>: <?=number_format($totalUsers, 0, 0, " ")?></p>
+        <p class="text-semibold text-uppercase text-main"><?= Yii::t("app", "Total users") ?>: <?= number_format($totalUsers, 0, 0, " ") ?></p>
     </div>
 
     <div class="panel-body">
@@ -309,6 +366,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'series' => $userSeries
             ]
-        ]);?>
+        ]); ?>
     </div>
 </div>
