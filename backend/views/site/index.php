@@ -25,7 +25,8 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                         'qarsInProgress' => $qarsInProgress,
                         'qarsToBeDone' => $qarsToBeDone,
                         'qarsCompleted' => $qarsCompleted,
-                        'qarsCanceled' => $qarsCanceled
+                        'qarsCanceled' => $qarsCanceled,
+                        'fromDashboard' => true
                     ]); ?>
                 </div>
                 <div class="col-md-8">
