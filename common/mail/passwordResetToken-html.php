@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /* @var $user common\models\User */
 
 if (!$baseUrl):
-    $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+    $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token, 'requestOrigin' => $origin]);
 else:
-    $resetLink = $baseUrl . 'site/reset-password?token=' . $user->password_reset_token;
+    $resetLink = $baseUrl . 'site/reset-password?token=' . $user->password_reset_token . "&requestOrigin=". $origin;
 endif;
 ?>
 <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">

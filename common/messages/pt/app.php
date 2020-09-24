@@ -376,4 +376,5 @@ return [
     'User details' => 'Detalhes do usuario',
     'User-Equipments management' => 'Gerenciamento de usuários-equipamentos',
     'Users management' => 'Gestão de usuários',
+    'Go to login screen' => 'Clique para ir para a tela de login'
 ];

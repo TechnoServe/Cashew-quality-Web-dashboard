@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-12 col-sm-6">
         <div class="panel panel-warning panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-12 col-sm-6">
         <div class="panel panel-info panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-12 col-sm-6">
         <div class="panel panel-mint panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-12 col-sm-6">
         <div class="panel panel-danger panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">

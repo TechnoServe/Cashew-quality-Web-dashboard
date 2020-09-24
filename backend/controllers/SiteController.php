@@ -21,7 +21,8 @@ use common\models\LoginForm;
  */
 class SiteController extends Controller
 {
-
+    const REQUEST_ORIGIN_MOBILE = "mobile";
+    const REQUEST_ORIGIN_WEB = "web";
     /**
      * {@inheritdoc}
      */
@@ -175,8 +176,9 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionRequestPasswordReset()
+    public function actionRequestPasswordReset($requestOrigin = "web")
     {
+        CashewAppHelper::getRequestOriginInSession($requestOrigin);
         // Logout the user if logged in
         Yii::$app->user->logout();
 
@@ -195,9 +197,11 @@ class SiteController extends Controller
                 $message = Yii::t('app', 'Sorry, we are unable to reset password for the provided email address.');
                 $messageType = "danger";
             }
+
             return $this->render("blank", [
                 "message" =>$message,
                 "type" =>$messageType,
+                "loginLink" => false
             ]);
         }
 
@@ -214,8 +218,9 @@ class SiteController extends Controller
      * @return mixed
      * @throws BadRequestHttpException
      */
-    public function actionResetPassword($token)
+    public function actionResetPassword($token, $requestOrigin = "web")
     {
+        CashewAppHelper::getRequestOriginInSession($requestOrigin);
         // Logout the user if logged in
         Yii::$app->user->logout();
 
@@ -225,14 +230,16 @@ class SiteController extends Controller
         } catch (InvalidArgumentException $e) {
             return $this->render("blank", [
                 "message" => Yii::t('app','Invalid password reset link'),
-                "type" => "danger"
+                "type" => "danger",
+                "loginLink" => false
             ]);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             return $this->render("blank", [
                 "message" => Yii::t('app','New password saved successfully. You can use it and login'),
-                "type" => "success"
+                "type" => "success",
+                "loginLink" => CashewAppHelper::getRequestOriginInSession() == CashewAppHelper::REQUEST_ORIGIN_WEB
             ]);
         }
         return $this->render('resetPassword', [
@@ -262,7 +269,6 @@ class SiteController extends Controller
      */
     public function actionSwitchUserLanguage($language)
     {
-
         $allowedLanguages = User::getLanguagesDropDownList();
         if (isset($allowedLanguages[$language])) {
             Yii::$app->language = $language;
@@ -291,7 +297,8 @@ class SiteController extends Controller
         if(!$model){
             return $this->render("blank", [
                 "message" => Yii::t("app", "Invalid verification link"),
-                "type" => "danger"
+                "type" => "danger",
+                "loginLink" => false
             ]);
         }
 
@@ -312,6 +319,7 @@ class SiteController extends Controller
         return $this->render("blank", [
             "message" =>$message,
             "type" =>$messageType,
+            "loginLink" => CashewAppHelper::getRequestOriginInSession() == CashewAppHelper::REQUEST_ORIGIN_WEB
         ]);
     }
 }

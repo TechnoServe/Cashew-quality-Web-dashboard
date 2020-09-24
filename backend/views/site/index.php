@@ -19,27 +19,51 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             <h4 class="panel-title"><?= Yii::t('app', 'QARs') ?></h4>
         </div>
         <div class="panel-body">
-            <?= $this->render('//qar/_mini_stat', [
-                'qarsInProgress' => $qarsInProgress,
-                'qarsToBeDone' => $qarsToBeDone,
-                'qarsCompleted' => $qarsCompleted,
-                'qarsCanceled' => $qarsCanceled
-            ]); ?>
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $this->render('//qar/_mini_stat', [
+                        'qarsInProgress' => $qarsInProgress,
+                        'qarsToBeDone' => $qarsToBeDone,
+                        'qarsCompleted' => $qarsCompleted,
+                        'qarsCanceled' => $qarsCanceled
+                    ]); ?>
+                </div>
+                <div class="col-md-8">
+                    <?= $this->render('//qar/_mini_graph_pie', [
+                        'qarsInProgress' => $qarsInProgress,
+                        'qarsToBeDone' => $qarsToBeDone,
+                        'qarsCompleted' => $qarsCompleted,
+                        'qarsCanceled' => $qarsCanceled,
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                        'predefinedPeriod' => $predefinedPeriod,
+                        'categories' => $categories,
+                        'qarSeries' => $qarSeries,
+                        'qarPieSeries' => $qarPieSeries
+                    ]) ?>
+                </div>
+            </div>
         </div>
 
         <div class="panel-body">
-            <?= $this->render('//qar/_mini_graph', [
-                'qarsInProgress' => $qarsInProgress,
-                'qarsToBeDone' => $qarsToBeDone,
-                'qarsCompleted' => $qarsCompleted,
-                'qarsCanceled' => $qarsCanceled,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-                'predefinedPeriod' => $predefinedPeriod,
-                'categories' => $categories,
-                'qarSeries' => $qarSeries,
-                'qarPieSeries' => $qarPieSeries
-            ]) ?>
+            <div class="col-md-12">
+                <?= $this->render('//qar/_mini_graph', [
+                    'qarsInProgress' => $qarsInProgress,
+                    'qarsToBeDone' => $qarsToBeDone,
+                    'qarsCompleted' => $qarsCompleted,
+                    'qarsCanceled' => $qarsCanceled,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                    'predefinedPeriod' => $predefinedPeriod,
+                    'categories' => $categories,
+                    'qarSeries' => $qarSeries,
+                    'qarPieSeries' => $qarPieSeries
+                ]) ?>
+            </div>
+
+            <div class="col-md-3">
+
+            </div>
         </div>
     </div>
 

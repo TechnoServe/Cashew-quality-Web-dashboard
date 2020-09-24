@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\helpers\CashewAppHelper;
 use Yii;
 
 class User extends \common\models\User
@@ -14,10 +15,10 @@ class User extends \common\models\User
                 function ($attribute, $params) {
 
                     if (Yii::$app->user->identity->role == User::ROLE_ADMIN && $this->role == User::ROLE_INSTITUTION_ADMIN && empty($this->company_id))
-                        $this->addError($attribute, Yii::t("app","You need to choose company"));
+                        $this->addError($attribute, Yii::t("app", "You need to choose company"));
 
-                    if (Yii::$app->user->identity->role == User::ROLE_ADMIN && ($this->role == User::ROLE_ADMIN || $this->role == User::ROLE_ADMIN_VIEW)  && !empty($this->company_id))
-                        $this->addError($attribute, Yii::t("app","Please remove company"));
+                    if (Yii::$app->user->identity->role == User::ROLE_ADMIN && ($this->role == User::ROLE_ADMIN || $this->role == User::ROLE_ADMIN_VIEW) && !empty($this->company_id))
+                        $this->addError($attribute, Yii::t("app", "Please remove company"));
 
                     return false;
                 },
@@ -45,13 +46,14 @@ class User extends \common\models\User
      * Query users by company
      * @return \yii\db\ActiveQuery
      */
-    public static function queryByCompany($loggedInUser = null){
+    public static function queryByCompany($loggedInUser = null)
+    {
 
-        if(!$loggedInUser)
+        if (!$loggedInUser)
             $loggedInUser = Yii::$app->user->identity;
 
-        if($loggedInUser->role != self::ROLE_ADMIN && $loggedInUser->role != self::ROLE_ADMIN_VIEW)
-            return self::find()->where(["user.company_id" =>  $loggedInUser->company_id]);
+        if ($loggedInUser->role != self::ROLE_ADMIN && $loggedInUser->role != self::ROLE_ADMIN_VIEW)
+            return self::find()->where(["user.company_id" => $loggedInUser->company_id]);
 
         return self::find();
     }
@@ -113,7 +115,8 @@ class User extends \common\models\User
         $userRole,
         $html_id,
         $placeholder
-    ) {
+    )
+    {
         if ($userRole) {
             $activeUsers = self::queryByCompany()
                 ->andWhere(["status" => User::STATUS_ACTIVE])
@@ -128,7 +131,7 @@ class User extends \common\models\User
         $data = [];
 
         foreach ($activeUsers as $user) {
-            $data[$user->id] = $user->first_name." ".$user->middle_name." ".$user->last_name;
+            $data[$user->id] = $user->first_name . " " . $user->middle_name . " " . $user->last_name;
         }
 
         return [
@@ -166,16 +169,17 @@ class User extends \common\models\User
     /**
      * Clean input data to ensure data validation
      */
-    public function purifyInput(){
+    public function purifyInput()
+    {
 
         $currentUser = Yii::$app->user->identity;
 
         $allowedRoles = self::getUserRoleConsideringCurrentUser();
 
-        if(!array_key_exists($this->role, $allowedRoles))
+        if (!array_key_exists($this->role, $allowedRoles))
             $this->role = null;
 
-        if($currentUser->role != User::ROLE_ADMIN && $currentUser->role != User::ROLE_ADMIN_VIEW)
+        if ($currentUser->role != User::ROLE_ADMIN && $currentUser->role != User::ROLE_ADMIN_VIEW)
             $this->company_id = $currentUser->company_id;
     }
 
@@ -208,8 +212,8 @@ class User extends \common\models\User
             ->compose(
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user,
-                 'pass' => $pass,
-                 ]
+                    'pass' => $pass, 'origin' => in_array($user->role, [User::ROLE_FIELD_TECH, User::ROLE_FIELD_BUYER]) ? CashewAppHelper::REQUEST_ORIGIN_MOBILE : CashewAppHelper::REQUEST_ORIGIN_WEB
+                ]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->setTo($this->email)
@@ -221,10 +225,11 @@ class User extends \common\models\User
     /**
      * Count Users per period and role
      */
-    public static function getUsersCountsByPeriodAndRole($dates, $role) {
+    public static function getUsersCountsByPeriodAndRole($dates, $role)
+    {
         $data = [];
         foreach ($dates as $date) {
-            array_push($data, (int) self::queryByCompany()
+            array_push($data, (int)self::queryByCompany()
                 //->where([">=", "DATE(created_at)" , date('Y-m-d', strtotime($date["startDate"]))])
                 ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($date["endDate"]))])
                 ->andWhere(["role" => $role])
@@ -234,7 +239,8 @@ class User extends \common\models\User
         return $data;
     }
 
-    public  static function findUsersByIdArray($ids){
+    public static function findUsersByIdArray($ids)
+    {
         return User::find()->where(["in", "id", $ids])->asArray()->all();
     }
 }

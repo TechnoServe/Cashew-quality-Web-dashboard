@@ -18,6 +18,10 @@ class CashewAppHelper
      * @param $startDate
      * @param $endDate
      */
+
+    const REQUEST_ORIGIN_WEB = "web";
+    const REQUEST_ORIGIN_MOBILE = "mobile";
+
     public static function getDatePeriodToFetch($startDate, $endDate){
 
         $daysDifference =  self::dateDiffInDays($startDate, $endDate);
@@ -483,6 +487,21 @@ class CashewAppHelper
             'ZM' => 'Zambia',
             'ZW' => 'Zimbabwe',
         ];
+    }
+
+    /**
+     * Updates request origin session value for site controller
+     * @param $requestOrigin
+     */
+    public static function getRequestOriginInSession($requestOrigin = null)
+    {
+        if(Yii::$app->session->get("site_request_origin") == null && !$requestOrigin)
+            Yii::$app->session->set("site_request_origin", self::REQUEST_ORIGIN_WEB);
+
+        if($requestOrigin)
+            Yii::$app->session->set("site_request_origin", $requestOrigin == self::REQUEST_ORIGIN_MOBILE ? self::REQUEST_ORIGIN_MOBILE : self::REQUEST_ORIGIN_WEB);
+
+        return Yii::$app->session->get("site_request_origin");
     }
 
 

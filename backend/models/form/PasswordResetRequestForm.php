@@ -1,6 +1,7 @@
 <?php
 namespace backend\models\form;
 
+use common\helpers\CashewAppHelper;
 use Yii;
 use yii\base\Model;
 use common\models\User;
@@ -58,7 +59,7 @@ class PasswordResetRequestForm extends Model
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
-                ['user' => $user, "baseUrl" => $baseUrl]
+                ['user' => $user, "baseUrl" => $baseUrl, "origin" => CashewAppHelper::getRequestOriginInSession()]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => "CashewNutsQualityApp - TNS"])
             ->setTo($this->email)

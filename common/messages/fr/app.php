@@ -376,4 +376,5 @@ return [
     'User details' => 'Détails de l\'utilisateur',
     'User-Equipments management' => 'Gestion des équipements utilisateurs',
     'Users management' => 'Gestion des utilisateurs',
+    'Go to login screen' => 'Cliquez pour ouvrir l\'écran de connexion'
 ];
