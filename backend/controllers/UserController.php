@@ -66,7 +66,7 @@ class UserController extends Controller
      * Lists all User models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($role = null)
     {
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
@@ -74,6 +74,10 @@ class UserController extends Controller
         $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
 
         $searchModel = new UserSearch();
+
+        if($role)
+            $searchModel->role = $role;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

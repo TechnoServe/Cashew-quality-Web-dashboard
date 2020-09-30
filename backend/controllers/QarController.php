@@ -61,7 +61,7 @@ class QarController extends Controller
      * Lists all Qar models.
      * @return mixed
      */
-    public function actionIndex($site = null)
+    public function actionIndex($site = null, $status = null)
     {
 
         $qarsInProgress = Qar::queryByCompany()->andWhere(["status"=>Qar::STATUS_IN_PROGRESS])->count();
@@ -73,6 +73,9 @@ class QarController extends Controller
 
         if($site)
             $searchModel->site = $site;
+
+        if($status)
+            $searchModel->status = $status;
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
