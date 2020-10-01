@@ -155,6 +155,11 @@ class QarController extends Controller
     {
         $model = $this->findModel($id);
 
+        if($model->status != Qar::STATUS_TOBE_DONE){
+            Yii::$app->getSession()->setFlash("info", Yii::t("app", "Qar can not be updated because. It might be either canceled or has data from fieldTech already"));
+            return $this->redirect(["qar/view", "id"=>$id]);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
 
             $model->purifyInput();
@@ -162,7 +167,6 @@ class QarController extends Controller
             if(strtotime($model->deadline) < strtotime("now")){
                 $model->addError("deadline", Yii::t("app", "deadline must be greater or equal to today"));
             }
-
 
             if($model->validate()) {
 

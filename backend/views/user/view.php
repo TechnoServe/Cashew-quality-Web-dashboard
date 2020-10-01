@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php if($model->status == User::STATUS_ACTIVE && $model->id != Yii::$app->user->getId()): ?>
             <?= Html::a(Yii::t('app', 'Deactivate'), ['deactivate', 'id' => $model->id],
                 [
-                    'class' => 'btn btn-danger',
+                    'class' => 'btn btn-default',
                     'data' => [
                         'confirm' => Yii::t('app',
                             'Are you sure you want to deactivate this user?'),
@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php if($model->id != Yii::$app->user->getId()):?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
                 [
-                    'class' => 'btn btn-default',
+                    'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => Yii::t('app',
-                            'Are you sure you want to restore this user?'),
+                            'Are you sure you want to delete this user?'),
                         'method' => 'post',
                     ],
                 ]) ?>
