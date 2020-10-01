@@ -52,7 +52,7 @@ use yii\helpers\Url;
                         <div class="profile-wrap text-center">
 
                             <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
-                                <img class="img-circle img-md" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
+                                <img class="img-md mar-btm" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
                             <?php else : ?>
                                 <!-- <?php $company = Company::findOne(Yii::$app->user->identity->company_id);
                                         $logoUrl = $company->getThumbLogoPath(); ?>
