@@ -52,13 +52,13 @@ use yii\helpers\Url;
                         <div class="profile-wrap text-center">
 
                             <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
-                                <img class="img-circle img-md" src="<?= Url::to("/nifty/img/profile-photos/1.png") ?>" alt="Profile Picture">
+                                <img class="img-circle img-md" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
                             <?php else : ?>
-                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id);
-                                $logoUrl = $company->getThumbLogoPath(); ?>
+                                <!-- <?php $company = Company::findOne(Yii::$app->user->identity->company_id);
+                                        $logoUrl = $company->getThumbLogoPath(); ?>
 
-                                <?= !empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?>
-
+                                <?= !empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?> -->
+                                <img class="img-circle img-md" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
                             <?php endif; ?>
 
 
@@ -183,7 +183,7 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
                             <div class="pad-btm">
-                                <?= Html::img('@web/img/logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => "120px", "height" => "auto"]]) ?>
+                                <?= Html::img('@web/img/TechnoServe-Logo.png', ['alt' => 'TechnoServe-Logo', 'class' => 'img-lg', 'style' => ['width' => "120px", "height" => "auto"]]) ?>
                             </div>
                             <a target="_blank" href="<?= Url::to("http://tns.org/") ?>" class="box-block">
                                 <span class="mnp-desc"> <?= Yii::t("app", "Powered by TechnoServe") ?></span>
