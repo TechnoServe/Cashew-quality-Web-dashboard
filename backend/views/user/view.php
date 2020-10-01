@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             <?php endif; ?>
 
-            <?php if($model->status == User::STATUS_INACTIVE): ?>
+            <?php if($model->status == User::STATUS_INACTIVE && $model->id != Yii::$app->user->getId()):?>
                 <?= Html::a(Yii::t('app', 'Re-activate'), ['reactivate', 'id' => $model->id],
                     [
                         'class' => 'btn btn-success',
@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]) ?>
             <?php endif; ?>
 
+            <?php if($model->id != Yii::$app->user->getId()):?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
                 [
                     'class' => 'btn btn-default',
@@ -66,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'method' => 'post',
                     ],
                 ]) ?>
+            <?php endif; ?>
         </p>
 
         <?php endif; ?>
