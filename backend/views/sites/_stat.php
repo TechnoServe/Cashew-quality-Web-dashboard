@@ -40,15 +40,7 @@ use yii\helpers\Url;
             <input type="hidden">
             <input type="hidden">
             <div class="form-group" style="min-width: 200px;">
-                <?= Select2::widget([
-                    'name' => 'country_code',
-                    'value' => $country_code,
-                    'data' => CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country')),
-                    'options' => [
-                        'placeholder' => 'Select Country'
-                    ]
-                ])
-                ?>
+                <?= Select2::widget(CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country'), true, $country_code)) ?>
             </div>
             <?= Html::submitButton(Yii::t('app', 'OK'), ['class' => 'btn btn-primary']) ?>
         </form>
