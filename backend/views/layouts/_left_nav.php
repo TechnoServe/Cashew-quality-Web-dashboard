@@ -51,27 +51,15 @@ use yii\helpers\Url;
                     <div id="mainnav-profile" class="mainnav-profile">
                         <div class="profile-wrap text-center">
 
-                            <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
-                                <img class="img-md mar-btm" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
-                            <?php else : ?>
-                                <!-- <?php $company = Company::findOne(Yii::$app->user->identity->company_id);
-                                        $logoUrl = $company->getThumbLogoPath(); ?>
+                            <img class="img-md mar-btm" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="CNQA Logo">
 
-                                <?= !empty($logoUrl) ? Html::img($logoUrl, ['width' => '50px']) : Html::img(Yii::getAlias("@web/company_default.png"), ['width' => '50px']) ?> -->
-                                <img class="img-circle img-md" src="<?= Url::to("@web/img/CashewNuts-Logo.png") ?>" alt="Profile Picture">
+                            <?php if (Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW) : ?>
+                                <?php $company = Company::findOne(Yii::$app->user->identity->company_id);?>
+                                <h4> <strong> <?= $company->name ?> </strong></h4>
                             <?php endif; ?>
-
-
-
-                            <a href="<?= Url::to(["user/view/", "id" => Yii::$app->user->getId()]) ?>" class="box-block">
-                                <?php if (Yii::$app->user->identity->role != User::ROLE_ADMIN && Yii::$app->user->identity->role != User::ROLE_ADMIN_VIEW) : ?>
-                                    <h4> <strong> <?= $company->name ?> </strong></h4>
-                                <?php endif; ?>
-                                <p class="box-bock text-bold"> <span class="badge badge-success"> <?= User::getUserRole()[Yii::$app->user->identity->role] ?> </span></p>
-                            </a>
+                            <p class="box-bock text-bold"> <span class="badge badge-success"> <?= User::getUserRole()[Yii::$app->user->identity->role] ?> </span></p>
                         </div>
                     </div>
-
 
                     <!--Shortcut buttons-->
                     <!--================================-->
