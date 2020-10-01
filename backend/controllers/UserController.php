@@ -3,8 +3,10 @@
 namespace backend\controllers;
 
 use backend\models\Company;
+use backend\models\Qar;
 use backend\models\Report;
 use backend\models\search\UserEquipmentSearch;
+use backend\models\UserEquipment;
 use common\helper\OmsHelper;
 use common\helpers\CashewAppHelper;
 use Yii;
@@ -56,7 +58,8 @@ class UserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                    'restore' => ['POST'],
+                    'deactivate' => ['POST'],
+                    'reactivate' => ['POST'],
                 ],
             ],
         ];
@@ -71,6 +74,7 @@ class UserController extends Controller
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
         $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
+        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
         $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
 
         $searchModel = new UserSearch();
@@ -190,6 +194,8 @@ class UserController extends Controller
 
     }
 
+
+
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -198,6 +204,32 @@ class UserController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $associatedQars = Qar::find()->where(["or", ["buyer" => $model->id], ["field_tech" => $model->id], ["farmer" => $model->id], ["buyer" => $model->id],])->exists();
+
+        if($associatedQars){
+            Yii::$app->session->setFlash("danger", Yii::t("app", "User can not be deleted because of assiciated QAR. Please simply deactivate user"));
+            return $this->redirect(["user/view", "id" => $model->id]);
+        }
+
+        UserEquipment::deleteAll(["id_user" => $model->id]);
+        $model->delete();
+
+        Yii::$app->session->setFlash("success", Yii::t("app", "User has been successfully deleted"));
+        return $this->redirect( Yii::$app->request->referrer ?: ['user/index']);
+    }
+
+    /**
+     * Deletes an existing User model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDeactivate($id)
     {
 
         $model = $this->findModel($id);
@@ -224,9 +256,8 @@ class UserController extends Controller
     }
 
 
-    public function actionRestore($id)
+    public function actionReactivate($id)
     {
-
         $model = $this->findModel($id);
 
         if ($model->status == User::STATUS_ACTIVE) {

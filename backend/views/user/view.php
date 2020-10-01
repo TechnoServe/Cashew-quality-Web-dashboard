@@ -27,24 +27,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="panel-body">
 
+        <?php $role =  Yii::$app->user->getIdentity()->role; if($role == User::ROLE_ADMIN || $role == User::ROLE_INSTITUTION_ADMIN): ?>
+
         <p>
             <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id],
                 ['class' => 'btn btn-primary']) ?>
 
             <?php if($model->status == User::STATUS_ACTIVE && $model->id != Yii::$app->user->getId()): ?>
-            <?= Html::a(Yii::t('app', 'Deactivate'), ['delete', 'id' => $model->id],
+            <?= Html::a(Yii::t('app', 'Deactivate'), ['deactivate', 'id' => $model->id],
                 [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => Yii::t('app',
-                            'Are you sure you want to delete this item?'),
+                            'Are you sure you want to deactivate this user?'),
                         'method' => 'post',
                     ],
                 ]) ?>
             <?php endif; ?>
 
             <?php if($model->status == User::STATUS_INACTIVE): ?>
-                <?= Html::a(Yii::t('app', 'Re-activate'), ['restore', 'id' => $model->id],
+                <?= Html::a(Yii::t('app', 'Re-activate'), ['reactivate', 'id' => $model->id],
                     [
                         'class' => 'btn btn-success',
                         'data' => [
@@ -54,7 +56,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ]) ?>
             <?php endif; ?>
+
+            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id],
+                [
+                    'class' => 'btn btn-default',
+                    'data' => [
+                        'confirm' => Yii::t('app',
+                            'Are you sure you want to restore this user?'),
+                        'method' => 'post',
+                    ],
+                ]) ?>
         </p>
+
+        <?php endif; ?>
 
         <?= DetailView::widget([
             'model' => $model,
@@ -90,12 +104,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]) ?>
-
     </div>
-
 </div>
-
-
 <?php if($model->role == User::ROLE_FIELD_TECH): ?>
 <div class="panel">
 
