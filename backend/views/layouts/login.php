@@ -94,8 +94,11 @@ AppAsset::register($this);
                     <?php endif; ?>
 
                     <a href="<?= Yii::$app->homeUrl ?>">
-                        <div class="pad-btm mar-btm">
-                            <?= Html::img('@web/img/TechnoServe-Logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => '120px', 'height' => 'auto']]) ?>
+                        <div class="pad-all mar-all">
+                            <?= Html::img('@web/img/TechnoServe-Logo.png', ['alt' => 'TechnoServe Logo', 'class' => 'img-lg', 'style' => ['width' => '150px', 'height' => 'auto']]) ?>
+                            <a target="_blank" href="<?= Url::to("http://tns.org/") ?>" class="box-block text-xs mar-top">
+                                <span class="mnp-desc"> <?= Yii::t("app", "Powered by TechnoServe") ?></span>
+                            </a>
                         </div>
                     </a>
                 </div>
