@@ -109,9 +109,12 @@ class SiteController extends Controller
         $qarPieSeries = SiteHelper::getQarPieChart($period);
 
 
-        if(!$country_code) {
+        if(!$country_code && Yii::$app->language != "pt") {
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
+        } else {
+            $country_code = "MZ";
         }
+
         $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
         $korLocations = SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code);
 
