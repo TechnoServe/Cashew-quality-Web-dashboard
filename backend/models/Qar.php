@@ -141,7 +141,18 @@ class Qar extends \common\models\Qar
                 'skipOnEmpty' => true,
                 'skipOnError' => true
             ],
+            ['deadline', 'validateDeadline', 'skipOnEmpty' => true, 'skipOnError' => true],
         ]);
+    }
+
+
+    public function validateDeadline($attribute, $params){
+
+        if( empty($this->deadline) ||(strtotime($this->deadline) < strtotime(date("Y-m-d")))){
+            $this->addError($attribute, Yii::t("app", "Deadline must be greater or equal to today"));
+            return false;
+        }
+        return true;
     }
 
     /**

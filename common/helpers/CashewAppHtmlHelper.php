@@ -8,6 +8,7 @@ use backend\models\User;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use function GuzzleHttp\Psr7\str;
 
 class CashewAppHtmlHelper
 {
@@ -66,7 +67,7 @@ class CashewAppHtmlHelper
      *
      * @return array
      */
-    public static function getDatePickerWidgetValues($name, $format, $placeholder = "", $strtotime = null)
+    public static function getDatePickerWidgetValues($name, $format, $placeholder = "", $strtotime = null, $startDate = null, $endDate = null)
     {
         $params = [
             'name' => $name,
@@ -74,6 +75,8 @@ class CashewAppHtmlHelper
             'value' => date('Y/m/d'),
             'options' => ['placeholder' => $placeholder,],
             'pluginOptions' => [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
                 'format' => 'yyyy/m/dd',
                 'todayHighlight' => true,
 

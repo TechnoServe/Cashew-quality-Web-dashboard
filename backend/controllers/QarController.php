@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * QarController implements the CRUD actions for Qar model.
@@ -122,7 +123,6 @@ class QarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->purifyInput();
 
-
             if ($model->validate()) {
 
                 list($reminder1, $reminder2) = (new CashewAppHelper())->calculateNotificationTimeForQar(date("Y-m-d H:i:s", strtotime("now")), $model->deadline." 18:00:00");
@@ -158,6 +158,11 @@ class QarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->purifyInput();
+
+            if(strtotime($model->deadline) < strtotime("now")){
+                $model->addError("deadline", Yii::t("app", "deadline must be greater or equal to today"));
+            }
+
 
             if($model->validate()) {
 

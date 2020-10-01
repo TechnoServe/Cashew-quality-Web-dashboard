@@ -63,7 +63,7 @@ use backend\models\User;
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date")) ?>
+            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date", null,null, date("Y-m-d", strtotime("now")), null)) ?>
         </div>
     </div>
 
