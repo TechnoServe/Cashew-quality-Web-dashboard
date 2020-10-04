@@ -2,11 +2,12 @@
 namespace api\controllers;
 
 use common\models\User;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
-use yii\rest\ActiveController;
-use yii\filters\auth\QueryParamAuth;
+use yii\filters\VerbFilter;
+use yii\rest\Controller;
 
-class SiteController extends ActiveController
+class SiteController extends Controller
 {
     public function behaviors()
     {
@@ -20,18 +21,27 @@ class SiteController extends ActiveController
                 }
             }
         ];
-        return $behaviors;
+
+        return array_merge(
+            $behaviors,
+            [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => [
+                                \api\models\User::ROLE_FIELD_TECH,
+                                User::ROLE_FIELD_FARMER,
+                                User::ROLE_FIELD_BUYER
+                            ],
+                        ],
+
+                    ],
+                ],]);
     }
-    public $modelClass = 'common\models\Site';
 
-    public function actions()
-    {
-        $actions = parent::actions();
-
-        // disable the "delete" and "create" actions ?????
-        // customize the data provider preparation with the "prepareDataProvider()" method
-
-        return $actions;
+    public function actionIndex(){
+        return "WELCOME TO CNQA API";
     }
-
 }

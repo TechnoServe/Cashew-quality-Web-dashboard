@@ -5,13 +5,15 @@ namespace api\controllers;
 use api\components\ApiError;
 use api\components\ApiResponse;
 use api\models\User;
+use backend\models\UserEquipment;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
+use yii\rest\Controller;
 
 
-class FieldTechController extends ActiveController
+class FieldTechController extends Controller
 {
     public function behaviors()
     {
@@ -35,20 +37,30 @@ class FieldTechController extends ActiveController
                         'view' => ['GET']
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => [
+                                User::ROLE_FIELD_TECH,
+                                User::ROLE_FIELD_FARMER,
+                                User::ROLE_FIELD_BUYER
+                            ],
+                        ],
+
+                    ],
+                ],
             ]);
     }
 
-    public $modelClass = 'api\models\User';
-    // Some reserved attributes like maybe 'q' for searching all fields at once
-    // or 'sort' which is already supported by Yii RESTful API
-   // public $reservedParams = ['sort','q'];
 
     public function actions()
     {
         $actions = parent::actions();
-      //  $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-       unset($actions['index']);
-       unset($actions['view']);
+        //  $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+        unset($actions['index']);
+        unset($actions['view']);
         return $actions;
     }
 
@@ -58,16 +70,17 @@ class FieldTechController extends ActiveController
      * Responds to request to get list of fieldTechs
      * @return array
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
 
         // Initiate search query
-        $query = $this->modelClass::queryByCompany(Yii::$app->user->identity);
+        $query = User::queryByCompany(Yii::$app->user->identity);
 
         // Search has to be performed on active fieldTechs
-        $query->andWhere(["role" => User::ROLE_FIELD_TECH]) ->andWhere(["status" => User::STATUS_ACTIVE]);
+        $query->andWhere(["role" => User::ROLE_FIELD_TECH])->andWhere(["status" => User::STATUS_ACTIVE]);
 
         // Get filter parameters from query params
-        $filter =  Yii::$app->request->getQueryParams();
+        $filter = Yii::$app->request->getQueryParams();
 
         // Filter by username if passed
         (isset($filter['username']) && $filter['username']) ? $query->andFilterWhere(['like', 'username', trim($filter['username'])]) : null;
@@ -84,7 +97,7 @@ class FieldTechController extends ActiveController
         (isset($filter['email']) && $filter['email']) ? $query->andFilterWhere(['like', 'email', trim($filter['email'])]) : null;
 
         // Filter by phone if passed
-        (isset($filter['phone']) && $filter['phone'])? $query->andFilterWhere(['like', 'phone', trim($filter['phone'])]) : null;
+        (isset($filter['phone']) && $filter['phone']) ? $query->andFilterWhere(['like', 'phone', trim($filter['phone'])]) : null;
 
         return new ApiResponse($query->all(), null, true);
     }
@@ -97,7 +110,8 @@ class FieldTechController extends ActiveController
      */
     public function actionView($id)
     {
-        $field_tech = $this->modelClass::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => $this->modelClass::ROLE_FIELD_TECH])->one();
+
+        $field_tech = User::queryByCompany(Yii::$app->user->identity)->andWhere(['id' => $id, 'role' => User::ROLE_FIELD_TECH])->one();
 
         if ($field_tech) {
             return new ApiResponse($field_tech, null, true);
@@ -105,5 +119,23 @@ class FieldTechController extends ActiveController
             Yii::$app->response->statusCode = 404;
             return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, "Invalid FieldTech ID")], false);
         }
+    }
+
+
+    /**
+     * Handles request to get details of a specific fieldTech by id
+     * @param $id
+     * @return ApiResponse
+     */
+    public function actionEquipments($id)
+    {
+        $equipments = UserEquipment::queryByCompany(Yii::$app->user->identity)->andWhere(['id_user' => $id])->asArray()->all();
+
+        if ($equipments) {
+            return new ApiResponse($equipments, null, true);
+        }
+        Yii::$app->response->statusCode = 404;
+        return new ApiResponse(null, [new ApiError(ApiError::INVALID_DATA, "Invalid FieldTech ID")], false);
+
     }
 }

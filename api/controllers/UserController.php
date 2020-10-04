@@ -9,12 +9,11 @@ use api\models\ChangePassword;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
 use yii\filters\AccessControl;
+use yii\rest\Controller;
 
-class UserController extends ActiveController
+class UserController extends Controller
 {
-
     public $email;
 
     public function behaviors()
@@ -36,7 +35,7 @@ class UserController extends ActiveController
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['change-password', 'save-token'],
+                            'actions' => ['change-password', 'save-token', 'view'],
                             'allow' => true,
                             'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
                         ],
@@ -50,11 +49,25 @@ class UserController extends ActiveController
                     ],
                 ],
             ]);
-
     }
 
-    public $modelClass = 'api\models\User';
 
+    /**
+     * Get details of a specific user
+     * @param $id
+     * @return ApiResponse
+     */
+    public function actionView($id = null)
+    {
+
+        $user = \api\models\User::queryByCompany(Yii::$app->user->identity)->andWhere(["id" => $id])->one();
+        if (!empty($user)) {
+            return new ApiResponse($user, null, true);
+        }
+
+        Yii::$app->response->statusCode = 404;
+        return new ApiResponse(null, [new ApiError("INVALID DATA", "User not found")], true);
+    }
 
     /**
      * Accepts request to change an existing password, knowing the current password

@@ -35,6 +35,16 @@ class BuyerController extends ActiveController
                         'view' => ['GET']
                     ],
                 ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => [
+                            User::ROLE_FIELD_TECH,
+                            User::ROLE_FIELD_FARMER,
+                            User::ROLE_FIELD_BUYER
+                        ],
+                    ],
+                ],
             ]);
     }
 
