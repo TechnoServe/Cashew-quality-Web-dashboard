@@ -14,9 +14,7 @@ public function fields()
             $fields['auth_key'],
             $fields['verification_token'],
             $fields['updated_at'],
-            $fields['company_id'],
-            $fields['role']);
-
+            $fields['company_id']);
         return $fields;
     }
 }
