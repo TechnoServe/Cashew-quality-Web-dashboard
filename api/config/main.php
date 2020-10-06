@@ -14,6 +14,10 @@ return [
     'modules' => [],
     'components' => [
 
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+        ],
+
         'authManager' => [
             'class' => 'backend\components\RoleManager',
         ],
