@@ -42,7 +42,7 @@ class QarController extends Controller
 
                     [
                         'allow' => true,
-                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
+                        'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_FIELD_TECH, User::ROLE_FIELD_BUYER]
                     ],
 
                 ],
@@ -139,8 +139,7 @@ class QarController extends Controller
         return $this->render('create', [
             'model' => $model,
             'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
-            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER,
-            'showFarmerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_FARMER,
+            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER
         ]);
     }
 
@@ -184,8 +183,7 @@ class QarController extends Controller
         return $this->render('update', [
             'model' => $model,
             'showFieldTechSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_TECH,
-            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER,
-            'showFarmerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_FARMER,
+            'showBuyerSelectorOnForm' => Yii::$app->user->identity->role != User::ROLE_FIELD_BUYER
         ]);
     }
 
@@ -274,7 +272,6 @@ class QarController extends Controller
         //$filter['created_at_end'] ? $query->andWhere(['created_at_end' => $filter['created_at_end']]) : null;
         $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
         $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
-        $filter['farmer'] ? $query->andWhere(['farmer' => $filter['farmer']]) : null;
         $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
         $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
@@ -290,7 +287,6 @@ class QarController extends Controller
             Yii::t('app', 'Company'),
             Yii::t('app', 'Buyer'),
             Yii::t('app', 'Field Tech'),
-            Yii::t('app', 'Farmer'),
             Yii::t('app', 'Initiator'),
             Yii::t('app', 'Site'),
             Yii::t('app', 'Estimated Volume of bags'),
@@ -305,7 +301,6 @@ class QarController extends Controller
                 $row['company_id'] ? Company::findOne($row['company_id'])->name : '',
                 $row['buyer'] ? User::findOne($row['buyer'])->getFullName() : '',
                 $row['field_tech'] ? User::findOne($row['field_tech'])->getFullName() : '',
-                $row['farmer'] ? User::findOne($row['farmer'])->getFullName() : '',
                 $row['initiator'] ? Qar::getInitiatorByIndex($row['initiator']) : '',
                 $row['site'] ? Site::findOne($row['site'])->site_name : '',
                 $row['number_of_bags'],
@@ -331,7 +326,6 @@ class QarController extends Controller
         //$filter['created_at_end'] ? $query->andWhere(['created_at_end' => $filter['created_at_end']]) : null;
         $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
         $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
-        $filter['farmer'] ? $query->andWhere(['farmer' => $filter['farmer']]) : null;
         $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
         $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;

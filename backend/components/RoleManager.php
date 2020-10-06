@@ -41,11 +41,6 @@ class RoleManager extends Component
                 return $user->role == User::ROLE_INSTITUTION_ADMIN_VIEW ? true : false;
                 break;
 
-
-            case User::ROLE_FIELD_FARMER:
-                return $user->role == User::ROLE_FIELD_FARMER ? true : false;
-                break;
-
             case User::ROLE_FIELD_TECH:
                 return $user->role == User::ROLE_FIELD_TECH ? true : false;
                 break;

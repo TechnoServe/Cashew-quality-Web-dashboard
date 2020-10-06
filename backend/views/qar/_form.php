@@ -19,51 +19,44 @@ use backend\models\User;
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row">
-        <?php if($showBuyerSelectorOnForm): ?>
-        <div class="col-md-6">
-            <?= $form->field($model, 'buyer')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'buyer',User::ROLE_FIELD_BUYER, "buyer_id",   Yii::t('app', 'Select Buyer'))) ?>
-        </div>
+        <?php if ($showBuyerSelectorOnForm) : ?>
+            <div class="col-md-6">
+                <?= $form->field($model, 'buyer')->widget(Select2::className(), User::getUsersSelectWidgetValues('buyer', User::ROLE_FIELD_BUYER, "buyer_id",   Yii::t('app', 'Select Buyer'))) ?>
+            </div>
         <?php endif; ?>
 
-        <?php if($showFieldTechSelectorOnForm): ?>
-        <div class="col-md-6">
-            <?= $form->field($model, 'field_tech')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'field_tech',User::ROLE_FIELD_TECH, "field_tech_id",   Yii::t('app', 'Select Field Tech'))) ?>
-        </div>
+        <?php if ($showFieldTechSelectorOnForm) : ?>
+            <div class="col-md-6">
+                <?= $form->field($model, 'field_tech')->widget(Select2::className(), User::getUsersSelectWidgetValues('field_tech', User::ROLE_FIELD_TECH, "field_tech_id",   Yii::t('app', 'Select Field Tech'))) ?>
+            </div>
         <?php endif; ?>
     </div>
 
 
     <div class="row">
-        <?php if($showFarmerSelectorOnForm): ?>
         <div class="col-md-6">
-            <?= $form->field($model, 'farmer')->widget(Select2::className(), User::getUsersSelectWidgetValues( 'farmer',User::ROLE_FIELD_FARMER, "farmer_id",   Yii::t('app', 'Select Farmer'))) ?>
+            <?= $form->field($model, 'initiator')->dropDownList(\backend\models\Qar::getInitiatorDropDownValues(), ["prompt" => Yii::t("app", "Select initiator")]) ?>
         </div>
-        <?php endif; ?>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'initiator')->dropDownList(\backend\models\Qar::getInitiatorDropDownValues(), ["prompt"=>Yii::t("app", "Select initiator")]) ?>
+            <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site', "site_id",  Yii::t('app', 'Select site'))) ?>
         </div>
     </div>
 
 
     <div class="row">
-        <div class="col-md-6">
-            <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site',"site_id",  Yii::t('app', 'Select site'))) ?>
-        </div>
-
         <div class="col-md-6">
             <?= $form->field($model, 'number_of_bags')->textInput(['maxlength' => true]) ?>
         </div>
-    </div>
-
-    <div class="row">
 
         <div class="col-md-6">
             <?= $form->field($model, 'volume_of_stock')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date", null,null, date("Y-m-d", strtotime("now")), null)) ?>
+            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date", null, null, date("Y-m-d", strtotime("now")), null)) ?>
         </div>
     </div>
 

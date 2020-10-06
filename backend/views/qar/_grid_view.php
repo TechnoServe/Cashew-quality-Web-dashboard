@@ -45,18 +45,6 @@ use yii\helpers\Html;
             },
         ],
         [
-            'attribute' => 'farmer',
-            'value' => function ($model) {
-                $farmer = User::findOne($model->farmer);
-                if ($farmer) {
-                    return $farmer->first_name." ".$farmer->middle_name." ".$farmer->last_name;
-                }
-
-                return null;
-            },
-        ],
-
-        [
             'attribute' => 'site',
             'value' => function ($model) {
                 $site = Site::findOne($model->site);

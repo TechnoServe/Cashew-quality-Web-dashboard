@@ -22,8 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('_form', [
             'model' => $model,
             'showFieldTechSelectorOnForm' => $showFieldTechSelectorOnForm,
-            'showBuyerSelectorOnForm' => $showBuyerSelectorOnForm,
-            'showFarmerSelectorOnForm' => $showFarmerSelectorOnForm,
+            'showBuyerSelectorOnForm' => $showBuyerSelectorOnForm
         ]) ?>
 
     </div>

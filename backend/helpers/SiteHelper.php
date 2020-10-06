@@ -314,17 +314,6 @@ class SiteHelper
             ]
         );
 
-        // Farmers
-        array_push(
-            $series,
-            [
-                'type' => 'spline',
-                'name' => Yii::t("app", "Farmers"),
-                'data' => User::getUsersCountsByPeriodAndRole($period, User::ROLE_FIELD_FARMER),
-                'color' => "#26a69a"
-            ]
-        );
-
         return $series;
 
     }

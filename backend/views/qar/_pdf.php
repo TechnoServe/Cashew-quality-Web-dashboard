@@ -8,7 +8,6 @@
                 <?php  endif; ?>
                 <th><?=Yii::t("app", "Buyer")?></th>
                 <th><?=Yii::t("app", "Field Tech")?></th>
-                <th><?=Yii::t("app", "Farmer")?></th>
                 <th><?=Yii::t("app", "Initiator")?></th>
                 <th><?=Yii::t("app", "Site")?></th>
                 <th><?=Yii::t("app", "Estimated number of bags")?></th>
@@ -33,7 +32,6 @@
                     <?php  endif; ?>
                     <td><?= $row['buyer'] ? User::findOne($row['buyer'])->getFullName() : '' ?></td>
                     <td><?= $row['field_tech'] ? User::findOne($row['field_tech'])->getFullName() : '' ?></td>
-                    <td><?= $row['farmer'] ? User::findOne($row['farmer'])->getFullName() : '' ?></td>
                     <td><?= $row['initiator'] ? Qar::getInitiatorByIndex($row['initiator']) : '' ?></td>
                     <td><?= $row['site'] ? Site::findOne($row['site'])->site_name : '' ?></td>
                     <td><?= $row['number_of_bags'] ?></td>

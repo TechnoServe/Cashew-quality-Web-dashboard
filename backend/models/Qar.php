@@ -116,10 +116,6 @@ class Qar extends \common\models\Qar
             if($loggedInUser->role == User::ROLE_FIELD_BUYER)
                 return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["buyer"=>$loggedInUser->id]);
 
-
-            if($loggedInUser->role == User::ROLE_FIELD_FARMER)
-                return self::find()->where(["qar.company_id" => $loggedInUser->company_id])->andWhere(["farmer"=>$loggedInUser->id]);
-
         }
 
         return self::find();
@@ -163,10 +159,8 @@ class Qar extends \common\models\Qar
     public static function getInitiatorDropDownValues()
     {
         return [
-            self::INITIATED_BY_FIELD_TECH => Yii::t("app",
-                "Initiated by Field Tech"),
-            self::INITIATED_BY_BUYER => Yii::t("app", "Initiated by Buyer"),
-            self::INITIATED_BY_FARMER => Yii::t("app", "Initiated by Farmer"),
+            self::INITIATED_BY_FIELD_TECH => Yii::t("app", "Initiated by Field Tech"),
+            self::INITIATED_BY_BUYER => Yii::t("app", "Initiated by Buyer")
         ];
     }
 
@@ -231,11 +225,6 @@ class Qar extends \common\models\Qar
             $this->field_tech = null;
 
 
-        //validate farmer
-        if(!User::queryByCompany()->andWhere(["id"=>$this->farmer, "role"=>User::ROLE_FIELD_FARMER])->exists())
-            $this->farmer = null;
-
-
         //validate site
         if(!Site::queryByCompany()->andWhere(["id"=>$this->site])->exists())
             $this->site = null;
@@ -251,9 +240,6 @@ class Qar extends \common\models\Qar
                 $this->buyer = $currentUser->id;
             }
 
-            if ($currentUser->role == User::ROLE_FIELD_FARMER) {
-                $this->farmer = $currentUser->id;
-            }
         }
 
         $this->company_id = $currentUser->company_id;
