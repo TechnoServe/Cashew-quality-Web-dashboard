@@ -17,8 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= $this->render('//user/_mini_stat', [
     'totalUsers' => $totalUsers,
     'totalFieldTech' => $totalFieldTech,
-    'totalBuyer' => $totalBuyer,
-    'totalFarmer' => $totalFarmer
+    'totalBuyer' => $totalBuyer
 ]); ?>
 
 <div class="panel">

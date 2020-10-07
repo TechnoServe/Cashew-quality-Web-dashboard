@@ -97,7 +97,6 @@ class SiteController extends Controller
         $totalUsers = User::queryByCompany()->andWhere(["status" => User::STATUS_ACTIVE])->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->andWhere(["status" => User::STATUS_ACTIVE])->count();
         $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
-        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->andWhere(["status" => User::STATUS_ACTIVE])->count();
 
         // chart
         $period = CashewAppHelper::getDatePeriodToFetch($startDate, $endDate);
@@ -129,7 +128,6 @@ class SiteController extends Controller
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,
-            'totalFarmer' => $totalFarmer,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,

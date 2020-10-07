@@ -100,8 +100,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             <?= $this->render('//user/_mini_stat', [
                 'totalUsers' => $totalUsers,
                 'totalFieldTech' => $totalFieldTech,
-                'totalBuyer' => $totalBuyer,
-                'totalFarmer' => $totalFarmer
+                'totalBuyer' => $totalBuyer
             ]); ?>
         </div>
         <div class="panel-body">

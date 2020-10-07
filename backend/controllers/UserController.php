@@ -74,8 +74,6 @@ class UserController extends Controller
         $totalUsers = User::queryByCompany()->count();
         $totalFieldTech = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_TECH])->count();
         $totalBuyer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_BUYER])->count();
-        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
-        $totalFarmer = User::queryByCompany()->andWhere(["role" => User::ROLE_FIELD_FARMER])->count();
 
         $searchModel = new UserSearch();
 
@@ -89,8 +87,7 @@ class UserController extends Controller
             'dataProvider' => $dataProvider,
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
-            'totalBuyer' => $totalBuyer,
-            'totalFarmer' => $totalFarmer
+            'totalBuyer' => $totalBuyer
         ]);
     }
 
@@ -208,7 +205,7 @@ class UserController extends Controller
 
         $model = $this->findModel($id);
 
-        $associatedQars = Qar::find()->where(["or", ["buyer" => $model->id], ["field_tech" => $model->id], ["farmer" => $model->id], ["buyer" => $model->id],])->exists();
+        $associatedQars = Qar::find()->where(["or", ["buyer" => $model->id], ["field_tech" => $model->id], ["buyer" => $model->id],])->exists();
 
         if($associatedQars){
             Yii::$app->session->setFlash("danger", Yii::t("app", "User can not be deleted because of assiciated QAR. Please simply deactivate user"));

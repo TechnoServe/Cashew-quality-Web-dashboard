@@ -138,17 +138,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 [
-                    'attribute' => 'farmer',
-                    'value' => function ($model) {
-                        $farmer = User::findOne($model->farmer);
-                        if ($farmer) {
-                            return $farmer->first_name." ".$farmer->middle_name." ".$farmer->last_name;
-                        }
-
-                        return null;
-                    },
-                ],
-                [
                     'attribute' => 'initiator',
                     'value' => function ($model) {
                         return Qar::getInitiatorByIndex($model->initiator);
