@@ -23,7 +23,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been created. it will be on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été créé. il sera sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi criado. será no site %s, e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -41,7 +41,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been updated. it is on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été mis à jour. il est sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi atualizado. está no site  %s, e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -60,7 +60,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been canceled. it was on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été annulé. il était sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi cancelado. estava no site %s e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
 
@@ -80,7 +80,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been canceled. it was on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d qui a été annulé a été restauré. il est sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d que foi cancelado foi restaurado. está no site %s e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -98,7 +98,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d  has been deleted. it was on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été supprimé. il était sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi excluído. estava no site %s e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -116,7 +116,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been created. it will be on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été créé. il sera sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi criado. será no site %s, e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -136,7 +136,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been updated. it is on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d a été mis à jour. il est sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi atualizado. está no site  %s, e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -156,7 +156,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d has been completed. it is on site %s, and it is due on %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_fr' => sprintf("QAR#%d est terminé. il est sur le site %s, et il est dû le %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
             'body_pt' => sprintf("QAR#%d foi concluído. está no site %s e é devido em %s", $model->id, Site::findOne($model->site)->site_name, $model->deadline),
-            'recipients' => [$model->buyer, $model->field_tech, $model->farmer],
+            'recipients' => [$model->buyer, $model->field_tech],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -175,7 +175,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d is close to its deadline. it is on site %s, and it is due on %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
             'body_fr' => sprintf("QAR#%d est proche de sa date limite. il est sur le site %s, et il est dû le %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
             'body_pt' => sprintf("QAR#%d está perto de seu prazo. está no site %s, e é devido em %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
-            'recipients' => [$qar["buyer"], $qar["field_tech"], $qar["farmer"]],
+            'recipients' => [$qar["buyer"], $qar["field_tech"]],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }
@@ -193,7 +193,7 @@ class QarNotificationHelper
             'body_en' => sprintf("QAR#%d passed it's deadline. it is on site %s, and it is due on %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
             'body_fr' => sprintf("QAR#%d a dépassé sa date limite. il est sur le site %s, et il était dû le %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
             'body_pt' => sprintf("QAR#%d também ultrapassou o prazo. estava no site %s, e era devido em %s", $qar["id"], Site::findOne($qar["site"])->site_name, $qar["deadline"]),
-            'recipients' => [$qar["buyer"], $qar["field_tech"], $qar["farmer"]],
+            'recipients' => [$qar["buyer"], $qar["field_tech"]],
             'destinations' => [NotificationHelper::DESTINATION_EMAIL, NotificationHelper::DESTINATION_APP]
         ]));
     }

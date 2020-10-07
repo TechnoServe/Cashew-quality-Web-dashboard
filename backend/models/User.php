@@ -39,8 +39,6 @@ class User extends \common\models\User
 
     const ROLE_FIELD_BUYER = 6;
 
-    const ROLE_FIELD_FARMER = 7;
-
     /**
      * Query users by company
      * @return \yii\db\ActiveQuery
@@ -66,8 +64,7 @@ class User extends \common\models\User
             self::ROLE_INSTITUTION_ADMIN => Yii::t('app', 'Institution Admin'),
             self::ROLE_INSTITUTION_ADMIN_VIEW => Yii::t('app', 'Institution Admin View'),
             self::ROLE_FIELD_TECH => Yii::t('app', 'Field Tech'),
-            self::ROLE_FIELD_BUYER => Yii::t('app', 'Buyer'),
-            self::ROLE_FIELD_FARMER => Yii::t('app', 'Farmer'),
+            self::ROLE_FIELD_BUYER => Yii::t('app', 'Buyer')
         ];
     }
 

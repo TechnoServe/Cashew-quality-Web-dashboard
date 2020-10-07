@@ -125,18 +125,6 @@ class Qar extends \common\models\Qar
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [
-                'farmer',
-                'required',
-                'when' => function ($model) {
-                    return $model->initiator == self::INITIATED_BY_FARMER;
-                },
-                'whenClient' => "function (attribute, value) {
-                    return $('#qar-initiator').val() == 3;
-                }",
-                'skipOnEmpty' => true,
-                'skipOnError' => true
-            ],
             ['deadline', 'validateDeadline', 'skipOnEmpty' => true, 'skipOnError' => true],
         ]);
     }
