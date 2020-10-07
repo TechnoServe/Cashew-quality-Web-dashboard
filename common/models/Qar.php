@@ -12,6 +12,7 @@ use Yii;
  * @property int|null $field_tech
  * @property int $initiator
  * @property int $site
+* @property int $status
  * @property string|null $audit_quantity
  * @property string $created_at
  * @property string $updated_at
@@ -39,7 +40,7 @@ class Qar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['buyer', 'field_tech', 'initiator', 'site'], 'integer'],
+            [['buyer', 'field_tech', 'initiator', 'site', 'status'], 'integer'],
             [['number_of_bags','volume_of_stock'], 'number'],
             [['initiator', 'site', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
             [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags', 'reminder1', 'reminder2'], 'safe'],

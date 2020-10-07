@@ -35,14 +35,9 @@ class UserController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['login'],
-                            'allow' => true,
-                            'roles' => '?',
-                        ],
-                        [
                             'actions' => ['change-password', 'save-token', 'view'],
                             'allow' => true,
-                            'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_FARMER, User::ROLE_FIELD_BUYER],
+                            'roles' => [User::ROLE_FIELD_TECH, User::ROLE_FIELD_BUYER],
                         ],
                     ],
                 ],

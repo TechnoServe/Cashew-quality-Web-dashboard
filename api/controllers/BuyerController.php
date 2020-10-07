@@ -6,12 +6,13 @@ use api\components\ApiError;
 use api\components\ApiResponse;
 use api\models\User;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
-use yii\rest\ActiveController;
+use yii\rest\Controller;
 
 
-class BuyerController extends ActiveController
+class BuyerController extends Controller
 {
     public function behaviors()
     {
@@ -35,28 +36,21 @@ class BuyerController extends ActiveController
                         'view' => ['GET']
                     ],
                 ],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => [
-                            User::ROLE_FIELD_TECH,
-                            User::ROLE_FIELD_FARMER,
-                            User::ROLE_FIELD_BUYER
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => [
+                                User::ROLE_FIELD_TECH,
+                                User::ROLE_FIELD_BUYER
+                            ],
                         ],
+
                     ],
                 ],
             ]);
     }
-
-
-    public function actions()
-    {
-        $actions = parent::actions();
-       unset($actions['index']);
-       unset($actions['view']);
-        return $actions;
-    }
-
 
     /**
      * Method can be passed parameters which will be used to filter result

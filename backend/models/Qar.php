@@ -13,8 +13,6 @@ class Qar extends \common\models\Qar
 
     const INITIATED_BY_BUYER = 2;
 
-    const INITIATED_BY_FARMER = 3;
-
     const STATUS_TOBE_DONE = 1;
 
     const STATUS_IN_PROGRESS = 2;

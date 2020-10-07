@@ -10,13 +10,10 @@ use backend\models\Company;
 use common\models\QarDetail;
 use backend\models\User;
 use Yii;
-use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
-use yii\validators\DateValidator;
 use yii\filters\VerbFilter;
-use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use common\helpers\QarNotificationHelper;
 
@@ -61,9 +58,7 @@ class QarController extends ActiveController
                         [
                             'allow' => true,
                             'roles' => [
-                                User::ROLE_INSTITUTION_ADMIN,
                                 User::ROLE_FIELD_TECH,
-                                User::ROLE_FIELD_FARMER,
                                 User::ROLE_FIELD_BUYER
                             ],
                         ],
@@ -125,13 +120,12 @@ class QarController extends ActiveController
 
         // Initiate search query
         $query = Qar::queryByCompany()->leftJoin(Site::tableName(), 'qar.site = site.id')
-            ->select(['qar.id', 'qar.buyer', 'qar.field_tech', 'qar.farmer', 'qar.id', 'site.site_name', 'qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline', 'qar.created_at'])
+            ->select(['qar.id', 'qar.buyer', 'qar.field_tech', 'qar.initiator', 'site.id as site_id', 'site.site_name', 'qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline', 'qar.status', 'qar.created_at', 'qar.updated_at'])
             ->andFilterWhere(['in', 'qar.buyer', $buyers])
             ->andFilterWhere(['in', 'qar.field_tech', $field_techs]);
 
         if (isset($filter['site_name']))
             $query->andFilterWhere(['like', 'site.site_name', $filter['site_name']]);
-
 
         return new ApiResponse($query->asArray()->all(), null, true);
 

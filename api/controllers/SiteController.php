@@ -4,7 +4,6 @@ namespace api\controllers;
 use common\models\User;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
-use yii\filters\VerbFilter;
 use yii\rest\Controller;
 
 class SiteController extends Controller
@@ -31,8 +30,7 @@ class SiteController extends Controller
                         [
                             'allow' => true,
                             'roles' => [
-                                \api\models\User::ROLE_FIELD_TECH,
-                                User::ROLE_FIELD_FARMER,
+                                User::ROLE_FIELD_TECH,
                                 User::ROLE_FIELD_BUYER
                             ],
                         ],

@@ -17,7 +17,6 @@
             <th><?=Yii::t("app", "Institution admin view users")?></th>
             <th><?=Yii::t("app", "Field Tech")?></th>
             <th><?=Yii::t("app", "Buyer")?></th>
-            <th><?=Yii::t("app", "Farmer")?></th>
             <th><?=Yii::t("app", "Qars to be done")?></th>
             <th><?=Yii::t("app", "Qars in progress")?></th>
             <th><?=Yii::t("app", "Qars completed")?></th>
@@ -51,7 +50,6 @@
                 <td><?= $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_INSTITUTION_ADMIN_VIEW])->count() : '' ?></td>
                 <td><?= $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_TECH])->count() : '' ?></td>
                 <td><?= $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_BUYER])->count() : '' ?></td>
-                <td><?= $row['id'] ? User::find()->andWhere(["company_id" => $row['id'], "role" => User::ROLE_FIELD_FARMER])->count() : '' ?></td>
                 <td><?= $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status" => Qar::STATUS_TOBE_DONE])->count() : '' ?></td>
                 <td><?= $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status" => Qar::STATUS_IN_PROGRESS])->count() : '' ?></td>
                 <td><?= $row['id'] ? Qar::find()->andWhere(["id" => $row['id'], "status" => Qar::STATUS_COMPLETED])->count() : '' ?></td>

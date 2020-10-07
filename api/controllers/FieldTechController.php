@@ -44,7 +44,6 @@ class FieldTechController extends Controller
                             'allow' => true,
                             'roles' => [
                                 User::ROLE_FIELD_TECH,
-                                User::ROLE_FIELD_FARMER,
                                 User::ROLE_FIELD_BUYER
                             ],
                         ],
@@ -52,16 +51,6 @@ class FieldTechController extends Controller
                     ],
                 ],
             ]);
-    }
-
-
-    public function actions()
-    {
-        $actions = parent::actions();
-        //  $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-        unset($actions['index']);
-        unset($actions['view']);
-        return $actions;
     }
 
 
