@@ -50,7 +50,7 @@ class UserController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'change-password' => ['POST'],
-                        'save-token' => ['POST'],
+                        'save-token' => ['PATCH'],
                         'login' => ['POST'],
                     ],
                 ],
@@ -148,7 +148,7 @@ class UserController extends Controller
 
         $user = \api\models\User::findOne(Yii::$app->getUser()->getId());
 
-        if (!isset($data['token']) || empty($data['token'])) {
+        if (!array_key_exists("token",$data)) {
             array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Please provide token"));
         }
 
