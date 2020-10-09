@@ -301,7 +301,7 @@ class UserController extends Controller
         $filter['last_name'] ? $query->andFilterWhere(['like', 'last_name' , $filter['last_name']]) : null;
         $filter['role'] ? $query->andFilterWhere(['role' => $filter['role']]) : null;
         $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
-        $filter['company_id'] ? $query->andFilterWhere(['status' => $filter['company_id']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
 
         $data = $query->asArray()->all();
@@ -359,7 +359,7 @@ class UserController extends Controller
         $filter['last_name'] ? $query->andFilterWhere(['like', 'last_name' , $filter['last_name']]) : null;
         $filter['role'] ? $query->andFilterWhere(['role' => $filter['role']]) : null;
         $filter['status'] ? $query->andFilterWhere(['status' => $filter['status']]) : null;
-        $filter['company_id'] ? $query->andFilterWhere(['status' => $filter['company_id']]) : null;
+        $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
 
 

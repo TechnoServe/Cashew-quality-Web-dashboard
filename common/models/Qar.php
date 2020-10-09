@@ -11,8 +11,9 @@ use Yii;
  * @property int|null $buyer
  * @property int|null $field_tech
  * @property int $initiator
- * @property int $site
-* @property int $status
+ * @property string $site_name
+ * @property string $site_location
+ * @property int $status
  * @property string|null $audit_quantity
  * @property string $created_at
  * @property string $updated_at
@@ -40,9 +41,11 @@ class Qar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['buyer', 'field_tech', 'initiator', 'site', 'status'], 'integer'],
+            [['buyer', 'field_tech', 'initiator', 'status'], 'integer'],
+            [['site_name'], 'string', 'max' => 255],
+            [['site_location'], 'string'],
             [['number_of_bags','volume_of_stock'], 'number'],
-            [['initiator', 'site', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
+            [['initiator','site_name', 'site_location', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
             [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags', 'reminder1', 'reminder2'], 'safe'],
             [['buyer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['buyer' => 'id']],
             [['field_tech'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['field_tech' => 'id']],
@@ -59,7 +62,8 @@ class Qar extends \yii\db\ActiveRecord
             'buyer' => Yii::t('app', 'Buyer'),
             'field_tech' => Yii::t('app', 'Field Tech'),
             'initiator' => Yii::t('app', 'Initiator'),
-            'site' => Yii::t('app', 'Site'),
+            'site_name' => Yii::t('app', 'Site Name'),
+            'site_location' => Yii::t('app', 'Site Location'),
             'volume_of_stock' => Yii::t('app', 'Estimated Volume of Stock (KG)'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),

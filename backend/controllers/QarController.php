@@ -72,8 +72,8 @@ class QarController extends Controller
 
         $searchModel = new QarSearch();
 
-        if($site)
-            $searchModel->site = $site;
+        // if($site)
+        //     $searchModel->site = $site;
 
         if($status)
             $searchModel->status = $status;
@@ -273,7 +273,8 @@ class QarController extends Controller
         $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
         $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
         $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
-        $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
+        $filter['site_name'] ? $query->andFilterWhere(['like', 'site_name',  $filter['site_name']]) : null;
+        $filter['site_location'] ? $query->andFilterWhere(['like', 'site_location', $filter['site_location']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
         $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 
@@ -288,7 +289,8 @@ class QarController extends Controller
             Yii::t('app', 'Buyer'),
             Yii::t('app', 'Field Tech'),
             Yii::t('app', 'Initiator'),
-            Yii::t('app', 'Site'),
+            Yii::t('app', 'Site Name'),
+            Yii::t('app', 'Site Location'),
             Yii::t('app', 'Estimated Volume of bags'),
             Yii::t('app', 'Estimated Volume of Stock (KG)'),
             Yii::t('app', 'Deadline'),
@@ -302,7 +304,8 @@ class QarController extends Controller
                 $row['buyer'] ? User::findOne($row['buyer'])->getFullName() : '',
                 $row['field_tech'] ? User::findOne($row['field_tech'])->getFullName() : '',
                 $row['initiator'] ? Qar::getInitiatorByIndex($row['initiator']) : '',
-                $row['site'] ? Site::findOne($row['site'])->site_name : '',
+                $row['site_name'],
+                $row['site_location'],
                 $row['number_of_bags'],
                 $row['volume_of_stock'],
                 $row['deadline'],
@@ -327,7 +330,8 @@ class QarController extends Controller
         $filter['buyer'] ? $query->andWhere(['buyer' => $filter['buyer']]) : null;
         $filter['field_tech'] ? $query->andWhere(['field_tech' => $filter['field_tech']]) : null;
         $filter['initiator'] ? $query->andWhere(['initiator' => $filter['initiator']]) : null;
-        $filter['site'] ? $query->andWhere(['site' => $filter['site']]) : null;
+        $filter['site_name'] ? $query->andWhere(['like', 'site_name', $filter['site_name']]) : null;
+        $filter['site_location'] ? $query->andWhere(['like', 'site_location', $filter['site_location']]) : null;
         $filter['status'] ? $query->andWhere(['status' => $filter['status']]) : null;
         $filter['company_id'] ? $query->andFilterWhere(['company_id' => $filter['company_id']]) : null;
 

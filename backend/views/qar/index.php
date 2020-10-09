@@ -49,7 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buyer' => $searchModel['buyer'],
                             'field_tech' => $searchModel['field_tech'],
                             'initiator' => $searchModel['initiator'],
-                            'site' => $searchModel['site'],
+                            'site_name' => $searchModel['site_name'],
+                            'site_location' => $searchModel['site_location'],
                             'status' => $searchModel['status'],
                             'company_id' => $searchModel['company_id']
                         ],
@@ -71,7 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buyer' => $searchModel['buyer'],
                             'field_tech' => $searchModel['field_tech'],
                             'initiator' => $searchModel['initiator'],
-                            'site' => $searchModel['site'],
+                            'site_name' => $searchModel['site_name'],
+                            'site_location' => $searchModel['site_location'],
                             'status' => $searchModel['status'],
                             'company_id' => $searchModel['company_id']
                         ],

@@ -37,9 +37,8 @@ use backend\models\User;
         <div class="col-md-6">
             <?= $form->field($model, 'initiator')->dropDownList(\backend\models\Qar::getInitiatorDropDownValues(), ["prompt" => Yii::t("app", "Select initiator")]) ?>
         </div>
-
         <div class="col-md-6">
-            <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site', "site_id",  Yii::t('app', 'Select site'))) ?>
+            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date", null, null, date("Y-m-d", strtotime("now")), null)) ?>
         </div>
     </div>
 
@@ -56,7 +55,10 @@ use backend\models\User;
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'deadline')->widget(DatePicker::className(), CashewAppHtmlHelper::getDatePickerWidgetValues("due_date", "date", null, null, date("Y-m-d", strtotime("now")), null)) ?>
+            <?= $form->field($model, 'site_name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'site_location')->textarea(['rows' => 6]) ?>
         </div>
     </div>
 

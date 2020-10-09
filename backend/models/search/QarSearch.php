@@ -20,8 +20,8 @@ class QarSearch extends Qar
     public function rules()
     {
         return [
-            [['id', 'buyer', 'field_tech', 'initiator', 'site'], 'integer'],
-            [['audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end', 'status', 'company_id'], 'safe'],
+            [['id', 'buyer', 'field_tech', 'initiator'], 'integer'],
+            [['site_name', 'site_location', 'audit_quantity', 'created_at', 'updated_at', 'created_at_start', 'created_at_end', 'status', 'company_id'], 'safe'],
         ];
     }
 
@@ -66,11 +66,12 @@ class QarSearch extends Qar
             'buyer' => $this->buyer,
             'field_tech' => $this->field_tech,
             'initiator' => $this->initiator,
-            'site' => $this->site,
             'company_id' => $this->company_id,
             'status' => $this->status,
         ]);
 
+        $query->andFilterWhere(['like', 'site_name', $this->site_name])
+            ->andFilterWhere(['like', 'site_location', $this->site_location]);
 
         if ($this->created_at_start) {
             $query->andWhere([

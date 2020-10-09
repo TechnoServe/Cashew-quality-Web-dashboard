@@ -48,15 +48,20 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'site')->widget(Select2::className(), Site::getSiteSelectWidgetValues('site', "site_id",  Yii::t('app', 'All'))) ?>
+            <?= $form->field($model, 'status')->dropDownList(\backend\models\Qar::getStatusDropDownValues(), ["prompt" => Yii::t("app", "All")]) ?>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'status')->dropDownList(\backend\models\Qar::getStatusDropDownValues(), ["prompt" => Yii::t("app", "All")]) ?>
+            <?= $form->field($model, 'site_name') ?>
         </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'site_location') ?>
+        </div>
+    </div>
 
+    <div class="row">
         <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_ADMIN_VIEW) : ?>
             <div class="col-md-6">
                 <?= $form->field($model, 'company_id')->widget(Select2::className(), Company::getCompaniesSelectWidgetValues('company', "company_id",  Yii::t('app', 'All'))) ?>

@@ -143,7 +143,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Qar::getInitiatorByIndex($model->initiator);
                     },
                 ],
-
+                'site_name',
+                'site_location:ntext',
                 'number_of_bags',
                 'volume_of_stock',
                 'deadline',
@@ -153,6 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </div>
 
+    <?php /*
     <div class="panel-heading">
         <h3 class="panel-title">
             <?php $site = \backend\models\Site::findOne($model->site)?>
@@ -163,6 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-body">
         <?= $this->render('../sites/_view_site', ['model' => $site]); ?>
     </div>
+    */ ?>
 
 </div>
 

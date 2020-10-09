@@ -12,7 +12,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
 ?>
 <div class="site-index">
 
-    <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'country_code' => $country_code , 'url' => "/"]) ?>
+    <?= AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'country_code' => $country_code, 'url' => "/"]) ?>
 
     <div class="panel">
         <div class="panel-heading bg-primary">
@@ -68,6 +68,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
         </div>
     </div>
 
+    <?php /*
     <div class="panel">
         <div class="panel-heading bg-primary">
             <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and province') ?></h4>
@@ -91,6 +92,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
             ]); ?>
         </div>
     </div>
+    */ ?>
 
     <div class="panel">
         <div class="panel-heading bg-primary">

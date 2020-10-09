@@ -46,7 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'first_name' => $searchModel['first_name'],
                             'last_name' => $searchModel['last_name'],
                             'role' => $searchModel['role'],
-                            'status' => $searchModel['status']
+                            'status' => $searchModel['status'],
+                            'company_id' => $searchModel['company_id']
                         ],
                     ],
                     'class' => 'btn btn-mint'

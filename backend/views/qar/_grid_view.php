@@ -44,14 +44,8 @@ use yii\helpers\Html;
                 return null;
             },
         ],
-        [
-            'attribute' => 'site',
-            'value' => function ($model) {
-                $site = Site::findOne($model->site);
-
-                return $site->site_name." ".$site->site_location;
-            },
-        ],
+        'site_name',
+        'site_location:ntext',
         'number_of_bags',
         'created_at',
 

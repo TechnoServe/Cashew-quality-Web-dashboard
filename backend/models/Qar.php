@@ -212,8 +212,8 @@ class Qar extends \common\models\Qar
 
 
         //validate site
-        if(!Site::queryByCompany()->andWhere(["id"=>$this->site])->exists())
-            $this->site = null;
+        // if(!Site::queryByCompany()->andWhere(["id"=>$this->site])->exists())
+        //     $this->site = null;
 
         // If user is not an institution admin
         if ($currentUser->role != User::ROLE_ADMIN && $currentUser->role != User::ROLE_ADMIN_VIEW) {

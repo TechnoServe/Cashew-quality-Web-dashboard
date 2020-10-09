@@ -91,7 +91,7 @@ class SiteController extends Controller
         $qarsCanceled = Qar::queryByCompany()->andWhere(["status" => Qar::STATUS_CANCELED])->count();
 
         // Sites
-        $totalSites = Site::queryByCompany()->count();
+        // $totalSites = Site::queryByCompany()->count();
 
         // Users
         $totalUsers = User::queryByCompany()->andWhere(["status" => User::STATUS_ACTIVE])->count();
@@ -114,8 +114,8 @@ class SiteController extends Controller
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
         }
 
-        $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
-        $korLocations = SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code);
+        // $siteSeries = SiteHelper::getSitesChart($startDate, $endDate, null, $country_code);
+        // $korLocations = SiteHelper::getSitesKorWithLocationChart($startDate, $endDate, null, $country_code);
 
         $userSeries = SiteHelper::getUsersChart($period);
 
@@ -124,7 +124,7 @@ class SiteController extends Controller
             'qarsToBeDone' => $qarsToBeDone,
             'qarsCompleted' => $qarsCompleted,
             'qarsCanceled' => $qarsCanceled,
-            'totalSites' => $totalSites,
+            // 'totalSites' => $totalSites,
             'totalUsers' => $totalUsers,
             'totalFieldTech' => $totalFieldTech,
             'totalBuyer' => $totalBuyer,
@@ -134,8 +134,8 @@ class SiteController extends Controller
             'categories' => $categories,
             'qarSeries' => $qarSeries,
             'qarPieSeries' => $qarPieSeries,
-            'siteSeries' => $siteSeries,
-            'korLocations' => $korLocations,
+            // 'siteSeries' => $siteSeries,
+            // 'korLocations' => $korLocations,
             'country_code'=> $country_code,
             'userSeries' => $userSeries
         ]);
