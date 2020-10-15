@@ -45,7 +45,7 @@ class Qar extends \yii\db\ActiveRecord
             [['site_name'], 'string', 'max' => 255],
             [['site_location'], 'string'],
             [['number_of_bags','volume_of_stock'], 'number'],
-            [['initiator','site_name', 'site_location', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock'], 'required'],
+            [['initiator','site_name', 'site_location', 'buyer', 'field_tech', 'number_of_bags', 'volume_of_stock', 'deadline'], 'required'],
             [['created_at', 'updated_at', 'company_id', 'deadline', 'status', 'number_of_bags', 'reminder1', 'reminder2'], 'safe'],
             [['buyer'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['buyer' => 'id']],
             [['field_tech'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['field_tech' => 'id']],

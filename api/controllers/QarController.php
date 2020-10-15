@@ -5,7 +5,6 @@ namespace api\controllers;
 use api\components\ApiError;
 use api\components\ApiResponse;
 use backend\models\Qar;
-use backend\models\Site;
 use backend\models\Company;
 use common\models\QarDetail;
 use backend\models\User;
@@ -119,16 +118,19 @@ class QarController extends ActiveController
         }
 
         // Initiate search query
-        $query = Qar::queryByCompany()->leftJoin(Site::tableName(), 'qar.site = site.id')
-            ->select(['qar.id', 'qar.buyer', 'qar.field_tech', 'qar.initiator', 'site.id as site_id', 'site.site_name', 'qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline', 'qar.status', 'qar.created_at', 'qar.updated_at'])
+        $query = Qar::queryByCompany()
+            ->select(['qar.id', 'qar.buyer', 'qar.field_tech', 'qar.initiator', 'qar.site_name', 'qar.site_location', 'qar.number_of_bags', 'qar.volume_of_stock', 'qar.deadline', 'qar.status', 'qar.created_at', 'qar.updated_at'])
             ->andFilterWhere(['in', 'qar.buyer', $buyers])
             ->andFilterWhere(['in', 'qar.field_tech', $field_techs]);
 
+
         if (isset($filter['site_name']))
-            $query->andFilterWhere(['like', 'site.site_name', $filter['site_name']]);
+            $query->andFilterWhere(['like', 'qar.site_name', $filter['site_name']]);
+
+        if (isset($filter['site_location']))
+            $query->andFilterWhere(['like', 'qar.site_location', $filter['site_location']]);
 
         return new ApiResponse($query->asArray()->all(), null, true);
-
     }
 
 
@@ -202,18 +204,6 @@ class QarController extends ActiveController
         $qar->initiator = $initiator;
 
 
-        if (isset($data['site']) && !empty($data['site'])) {
-            $site_exist = Site::queryByCompany()->andWhere(["id" => $data['site']])->exists();
-            if ($site_exist) {
-                $qar->site = $data['site'];
-            } else {
-                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Site is invalid"));
-            }
-        } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Site is empty"));
-        }
-
-
         //$dateValidator = new DateValidator();
         if (!isset($data['deadline']) || empty(trim($data['deadline']))) {
             array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide deadline"));
@@ -249,6 +239,18 @@ class QarController extends ActiveController
             }
         }
 
+        if (!isset($data['site_name']) && !empty($data['site_name'])) {
+            $qar->site_name = $data['site_name'];
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "site_name has to be provided"));
+        }
+
+        if (!isset($data['site_location']) && !empty($data['site_location'])) {
+            $qar->site_location = $data['site_location'];
+        } else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "site_location has to be provided"));
+        }
+
         // If validation
         if (!empty($errors)) {
             Yii::$app->response->statusCode = 400;
@@ -263,7 +265,6 @@ class QarController extends ActiveController
         $qar = $qar->toArray();
         $qar["buyer"] = \api\models\User::findOne($qar["buyer"]);
         $qar["field_tech"] = \api\models\User::findOne($qar["field_tech"]);
-        $qar["site"] = Site::findOne($qar["site"]);
         $qar["company_id"] = Company::findOne($qar["company_id"])->name;
 
         return new ApiResponse($qar, null, true);

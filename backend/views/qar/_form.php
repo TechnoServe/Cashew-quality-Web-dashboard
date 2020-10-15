@@ -1,17 +1,13 @@
 <?php
-
-use backend\models\Site;
 use common\helpers\CashewAppHtmlHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use backend\models\User;
-
 /* @var $this yii\web\View */
 /* @var $model backend\models\Qar */
 /* @var $form yii\widgets\ActiveForm */
-
 ?>
 
 <div class="qar-form">
@@ -58,14 +54,12 @@ use backend\models\User;
             <?= $form->field($model, 'site_name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'site_location')->textarea(['rows' => 6]) ?>
+            <?= $form->field($model, 'site_location')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
-
 </div>

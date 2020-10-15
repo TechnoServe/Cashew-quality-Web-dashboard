@@ -34,12 +34,12 @@ class SitesController extends Controller
                 'rules' => [
                     [
                         'actions' => ['index','view', 'export-csv', 'export-pdf'],
-                        'allow' => true,
+                        'allow' => false,
                         'roles' => [User::ROLE_INSTITUTION_ADMIN, User::ROLE_ADMIN, User::ROLE_ADMIN_VIEW],
                     ],
 
                     [
-                        'allow' => true,
+                        'allow' => false,
                         'roles' => [User::ROLE_INSTITUTION_ADMIN],
                     ],
                 ],

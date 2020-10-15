@@ -10,7 +10,6 @@ use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
-use backend\models\Company;
 
 class SitesController extends Controller
 {
@@ -42,7 +41,8 @@ class SitesController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'allow' => true,
+                            // This functionality has been removed, but we don't want throw it out yet
+                            'allow' => false,
                             'roles' => [
                                 User::ROLE_FIELD_TECH,
                                 User::ROLE_FIELD_BUYER

@@ -1,7 +1,6 @@
 <?php
 
 use backend\models\Company;
-use backend\models\Site;
 use backend\models\User;
 use common\helpers\CashewAppHtmlHelper;
 use kartik\date\DatePicker;
