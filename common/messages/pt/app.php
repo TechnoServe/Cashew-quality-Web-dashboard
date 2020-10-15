@@ -385,4 +385,6 @@ return [
     'User details' => 'Detalhes do usuario',
     'User-Equipments management' => 'Gerenciamento de usuários-equipamentos',
     'Users management' => 'Gestão de usuários',
+    'Only Institution admin is allowed to perform this action'=>'Apenas o administrador da instituição tem permissão para realizar esta ação'
+
 ];

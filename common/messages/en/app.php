@@ -9,7 +9,7 @@
  * Each array element represents the translation (value) of a message (key).
  * If the value is empty, the message is considered as not translated.
  * Messages that no longer need translation will have their translations
- * enclosed between a pair of '@@' marks.
+ * enclosed between a pair of '' marks.
  *
  * Message string can be used with plural forms format. Check i18n section
  * of the guide for details.
@@ -366,22 +366,23 @@ return [
     'deadline must be greater or equal to today' => '',
     'password' => '',
     'results found for' => '',
-    'Audit Quantity' => '@@@@',
-    'Forgot your password ? ' => '@@@@',
-    'Management' => '@@@@',
-    'Qar number {number} has also passed it\'s deadline. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been canceled. it was on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been completed. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been created. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been created. it will be on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been deleted. it was on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been updated to progress. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} is close to its deadline. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Qar number {number} which was canceled has been restored. it is on site {site}, and it is due on {duedate}' => '@@@@',
-    'Reports' => '@@@@',
-    'Settings' => '@@@@',
-    'Sites management' => '@@@@',
-    'User-Equipments management' => '@@@@',
-    'Users management' => '@@@@',
+    'Audit Quantity' => '',
+    'Forgot your password ? ' => '',
+    'Management' => '',
+    'Qar number {number} has also passed it\'s deadline. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been canceled. it was on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been completed. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been created. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been created. it will be on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been deleted. it was on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been updated to progress. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} has been updated. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} is close to its deadline. it is on site {site}, and it is due on {duedate}' => '',
+    'Qar number {number} which was canceled has been restored. it is on site {site}, and it is due on {duedate}' => '',
+    'Reports' => '',
+    'Settings' => '',
+    'Sites management' => '',
+    'User-Equipments management' => '',
+    'Users management' => '',
+    'Only Institution admin is allowed to perform this action' =>''
 ];

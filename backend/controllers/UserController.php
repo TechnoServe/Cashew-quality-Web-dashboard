@@ -16,6 +16,7 @@ use InvalidArgumentException;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
@@ -171,6 +172,11 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
+        $role = Yii::$app->user->identity->role;
+        if($role == User::ROLE_ADMIN && ($model->role == User::ROLE_FIELD_TECH || $model->role == User::ROLE_FIELD_BUYER)){
+            throw new ForbiddenHttpException(Yii::t("app", "Only Institution admin is allowed to perform this action"));
+        }
+
         if ($model->load(Yii::$app->request->post())) {
             
             if(!empty($model->pass)){
@@ -205,6 +211,11 @@ class UserController extends Controller
 
         $model = $this->findModel($id);
 
+        $role = Yii::$app->user->getIdentity()->role;
+        if($role == User::ROLE_ADMIN && ($model->role == User::ROLE_FIELD_TECH || $model->role == User::ROLE_FIELD_BUYER)){
+            throw new ForbiddenHttpException(Yii::t("app", "Only Institution admin is allowed to perform this action"));
+        }
+
         $associatedQars = Qar::find()->where(["or", ["buyer" => $model->id], ["field_tech" => $model->id], ["buyer" => $model->id],])->exists();
 
         if($associatedQars){
@@ -231,6 +242,11 @@ class UserController extends Controller
 
         $model = $this->findModel($id);
 
+        $role = Yii::$app->user->getIdentity()->role;
+        if($role == User::ROLE_ADMIN && ($model->role == User::ROLE_FIELD_TECH || $model->role == User::ROLE_FIELD_BUYER)){
+            throw new ForbiddenHttpException(Yii::t("app", "Only Institution admin is allowed to perform this action"));
+        }
+
         if ($model->id == Yii::$app->user->getId()) {
             Yii::$app->session->setFlash("danger", Yii::t("app", "You can not deactivate your own account"));
             return $this->redirect(["user/view", "id" => $model->id]);
@@ -256,6 +272,11 @@ class UserController extends Controller
     public function actionReactivate($id)
     {
         $model = $this->findModel($id);
+
+        $role = Yii::$app->user->getIdentity()->role;
+        if($role == User::ROLE_ADMIN && ($model->role == User::ROLE_FIELD_TECH || $model->role == User::ROLE_FIELD_BUYER)){
+            throw new ForbiddenHttpException(Yii::t("app", "Only Institution admin is allowed to perform this action"));
+        }
 
         if ($model->status == User::STATUS_ACTIVE) {
             Yii::$app->session->setFlash("danger", Yii::t("app", "User account already active"));
