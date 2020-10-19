@@ -8,7 +8,6 @@ use backend\models\UserEquipment;
 use backend\models\User;
 use Yii;
 use yii\rest\ActiveController;
-use yii\filters\auth\QueryParamAuth;
 use yii\filters\auth\HttpBasicAuth;
 
 class UserEquipmentController extends ActiveController
@@ -46,20 +45,9 @@ class UserEquipmentController extends ActiveController
 
         $equipment = new UserEquipment();
 
+        $equipment->id_user = Yii::$app->user->getId();
+
         $errors = [];
-        if (isset($data['id_user']) && !empty($data['id_user'])) {
-            $userExists = User::queryByCompany()->andWhere([
-                "role" => User::ROLE_FIELD_TECH,
-                "id" => $data['id_user']
-            ])->exists();
-            if ($userExists) {
-                $equipment->id_user = $data['id_user'];
-            } else {
-                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Field Tech is invalid"));
-            }
-        } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Field Tech is empty"));
-        }
 
         if (isset($data['brand']) && !empty($data['brand'])) {
             $equipment->brand = $data['brand'];
@@ -89,16 +77,16 @@ class UserEquipmentController extends ActiveController
             }
         }
 
+        if(isset($data['image']) && !empty($data['image'])){
+            if(!isset($data['image']['filename']) || empty($data['image']['filename']) || !preg_match("([^\\s]+(\\.(?i)(gif|jpg|png))$)", $data['image']['filename'])){
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide valid filename"));
+            }
 
-        
-
-        $filename = Yii::getAlias("@backend") . "/web/uploads/equipments/" . $data['image']['filename'];
-        $equipment->image = $this->base64_to_jpeg($data['image']['content'], $filename);
-
-        if (isset($data['image']) && !empty($data['image'])) {
-            $equipment->image = $data['image'];
-        } else {
-            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Image is required"));
+            if(!isset($data['image']['content']) || empty($data['image']['content'])){
+                array_push($errors, new ApiError(ApiError::INVALID_DATA, "Please provide valid file content"));
+            }
+        }else {
+            array_push($errors, new ApiError(ApiError::EMPTY_DATA, "Equipment image should be sent"));
         }
 
         if (!empty($errors)) {
@@ -106,11 +94,16 @@ class UserEquipmentController extends ActiveController
             return new ApiResponse(null, $errors, false);
         }
 
-        // if(!$equipment->save()){
-        //     return $equipment->getErrors();
-        // }
+        $fileRandomBaseName = uniqid('equipment_').'_'.date('Y_m_d-H_i_s', time()). "." . explode(".", $data["image"]["filename"])[1];
+        $filename = Yii::getAlias("@backend") . "/web/uploads/equipments/" . $fileRandomBaseName;
 
-        $equipment->save();
+        $this->base64_to_jpeg($data['image']['content'], $filename);
+
+        $equipment->picture = $fileRandomBaseName;
+
+        if(!$equipment->save(false)){
+             return $equipment->getErrors();
+        }
 
         $equipment = $equipment->toArray();
         $equipment["id_user"] = ModelsUser::findOne($equipment["id_user"]);
