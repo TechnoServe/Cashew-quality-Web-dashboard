@@ -162,7 +162,7 @@ use yii\helpers\Url;
 
                             <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
 
-                            <?= CashewAppHtmlHelper::showMenuContent('province', 'pli-location-2', Yii::t('app', 'Provinces')) ?>
+                            <!-- <?= CashewAppHtmlHelper::showMenuContent('province', 'pli-location-2', Yii::t('app', 'Provinces')) ?> -->
 
                         <?php endif; ?>
 
