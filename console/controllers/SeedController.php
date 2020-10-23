@@ -1,7 +1,7 @@
 <?php
 namespace console\controllers;
 
-use backend\models\User;
+use common\models\User;
 use yii\base\Exception;
 
 class SeedController extends \yii\console\Controller
