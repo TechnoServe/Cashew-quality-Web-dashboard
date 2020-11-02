@@ -322,17 +322,18 @@ class FirestoreHelper
 
             $location_array = [];
 
+
             try {
-                if(isset($good_kernel[0]["location"])){
+                if (isset($good_kernel[0]["location"])) {
                     $locationData = $good_kernel[0]["location"]->getData();
-                    $location_array =$locationData[0];
+                    $address = $locationData[0]["address"]->getData()[0];
+                    $coords = $locationData[0]["coords"]->getData()[0];
+                    $location_array = array_merge($address, $coords);
+
                 }
-            } catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 Yii::error("Could not fetch location data");
             }
-
-
-
 
             if(!empty($location_array)){
 
@@ -342,6 +343,13 @@ class FirestoreHelper
                     $result->location_accuracy = $location_array["accuracy"];
                     $result->location_lat = $location_array["latitude"];
                     $result->location_lon = $location_array["longitude"];
+                    $result->location_country = $location_array["country"];
+                    $result->location_country_code = $location_array["isoCountryCode"];
+                    $result->location_city = $location_array["city"];
+                    $result->location_region = $location_array["region"];
+                    $result->location_sub_region = $location_array["subregion"];
+                    $result->location_district = $location_array["district"];
+                    $result->location_street = $location_array["street"];
                     if(!$result->save(false)){
                         Yii::error($result->getErrors());
                     }

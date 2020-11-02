@@ -128,6 +128,12 @@ class FreeController extends Controller
             Yii::t('app', '[Location] Latitude'),
             Yii::t('app', '[Location] Longitude'),
             Yii::t('app', '[Location] Accuracy'),
+            Yii::t('app', '[Location] Country'),
+            Yii::t('app', '[Location] City'),
+            Yii::t('app', '[Location] Region'),
+            Yii::t('app', '[Location] Sub Region'),
+            Yii::t('app', '[Location] District'),
+            Yii::t('app', '[Location] Street'),
             Yii::t('app', 'Audit completed at')
         ]);
 
@@ -166,6 +172,12 @@ class FreeController extends Controller
                 $result['location_lat'],
                 $result['location_lon'],
                 $result['location_accuracy'],
+                $result['location_country'],
+                $result['location_city'],
+                $result['location_region'],
+                $result['location_sub_region'],
+                $result['location_district'],
+                $result['location_street'],
                 $result['created_at'],
             ]);
         }

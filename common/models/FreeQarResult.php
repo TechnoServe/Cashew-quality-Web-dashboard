@@ -22,6 +22,13 @@ use Yii;
  * @property integer|null $location_altitude
  * @property float|null $location_lat
  * @property float|null $location_lon
+ * @property float|null $location_country
+ * @property float|null $location_country_code
+ * @property float|null $location_city
+ * @property float|null $location_region
+ * @property float|null $location_sub_region
+ * @property float|null $location_district
+ * @property float|null $location_street
  */
 class FreeQarResult extends \yii\db\ActiveRecord
 {
@@ -41,7 +48,15 @@ class FreeQarResult extends \yii\db\ActiveRecord
         return [
             [['document_id'], 'required'],
             [['kor', 'defective_rate', 'foreign_material_rate', 'moisture_content', 'nut_count', 'useful_kernel', 'total_volume_of_stock'], 'number'],
-            [['created_at', 'updated_at', 'location_accuracy', 'location_altitude', 'location_lat', 'location_lon'], 'safe'],
+            [['created_at', 'updated_at', 'location_accuracy', 'location_altitude', 'location_lat', 'location_lon',
+                'location_country',
+                'location_country_code',
+                'location_city',
+                'location_region',
+                'location_sub_region',
+                'location_district',
+                'location_street',
+            ], 'safe'],
             [['document_id', 'qar'], 'string', 'max' => 255],
             [['document_id'], 'unique'],
         ];

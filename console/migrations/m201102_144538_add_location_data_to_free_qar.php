@@ -12,7 +12,13 @@ class m201102_144538_add_location_data_to_free_qar extends Migration
      */
     public function safeUp()
     {
-
+        $this->addColumn("free_qar_result", "location_country", $this->string(128)->null()->after("location_lon"));
+        $this->addColumn("free_qar_result", "location_country_code", $this->string(128)->null()->after("location_country"));
+        $this->addColumn("free_qar_result", "location_city", $this->string(128)->null()->after("location_country_code"));
+        $this->addColumn("free_qar_result", "location_region", $this->string(128)->null()->after("location_city"));
+        $this->addColumn("free_qar_result", "location_sub_region", $this->string(128)->null()->after("location_region"));
+        $this->addColumn("free_qar_result", "location_district", $this->string(128)->null()->after("location_sub_region"));
+        $this->addColumn("free_qar_result", "location_street", $this->string(128)->null()->after("location_district"));
     }
 
     /**
