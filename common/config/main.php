@@ -49,7 +49,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
                 'username' => 'cashewnuts.wiredin.test@gmail.com',
-                'password' => 'CashewNutsWiredin',
+                'password' => 'CashewNutsWiredin2',
                 'port' => '587',
                 'encryption' => 'tls',
             ],
