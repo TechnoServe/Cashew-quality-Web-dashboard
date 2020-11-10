@@ -286,10 +286,7 @@ class QarController extends ActiveController
             Qar::FIELD_IMMATURE_KERNEL,
             Qar::FIELD_OILY_KERNEL,
             Qar::FIELD_BAD_KERNEL,
-            Qar::FIELD_VOID_KERNEL,
-            Qar::FIELD_NUMBER_OF_BAGS_SAMPLED,
-            Qar::FIELD_TOTAL_NUMBER_OF_BAGS,
-            Qar::FIELD_VOLUME_TOTAL_STOCK,
+            Qar::FIELD_VOID_KERNEL
         ];
 
 
@@ -314,10 +311,70 @@ class QarController extends ActiveController
 
                 if (is_numeric($datum['sample_number'])) {
 
+                    // Retrieve lot info
+                    $lot_info = $datum['lot_info'];
+
+                    // Save total number of bags
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_TOTAL_NUMBER_OF_BAGS])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if(!$qar_detail){
+                        $qar_detail = new QarDetail();
+                        $qar_detail->key = Qar::FIELD_TOTAL_NUMBER_OF_BAGS;
+                        $qar_detail->sample_number = $datum['sample_number'];
+                        $qar_detail->id_qar = $id_qar;
+                        $qar_detail->result = 0;
+                    }
+
+                    if(isset($lot_info["count_bags"]) && is_int($lot_info["count_bags"])) {
+                        $qar_detail->value = $lot_info["count_bags"];
+                    }else{
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_TOTAL_NUMBER_OF_BAGS . " is not valid"));
+                    }
+
+                    $qar_detail->save(false);
+
+
+                    // Save number of bags sampled
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_NUMBER_OF_BAGS_SAMPLED])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if(!$qar_detail){
+                        $qar_detail = new QarDetail();
+                        $qar_detail->key = Qar::FIELD_NUMBER_OF_BAGS_SAMPLED;
+                        $qar_detail->sample_number = $datum['sample_number'];
+                        $qar_detail->id_qar = $id_qar;
+                        $qar_detail->result = 0;
+                    }
+
+
+                    if(isset($lot_info["count_sampled_bags"]) && is_int($lot_info["count_sampled_bags"])) {
+                        $qar_detail->value = $lot_info["count_sampled_bags"];
+                    }else{
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_NUMBER_OF_BAGS_SAMPLED . " is not valid"));
+                    }
+
+                    $qar_detail->save(false);
+
+                    // Save number of bags sampled
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_VOLUME_TOTAL_STOCK])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if(!$qar_detail){
+                        $qar_detail = new QarDetail();
+                        $qar_detail->key = Qar::FIELD_VOLUME_TOTAL_STOCK;
+                        $qar_detail->sample_number = $datum['sample_number'];
+                        $qar_detail->id_qar = $id_qar;
+                        $qar_detail->result = 0;
+                    }
+
+
+                    if(isset($lot_info["stock_volume"]) && is_int($lot_info["stock_volume"])) {
+                        $qar_detail->value = $lot_info["stock_volume"];
+                    }else{
+                        array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_VOLUME_TOTAL_STOCK . " is not valid"));
+                    }
+
+                    $qar_detail->save(false);
+
+
                     foreach ($datum as $key => $value) {
 
                         if (in_array($key, $data_keys)) {
-
                             // Initiate QAR detail
                             $qar_detail = QarDetail::find()->where(["key" => $key])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
                             if(!$qar_detail){
@@ -328,27 +385,19 @@ class QarController extends ActiveController
                                 $qar_detail->result = 0;
                             }
 
-                            if ($this->isObjectVariableSetAndNotNull($value, 'value')) {
-                                if (!is_numeric($value['value'])) {
+                            if ($this->isObjectVariableSetAndNotNull($value, 'with_shell')) {
+                                if (!is_numeric($value['with_shell'])) {
                                     array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
                                 } else {
-                                    $qar_detail->value = (float)$value['value'];
+                                    $qar_detail->value_with_shell = (float)$value['with_shell'];
                                 }
                             }
 
-                            if ($this->isObjectVariableSetAndNotNull($value, 'value_with_shell')) {
-                                if (!is_numeric($value['value_with_shell'])) {
+                            if ($this->isObjectVariableSetAndNotNull($value, 'without_shell')) {
+                                if (!is_numeric($value['without_shell'])) {
                                     array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
                                 } else {
-                                    $qar_detail->value_with_shell = (float)$value['value_with_shell'];
-                                }
-                            }
-
-                            if ($this->isObjectVariableSetAndNotNull($value, 'value_without_shell')) {
-                                if (!is_numeric($value['value_without_shell'])) {
-                                    array_push($errors, new ApiError(ApiError::INVALID_DATA, $key . " is not valid"));
-                                } else {
-                                    $qar_detail->value_without_shell = (float)$value['value_without_shell'];
+                                    $qar_detail->value_without_shell = (float)$value['without_shell'];
                                 }
                             }
 

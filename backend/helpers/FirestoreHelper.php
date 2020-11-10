@@ -322,7 +322,6 @@ class FirestoreHelper
 
             $location_array = [];
 
-
             try {
                 if (isset($good_kernel[0]["location"])) {
                     $locationData = $good_kernel[0]["location"]->getData();
@@ -336,23 +335,24 @@ class FirestoreHelper
             }
 
             if(!empty($location_array)){
-
-                $result = FreeQarResult::find()->where(["qar"=>$qar_id])->one();
-
-                if($result){
-                    $result->location_accuracy = $location_array["accuracy"];
-                    $result->location_lat = $location_array["latitude"];
-                    $result->location_lon = $location_array["longitude"];
-                    $result->location_country = $location_array["country"];
-                    $result->location_country_code = $location_array["isoCountryCode"];
-                    $result->location_city = $location_array["city"];
-                    $result->location_region = $location_array["region"];
-                    $result->location_sub_region = $location_array["subregion"];
-                    $result->location_district = $location_array["district"];
-                    $result->location_street = $location_array["street"];
-                    if(!$result->save(false)){
-                        Yii::error($result->getErrors());
-                    }
+                try {
+                    Yii::$app->db->createCommand()
+                        ->update('free_qar_result', [
+                            'location_accuracy' => $location_array["accuracy"],
+                            'location_lat' => $location_array["latitude"],
+                            'location_lon' => $location_array["longitude"],
+                            'location_country' => $location_array["country"],
+                            'location_country_code' => $location_array["isoCountryCode"],
+                            'location_city' => $location_array["city"],
+                            'location_region' => $location_array["region"],
+                            'location_sub_region' => $location_array["subregion"],
+                            'location_district' => $location_array["district"],
+                            'location_street' => $location_array["street"],
+                        ], 'qar = \'' . $qar_id . '\'')
+                        ->execute();
+                } catch (\Exception $exception){
+                    var_dump($exception->getMessage());
+                    die();
                 }
             }
         }
