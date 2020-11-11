@@ -1,7 +1,11 @@
 <?php
 
 use backend\widgets\AnalyticsPeriodPicker;
+use common\helpers\CashewAppHtmlHelper;
+use common\helpers\CashewAppHelper;
+use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 
 $this->title = Yii::t('app', 'Free version data');
@@ -207,6 +211,46 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'series' => $qarSeries
             ]
+        ]); ?>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-heading bg-primary">
+        <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and region') ?></h4>
+    </div>
+    <div class="panel-body">
+        <div class="panel-body">
+            <h3 class="panel-title">
+                <span class="text-1x text-muted text-bold text-italic"> <?= Yii::t("app", "Choose a Country") ?></span>
+            </h3>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <form class="fomr-inline" method="get">
+                            <div class="form-group">
+                                <?= Select2::widget([
+                                    'name' => 'country_code',
+                                    'data' => CashewAppHelper::getListOfCountries('country_code', "country_code", Yii::t('app', 'Select Country')),
+                                    'options' => [
+                                        'placeholder' => 'Select Country'
+                                    ]
+                                ])
+                                ?>
+                            </div>
+                            <div class="form-group">
+                                <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="panel-body">
+        <?= $this->render('_free_map', [
+            'country_code' => $country_code,
+            'kor_locations' => $kor_locations
         ]); ?>
     </div>
 </div>

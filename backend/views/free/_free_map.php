@@ -196,7 +196,7 @@ $this->registerJs("
 
             tooltip: {
                 header: '',
-                pointFormat: '<b>{point.name}</b><br>Lat: {point.lat:.2f}, Lon: {point.lon:.2f}<br>".Yii::t("app", 'Average KOR').": <b>{point.kor:.2f}</b>'
+                pointFormat: 'Site: <b>{point.name}</b><br>Lat: <b>{point.lat:.2f}</b>, Lon: <b>{point.lon:.2f}</b><br>KOR: <b>{point.kor:.2f}</b>'
             },
 
             mapNavigation: {
@@ -271,7 +271,7 @@ $this->registerJs("
                 },
                 enableMouseTracking: true,
                 colorKey: 'clusterPointsAmount',
-                name: 'Sites',
+                name: 'KOR Average per site',
                 data: data,
                 marker: {
                     symbol: 'url(http://maps.google.com/mapfiles/ms/icons/red-dot.png)'

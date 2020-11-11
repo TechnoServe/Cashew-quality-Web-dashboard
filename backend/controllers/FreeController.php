@@ -63,7 +63,7 @@ class FreeController extends Controller
     /**
      * Default action
      */
-    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null){
+    public function actionIndex($startDate = null, $endDate = null, $predefinedPeriod = null, $country_code = null){
 
         list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
 
@@ -78,6 +78,14 @@ class FreeController extends Controller
         //If provided invalid date
         if(empty($datesPeriod))
             return $this->redirect(["free/index"]);
+
+        if(!$country_code && Yii::$app->language == "pt") {
+            $country_code = "MZ";
+        } else if(!$country_code) {
+            $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
+        }
+
+        $kor_locations = FreeQar::getKorsAndLocations($startDate, $endDate);
 
         return $this->render("index", [
             'lastSync' => Settings::findOne(FirestoreHelper::SYNC_TIME_SETTING),
@@ -97,6 +105,8 @@ class FreeController extends Controller
             'totalUsers' => FreeUser::countByPeriod($endDate),
             'totalQar' => FreeQar::countByPeriod($startDate, $endDate),
             'siteKorMarkers' =>FreeQar::getKorsAndSiteLocations($startDate, $endDate),
+            'country_code' => $country_code,
+            'kor_locations' => $kor_locations
         ]);
     }
 
