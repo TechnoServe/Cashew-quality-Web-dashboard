@@ -116,16 +116,11 @@ class FreeController extends Controller
             Yii::t('app', 'Buyer'),
             Yii::t('app', 'Field Tech'),
             Yii::t('app', 'Site'),
-            Yii::t('app', 'Status'),
             Yii::t('app', 'KOR'),
             Yii::t('app', 'Deffective rate'),
             Yii::t('app', 'Foreign material rate'),
             Yii::t('app', 'Moisture content'),
             Yii::t('app', 'Nut count'),
-            Yii::t('app', 'Useful kernel'),
-            Yii::t('app', 'Total volume of stock'),
-            Yii::t('app', '[Location] Altitude'),
-            Yii::t('app', '[Location] Latitude'),
             Yii::t('app', '[Location] Longitude'),
             Yii::t('app', '[Location] Accuracy'),
             Yii::t('app', '[Location] Country'),
@@ -145,31 +140,16 @@ class FreeController extends Controller
             if(!$result)
                 $result = new FreeQarResult();
 
-            $status = null;
-            if($row['status'] == 0)
-                $status = Yii::t("app", "To Be Done");
-
-            if($row['status'] == 1)
-                $status = Yii::t("app", "In progress");
-
-            if($row['status'] == 2)
-                $status = Yii::t("app", "Completed");
-
             fputcsv($output, [
                 $row['created_at'],
                 $buyer['names'],
                 $fieldTech['names'],
                 $site['name'],
-                $status,
                 $result['kor'],
                 $result['defective_rate'],
                 $result['foreign_material_rate'],
                 $result['moisture_content'],
                 $result['nut_count'],
-                $result['useful_kernel'],
-                $result['total_volume_of_stock'],
-                $result['location_altitude'],
-                $result['location_lat'],
                 $result['location_lon'],
                 $result['location_accuracy'],
                 $result['location_country'],

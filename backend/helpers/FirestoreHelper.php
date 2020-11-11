@@ -212,51 +212,55 @@ class FirestoreHelper
             // Instantiate new free users object
             $freeVersionQar = new FreeQar();
 
-            //Fetch document id
-            $freeVersionQar->document_id = self::convertLongDocumentNameToSmall($item->getName());
-
-            if(FreeQar::find()->where(["document_id"=>$freeVersionQar->document_id])->exists())
-                $freeVersionQar->isNewRecord = false;
-
-            $siteDocumentId = null;
-            try {
-                $freeVersionQar->site = $this->getDocumentKey($item, "site");
-            } catch (\Exception $e){
-                Yii::error("could not extract site document id");
-            }
-
-            $fieldTechDocumentId = null;
-            try {
-                $freeVersionQar->field_tech = $this->getDocumentKey($item, "field_tech");
-            } catch (\Exception $e){
-                Yii::error("could not extract field_tech document id");
-            }
-
-
-            try {
-                $freeVersionQar->buyer = $this->getDocumentKey($item, "buyer");
-            } catch (\Exception $e){
-                Yii::error("could not extract buyer document id");
-            }
-
             $freeVersionQar->status = $this->getDocumentKey($item, "status");
 
-            $freeVersionQar->created_at = $this->getDocumentKey($item, "created_at");
+            if($freeVersionQar->status == 2) {
 
-            $freeVersionQar->updated_at = $this->getDocumentKey($item, "updated_at");
+                //Fetch document id
+                $freeVersionQar->document_id = self::convertLongDocumentNameToSmall($item->getName());
 
-            if($freeVersionQar->created_at)
-                $freeVersionQar->created_at = date("Y-m-d H:i:s", strtotime($freeVersionQar->created_at));
+                if (FreeQar::find()->where(["document_id" => $freeVersionQar->document_id])->exists())
+                    $freeVersionQar->isNewRecord = false;
 
-            if($freeVersionQar->updated_at)
-                $freeVersionQar->updated_at = date("Y-m-d H:i:s", strtotime($freeVersionQar->updated_at));
+                $siteDocumentId = null;
+                try {
+                    $freeVersionQar->site = $this->getDocumentKey($item, "site");
+                } catch (\Exception $e) {
+                    Yii::error("could not extract site document id");
+                }
 
-            if(!$freeVersionQar->save())
-                var_dump($freeVersionQar->getErrors());
-            else
-                array_push($foundDocumentIds, $freeVersionQar->document_id);
+                $fieldTechDocumentId = null;
+                try {
+                    $freeVersionQar->field_tech = $this->getDocumentKey($item, "field_tech");
+                } catch (\Exception $e) {
+                    Yii::error("could not extract field_tech document id");
+                }
+
+
+                try {
+                    $freeVersionQar->buyer = $this->getDocumentKey($item, "buyer");
+                } catch (\Exception $e) {
+                    Yii::error("could not extract buyer document id");
+                }
+
+                $freeVersionQar->status = $this->getDocumentKey($item, "status");
+
+                $freeVersionQar->created_at = $this->getDocumentKey($item, "created_at");
+
+                $freeVersionQar->updated_at = $this->getDocumentKey($item, "updated_at");
+
+                if ($freeVersionQar->created_at)
+                    $freeVersionQar->created_at = date("Y-m-d H:i:s", strtotime($freeVersionQar->created_at));
+
+                if ($freeVersionQar->updated_at)
+                    $freeVersionQar->updated_at = date("Y-m-d H:i:s", strtotime($freeVersionQar->updated_at));
+
+                if (!$freeVersionQar->save())
+                    var_dump($freeVersionQar->getErrors());
+                else
+                    array_push($foundDocumentIds, $freeVersionQar->document_id);
+            }
         }
-
         return $foundDocumentIds;
     }
 
