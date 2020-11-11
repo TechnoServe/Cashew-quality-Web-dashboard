@@ -41,20 +41,6 @@ return [
             'attempts' => 3, // Max number of attempts
         ],
 
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'cashewnuts.wiredin.test@gmail.com',
-                'password' => 'CashewNutsWiredin',
-                'port' => '587',
-                'encryption' => 'tls',
-            ],
-        ],
-
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
