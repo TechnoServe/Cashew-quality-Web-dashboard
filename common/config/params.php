@@ -1,9 +1,9 @@
 <?php
 return [
-    'adminEmail' => 'cashewnuts.wiredin.test@gmail.com',
-    'supportEmail' => 'scashewnuts.wiredin.test@gmail.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'adminEmail' => 'cajusupport@tnslabs.org',
+    'supportEmail' => 'cajusupport@tnslabs.org',
+    'senderEmail' => 'cajusupport@tnslabs.org',
+    'senderName' => 'tnslabs.org mailer',
     'user.passwordResetTokenExpire' => 3600,
     'FIREBASE_API_KEY' => 'AIzaSyDhzc03LpO-9vuHhNsQGPDg-LRHHn3ITDY',
     'icon' => 'images/icon.png',
