@@ -342,16 +342,16 @@ class FirestoreHelper
                 try {
                     Yii::$app->db->createCommand()
                         ->update('free_qar_result', [
-                            'location_accuracy' => $location_array["accuracy"],
-                            'location_lat' => $location_array["latitude"],
-                            'location_lon' => $location_array["longitude"],
-                            'location_country' => $location_array["country"],
-                            'location_country_code' => $location_array["isoCountryCode"],
-                            'location_city' => $location_array["city"],
-                            'location_region' => $location_array["region"],
-                            'location_sub_region' => $location_array["subregion"],
-                            'location_district' => $location_array["district"],
-                            'location_street' => $location_array["street"],
+                            'location_accuracy' => $this->getArrayKey($location_array, "accuracy"),
+                            'location_lat' => $this->getArrayKey($location_array, "latitude"),
+                            'location_lon' => $this->getArrayKey($location_array, "longitude"),
+                            'location_country' => $this->getArrayKey($location_array, "country"),
+                            'location_country_code' => $this->getArrayKey($location_array, "isoCountryCode"),
+                            'location_city' => $this->getArrayKey($location_array, "city"),
+                            'location_region' => $this->getArrayKey($location_array, "region"),
+                            'location_sub_region' => $this->getArrayKey($location_array, "subregion"),
+                            'location_district' => $this->getArrayKey($location_array, "district"),
+                            'location_street' => $this->getArrayKey($location_array, "street"),
                         ], 'qar = \'' . $qar_id . '\'')
                         ->execute();
                 } catch (\Exception $exception){
@@ -360,6 +360,10 @@ class FirestoreHelper
                 }
             }
         }
+    }
+
+    private function getArrayKey($array, $key){
+        return isset($array[$key]) ? $array[$key] : null;
     }
 
 
