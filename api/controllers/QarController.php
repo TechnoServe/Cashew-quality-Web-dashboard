@@ -286,14 +286,13 @@ class QarController extends ActiveController
             Qar::FIELD_IMMATURE_KERNEL,
             Qar::FIELD_OILY_KERNEL,
             Qar::FIELD_BAD_KERNEL,
-            Qar::FIELD_VOID_KERNEL
+            Qar::FIELD_VOID_KERNEL,
         ];
-
 
         $id_qar = 0;
 
         if (isset($data['id']) && !empty($data['id'])) {
-            $qar_exist = QAR::queryByCompany()->andWhere(["id" => $data["id"]])->andWhere(["or",["status"=>Qar::STATUS_TOBE_DONE], ["status"=>Qar::STATUS_IN_PROGRESS]])->exists();
+            $qar_exist = QAR::queryByCompany()->andWhere(["id" => $data["id"]])->andWhere(["or", ["status" => Qar::STATUS_TOBE_DONE], ["status" => Qar::STATUS_IN_PROGRESS]])->exists();
             if ($qar_exist) {
                 $id_qar = (int)$data['id'];
             } else {
@@ -315,8 +314,8 @@ class QarController extends ActiveController
                     $lot_info = $datum['lot_info'];
 
                     // Save total number of bags
-                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_TOTAL_NUMBER_OF_BAGS])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
-                    if(!$qar_detail){
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_TOTAL_NUMBER_OF_BAGS])->andWhere(["sample_number" => $datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if (!$qar_detail) {
                         $qar_detail = new QarDetail();
                         $qar_detail->key = Qar::FIELD_TOTAL_NUMBER_OF_BAGS;
                         $qar_detail->sample_number = $datum['sample_number'];
@@ -324,9 +323,9 @@ class QarController extends ActiveController
                         $qar_detail->result = 0;
                     }
 
-                    if(isset($lot_info["count_bags"]) && is_int($lot_info["count_bags"])) {
+                    if (isset($lot_info["count_bags"]) && is_int($lot_info["count_bags"])) {
                         $qar_detail->value = $lot_info["count_bags"];
-                    }else{
+                    } else {
                         array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_TOTAL_NUMBER_OF_BAGS . " is not valid"));
                     }
 
@@ -334,8 +333,8 @@ class QarController extends ActiveController
 
 
                     // Save number of bags sampled
-                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_NUMBER_OF_BAGS_SAMPLED])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
-                    if(!$qar_detail){
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_NUMBER_OF_BAGS_SAMPLED])->andWhere(["sample_number" => $datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if (!$qar_detail) {
                         $qar_detail = new QarDetail();
                         $qar_detail->key = Qar::FIELD_NUMBER_OF_BAGS_SAMPLED;
                         $qar_detail->sample_number = $datum['sample_number'];
@@ -344,17 +343,17 @@ class QarController extends ActiveController
                     }
 
 
-                    if(isset($lot_info["count_sampled_bags"]) && is_int($lot_info["count_sampled_bags"])) {
+                    if (isset($lot_info["count_sampled_bags"]) && is_int($lot_info["count_sampled_bags"])) {
                         $qar_detail->value = $lot_info["count_sampled_bags"];
-                    }else{
+                    } else {
                         array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_NUMBER_OF_BAGS_SAMPLED . " is not valid"));
                     }
 
                     $qar_detail->save(false);
 
                     // Save number of bags sampled
-                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_VOLUME_TOTAL_STOCK])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
-                    if(!$qar_detail){
+                    $qar_detail = QarDetail::find()->where(["key" => Qar::FIELD_VOLUME_TOTAL_STOCK])->andWhere(["sample_number" => $datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                    if (!$qar_detail) {
                         $qar_detail = new QarDetail();
                         $qar_detail->key = Qar::FIELD_VOLUME_TOTAL_STOCK;
                         $qar_detail->sample_number = $datum['sample_number'];
@@ -363,21 +362,46 @@ class QarController extends ActiveController
                     }
 
 
-                    if(isset($lot_info["stock_volume"]) && is_int($lot_info["stock_volume"])) {
+                    if (isset($lot_info["stock_volume"]) && is_int($lot_info["stock_volume"])) {
                         $qar_detail->value = $lot_info["stock_volume"];
-                    }else{
+                    } else {
                         array_push($errors, new ApiError(ApiError::INVALID_DATA, Qar::FIELD_VOLUME_TOTAL_STOCK . " is not valid"));
                     }
 
                     $qar_detail->save(false);
 
+                    // Update location data
+                    if (isset($datum[Qar::FIELD_GOOD_KERNEL]) && $this->isObjectVariableSetAndNotNull($datum[Qar::FIELD_GOOD_KERNEL], 'location')) {
+                        $location_ac = $datum[Qar::FIELD_GOOD_KERNEL]['location'];
+                        $location_data = array_merge($location_ac['address'], $location_ac['coords']);
+
+                        foreach ($location_data as $location_key => $location_datum){
+                            $location_db_key = $this->getLocationTableKey($location_key);
+
+                            if(!$location_db_key)
+                                continue;
+
+                            $qar_detail = QarDetail::find()->where(["key" => $location_db_key])->andWhere(["sample_number" => $datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                            if(!$qar_detail) {
+                                $qar_detail = new QarDetail();
+                                $qar_detail->key = $location_db_key;
+                                $qar_detail->sample_number = $datum['sample_number'];
+                                $qar_detail->id_qar = $id_qar;
+                                $qar_detail->result = 0;
+                            }
+                            $qar_detail->value = $location_datum;
+                            $qar_detail->save(false);
+                        }
+                    }
+
 
                     foreach ($datum as $key => $value) {
 
                         if (in_array($key, $data_keys)) {
+
                             // Initiate QAR detail
-                            $qar_detail = QarDetail::find()->where(["key" => $key])->andWhere(["sample_number"=>$datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
-                            if(!$qar_detail){
+                            $qar_detail = QarDetail::find()->where(["key" => $key])->andWhere(["sample_number" => $datum['sample_number']])->andWhere(["id_qar" => $id_qar])->one();
+                            if (!$qar_detail) {
                                 $qar_detail = new QarDetail();
                                 $qar_detail->key = $key;
                                 $qar_detail->sample_number = $datum['sample_number'];
@@ -401,6 +425,7 @@ class QarController extends ActiveController
                                 }
                             }
 
+                            // Save image
                             $qar_detail->picture = isset($value['image_url']) ? $value['image_url'] : null;
 
 
@@ -411,7 +436,7 @@ class QarController extends ActiveController
                             }
                         }
                     }
-                }else{
+                } else {
                     array_push($errors, new ApiError(ApiError::INVALID_DATA, "Sample number is not valid"));
                 }
             }
@@ -484,8 +509,8 @@ class QarController extends ActiveController
                 }
 
                 $sample_number = 0;
-                if (!is_numeric($datum['sample_number']) || !QarDetail::find()->where(["id_qar" =>$id_qar, "sample_number" => $datum['sample_number']])->exists()) {
-                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Sample number ". $datum['sample_number']  ." is not valid"));
+                if (!is_numeric($datum['sample_number']) || !QarDetail::find()->where(["id_qar" => $id_qar, "sample_number" => $datum['sample_number']])->exists()) {
+                    array_push($errors, new ApiError(ApiError::INVALID_DATA, "Sample number " . $datum['sample_number'] . " is not valid"));
                 } else {
                     $sample_number = $datum['sample_number'];
                 }
@@ -531,6 +556,45 @@ class QarController extends ActiveController
     private function isObjectVariableSetAndNotNull($array, $key)
     {
         return isset($array[$key]) && !empty($array[$key]);
+    }
+
+    private function getLocationTableKey($location_key)
+    {
+        switch ($location_key) {
+            case "latitude":
+                return Qar::FIELD_LOCATION_LATITUDE;
+                break;
+            case "longitude":
+                return Qar::FIELD_LOCATION_LONGITUDE;
+                break;
+
+            case "country":
+                return Qar::FIELD_LOCATION_COUNTRY;
+                break;
+
+            case "city":
+                return Qar::FIELD_LOCATION_CITY;
+                break;
+
+            case "isoCountryCode":
+                return Qar::FIELD_LOCATION_COUNTRY_CODE;
+                break;
+
+            case "region":
+                return Qar::FIELD_LOCATION_REGION;
+                break;
+
+            case "subregion":
+                return Qar::FIELD_LOCATION_SUB_REGION;
+                break;
+
+            case "district":
+                return Qar::FIELD_LOCATION_DISTRICT;
+                break;
+
+            default:
+                return null;
+        }
     }
 
 }

@@ -40,9 +40,16 @@ class Qar extends \common\models\Qar
     const FIELD_LOT_INFO='lot_info';
     const FIELD_REQUEST_ID= 'request_id';
     const FIELD_CREATED_AT= 'created_at';
-    const FIELD_LOCATION_LONGITUDE= 'location_longitude';
-    const FIELD_LOCATION_LATITUDE= 'location_latitude';
     const FIELD_LOCATION_ACCURACY= 'location_accuracy';
+    const FIELD_LOCATION_LONGITUDE = 'location_lat';
+    const FIELD_LOCATION_LATITUDE = 'location_lon';
+    const FIELD_LOCATION_CITY = 'location_city';
+    const FIELD_LOCATION_COUNTRY = 'location_country';
+    const FIELD_LOCATION_COUNTRY_CODE = 'location_country_code';
+    const FIELD_LOCATION_REGION = 'location_region';
+    const FIELD_LOCATION_SUB_REGION = 'location_sub_region';
+    const FIELD_LOCATION_DISTRICT = 'location_district';
+    const FIELD_LOCATION_STREET = 'location_street';
     /**
      *
      */
