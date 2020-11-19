@@ -95,7 +95,7 @@ class FreeQar extends \common\models\FreeQar
 
         if(!empty($locationFilters)){
             foreach ($locationFilters as $key => $value) {
-                $q->andWhere([$key => $value]);
+                $q->andFilterWhere([$key => $value]);
             }
         }
 
@@ -112,28 +112,4 @@ class FreeQar extends \common\models\FreeQar
         }
     }
 
-    public static function getKorsByRegion($startDate, $endDate, $region = null)
-    {
-        $data = self::find()->innerJoin("free_qar_result", "free_qar_result.qar = free_qar.document_id");
-        
-        if ($region)
-            $data->where(["free_qar_result.location_region" => $region]);
-
-        return $data->select(["free_qar.document_id", "free_qar_result.kor", "free_qar_result.location_accuracy", "free_qar_result.location_lat", "free_qar_result.location_lon", "free_qar_result.location_country", "free_qar_result.location_country_code", "free_qar_result.location_city", "free_qar_result.location_region", "free_qar_result.location_sub_region", "free_qar_result.location_district", "free_qar_result.location_accuracy", "free_sites.name"])
-            ->where([">=", "DATE(free_qar.created_at)" , date('Y-m-d', strtotime($startDate))])
-            ->andWhere(["<=", "DATE(free_qar.created_at)", date('Y-m-d', strtotime($endDate))])
-            ->asArray()->all();
-    }
-    public static function getKorsBySite($startDate, $endDate, $site = null)
-    {
-        $data = self::find()->innerJoin("free_qar_result", "free_qar_result.qar = free_qar.document_id");
-        
-        if ($site)
-            $data->where(["free_qar.site" => $site]);
-
-        return $data->select(["free_qar.document_id", "free_qar_result.kor", "free_qar_result.location_accuracy", "free_qar_result.location_lat", "free_qar_result.location_lon", "free_qar_result.location_country", "free_qar_result.location_country_code", "free_qar_result.location_city", "free_qar_result.location_region", "free_qar_result.location_sub_region", "free_qar_result.location_district", "free_qar_result.location_accuracy", "free_sites.name"])
-            ->where([">=", "DATE(free_qar.created_at)" , date('Y-m-d', strtotime($startDate))])
-            ->andWhere(["<=", "DATE(free_qar.created_at)", date('Y-m-d', strtotime($endDate))])
-            ->asArray()->all();
-    }
 }

@@ -250,7 +250,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-body">
         <?= $this->render('_free_map', [
             'country_code' => $country_code,
-            'kor_locations' => $kor_locations
+            'kor_locations' => $kor_locations,
+            'categories' => $categories
         ]); ?>
     </div>
 </div>

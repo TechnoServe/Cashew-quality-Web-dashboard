@@ -85,7 +85,7 @@ class FreeController extends Controller
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
         }
 
-        $kor_locations = FreeQar::getKorsAndLocations($startDate, $endDate);
+        $kor_locations = FreeVersionDataHelper::getKorLocations($startDate, $endDate, $country_code);
 
         return $this->render("index", [
             'lastSync' => Settings::findOne(FirestoreHelper::SYNC_TIME_SETTING),
