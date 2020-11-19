@@ -156,7 +156,10 @@ $this->registerJs("
                 enableMouseTracking: true,
                 colorKey: 'clusterPointsAmount',
                 name: 'KOR Average',
-                data: data
+                data: data,
+                marker: {
+                    symbol: 'url(http://maps.google.com/mapfiles/ms/icons/red-dot.png)'
+                }
             }]
         });
 

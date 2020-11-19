@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?=AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'url' => "free/index"])?>
+<?=AnalyticsPeriodPicker::widget(['startDate' => $startDate, 'endDate' => $endDate, 'predefinedPeriod' => $predefinedPeriod, 'country_code' => $country_code, 'url' => "free/index"])?>
 
 <div class="panel">
 
@@ -219,33 +219,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-heading bg-primary">
         <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and region') ?></h4>
     </div>
+
     <div class="panel-body">
-        <div class="panel-body">
-            <h3 class="panel-title">
-                <span class="text-1x text-muted text-bold text-italic"> <?= Yii::t("app", "Choose a Country") ?></span>
-            </h3>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <form class="fomr-inline" method="get">
-                            <div class="form-group">
-                                <?= Select2::widget([
-                                    'name' => 'country_code',
-                                    'data' => CashewAppHelper::getListOfCountries('country_code', "country_code", Yii::t('app', 'Select Country')),
-                                    'options' => [
-                                        'placeholder' => 'Select Country'
-                                    ]
-                                ])
-                                ?>
-                            </div>
-                            <div class="form-group">
-                                <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-                            </div>
-                        </form>
+        <div class="row">
+            <div class="col-md-9 col-sm-6 col-xs-12">
+                <form class="form-inline pull-right">
+                    <?php if ($predefinedPeriod) : ?>
+                        <input name="predefinedPeriod" type="hidden" value="<?= $predefinedPeriod ?>">
+                    <?php endif; ?>
+
+                    <?php if ($startDate) : ?>
+                        <input name="startDate" type="hidden" value="<?= $startDate ?>">
+                    <?php endif; ?>
+
+                    <?php if ($endDate) : ?>
+                        <input name="endDate" type="hidden" value="<?= $endDate ?>">
+                    <?php endif; ?>
+
+                    <input type="hidden">
+                    <input type="hidden">
+                    <div class="form-group" style="min-width: 200px;">
+                        <?= Select2::widget(CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country'), true, $country_code)) ?>
                     </div>
-                </div>
+                    <?= Html::submitButton(Yii::t('app', 'OK'), ['class' => 'btn btn-primary']) ?>
+                </form>
             </div>
         </div>
+    </div>
 
     <div class="panel-body">
         <?= $this->render('_free_map', [

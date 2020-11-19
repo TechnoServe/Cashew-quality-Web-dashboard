@@ -67,8 +67,11 @@ class FreeController extends Controller
 
         list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
 
+        // Users
         $freeUsers = FreeUsers::find()->count();
+        //QARs
         $freeQar = FreeQar::find()->count();
+        //Sites
         $freeSites = FreeSites::find()->count();
 
 
@@ -78,6 +81,9 @@ class FreeController extends Controller
         //If provided invalid date
         if(empty($datesPeriod))
             return $this->redirect(["free/index"]);
+
+        $categories = array_map( function ($date){ return $date["generic"];}, $datesPeriod);
+        $tableSeries = FreeVersionDataHelper::getKorTableHeatMap($startDate, $endDate, $countryCode = null);
 
         if(!$country_code && Yii::$app->language == "pt") {
             $country_code = "MZ";
@@ -95,7 +101,7 @@ class FreeController extends Controller
             'startDate' => $startDate,
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,
-            'categories' => array_map( function ($date){ return $date["generic"];}, $datesPeriod),
+            'categories' => $categories,
             'qarSeries' => FreeVersionDataHelper::getQarChartData($datesPeriod),
             'qarPieSeries' => FreeVersionDataHelper::getQarPieChartData($datesPeriod),
             'userSeries' => FreeVersionDataHelper::getUsersChartData($datesPeriod),

@@ -234,10 +234,19 @@ class FreeVersionDataHelper
         return $series ."]";
     }
 
-    public static function getKorTableHeatMap($startDate = null, $endDate = null, $countryCode = null)
+    public static function getKorTableHeatMap($startDate, $endDate, $countryCode = null)
     {
-        $kor_country = FreeQar::getKorsAndLocations($startDate, $endDate, $locationFilters = ["location_country_code" => $countryCode], $rtn = "list");
-        $series = '[' ;
-        return $series ."]";
+        $series = [] ;
+
+        array_push(
+            $series,
+            [
+                'name' => 'KOR per region',
+                'borderWidth' => 1,
+                'data' => FreeQar::getKorsAndLocations($startDate, $endDate, $locationFilters = ["location_country_code" => $countryCode], $rtn = "list")
+            ]
+        );
+
+        return $series;
     }
 }
