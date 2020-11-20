@@ -239,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <input type="hidden">
                     <input type="hidden">
                     <div class="form-group" style="min-width: 200px;">
-                        <?= Select2::widget(CashewAppHtmlHelper::getCountriesSelectWidgetValues('country_code', "country_code", Yii::t('app', 'Select Country'), true, $country_code)) ?>
+                        <?= Select2::widget(CashewAppHtmlHelper::getCountries('country_code', "country_code", Yii::t('app', 'Select Country'), true, $country_code)) ?>
                     </div>
                     <?= Html::submitButton(Yii::t('app', 'OK'), ['class' => 'btn btn-primary']) ?>
                 </form>
@@ -251,7 +251,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $this->render('_free_map', [
             'country_code' => $country_code,
             'kor_locations' => $kor_locations,
-            'categories' => $categories
+            'categories' => $categories,
+            'regions' => $regions,
+            'tableSeries' => $tableSeries
         ]); ?>
     </div>
 </div>

@@ -9,6 +9,7 @@ use backend\models\FreeSite;
 use backend\models\FreeUser;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
+use common\helpers\CashewAppHtmlHelper;
 use backend\models\FreeQar;
 use common\models\FreeQarResult;
 use common\models\FreeSites;
@@ -83,7 +84,8 @@ class FreeController extends Controller
             return $this->redirect(["free/index"]);
 
         $categories = array_map( function ($date){ return $date["generic"];}, $datesPeriod);
-        $tableSeries = FreeVersionDataHelper::getKorTableHeatMap($startDate, $endDate, $countryCode = null);
+        $regions = FreeQarResult::getRegionsByCountry($country_code);
+        $tableSeries = FreeVersionDataHelper::getKorTableHeatMap($datesPeriod, $regions);
 
         if(!$country_code && Yii::$app->language == "pt") {
             $country_code = "MZ";
@@ -112,7 +114,9 @@ class FreeController extends Controller
             'totalQar' => FreeQar::countByPeriod($startDate, $endDate),
             'siteKorMarkers' =>FreeQar::getKorsAndSiteLocations($startDate, $endDate),
             'country_code' => $country_code,
-            'kor_locations' => $kor_locations
+            'kor_locations' => $kor_locations,
+            'regions' => $regions,
+            'tableSeries' => $tableSeries
         ]);
     }
 

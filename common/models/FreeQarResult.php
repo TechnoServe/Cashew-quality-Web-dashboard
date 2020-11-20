@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use yii\helpers\ArrayHelper;
 
 use Yii;
 
@@ -81,4 +82,24 @@ class FreeQarResult extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
+
+    public function getRegionsByCountry($country_code)
+    {
+        $q = self::find()
+            ->select(["location_region"])
+            ->where(["location_country_code" => $country_code])
+            ->distinct()->all();
+
+        return ArrayHelper::getColumn($q, "location_region");
+    }
+
+    public static function getAverageKorOfQarByTimePeriod($startDate, $endDate, $region){
+     
+           return (float) self::find()
+                ->where([">=", "DATE(created_at)" , date('Y-m-d', strtotime($startDate))])
+                ->andWhere(["<=", "DATE(created_at)", date('Y-m-d', strtotime($endDate))])
+                ->andWhere(["location_region" => $region])
+                ->average('kor');
+    }
+
 }
