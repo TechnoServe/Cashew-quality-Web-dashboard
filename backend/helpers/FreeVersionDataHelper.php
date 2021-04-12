@@ -3,7 +3,8 @@
 
 namespace backend\helpers;
 
-
+use backend\models\FreeQar;
+use common\models\FreeQarResult;
 use yii\web\JsExpression;
 use Yii;
 
@@ -217,5 +218,36 @@ class FreeVersionDataHelper
             ]
         );
         return $series;
+    }
+
+    public static function getKorLocations($startDate = null, $endDate = null, $countryCode = null)
+    {
+
+        $kor_country = FreeQar::getKorsAndLocations($startDate, $endDate, $locationFilters = ["location_country_code" => $countryCode], $rtn = "list");
+        $series = '[' ;
+
+        $rtn_array = [];
+
+        foreach ($kor_country as $key => $value) {
+            $series .= '{"region": "' . $value['location_region'] . '", "name": "' . $value['name'] . '", "lat": ' . $value['location_lat'] . ', "lon": ' . $value['location_lon']. ', "country":"'  . $value['location_country_code']. '", "kor":' . $value['kor'] . '}' . ($key < (count($kor_country)-1) ? "," : "");
+        }
+
+        return $series ."]";
+    }
+
+    public static function getKorTableHeatMap($dates, $regions)
+    {
+        $series = "[" ;
+
+        for($i = 0; $i < count($dates); $i++ ){
+            for($j = 0; $j < count($regions); $j ++){
+                $startDate = $dates[$i]["startDate"];
+                $endDate = $dates[$i]["endDate"];
+                $avKor = FreeQarResult::getAverageKorOfQarByTimePeriod($startDate, $endDate, $regions[$j]);
+                $series .= "[" . implode(',', [$i, $j, $avKor]) . "]" . ($j < (count($regions)-1) ? "," : "");
+            }
+            $series.= ($i < (count($dates)-1) ? "," : "");
+        }
+        return $series . "]";
     }
 }

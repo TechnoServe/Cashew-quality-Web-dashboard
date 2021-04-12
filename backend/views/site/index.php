@@ -68,6 +68,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
         </div>
     </div>
 
+    <?php /*
     <div class="panel">
         <div class="panel-heading bg-primary">
             <h4 class="panel-title"><?= Yii::t('app', 'Map for average KOR per country and region') ?></h4>
@@ -78,9 +79,7 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'country_code' => $country_code,
             ]); ?>
         </div>
-
-
-        <?php /*
+        
         <div class="panel-body">
             <?= $this->render('//sites/_stat', [
                 'totalSites' => $totalSites,
@@ -98,8 +97,8 @@ $this->title = Yii::t('app', ' Welcome to CashewNuts Application');
                 'siteSeries' => $siteSeries
             ]); ?>
         </div>
-        */ ?>
     </div>
+    */ ?>
 
     <div class="panel">
         <div class="panel-heading bg-primary">

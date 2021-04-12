@@ -5,6 +5,7 @@ namespace common\helpers;
 
 
 use backend\models\Department;
+use common\models\FreeQarResult;
 use backend\models\User;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -161,4 +162,35 @@ class CashewAppHtmlHelper
             ],
         ];
     }
+
+    public static function getCountries($attribute, $html_id, $placeholder, $byRegion = null, $country_code)
+    {
+        $countries = CashewAppHelper::getListOfCountries();
+
+        $data = [];
+
+        if ($byRegion) {
+            $distinctCountryCodesByExistingRegions = ArrayHelper::getColumn(FreeQarResult::find()->select(["location_country_code"])->distinct()->asArray()->all(), "location_country_code");
+            foreach ($countries as $key => $country) {
+                in_array($key, $distinctCountryCodesByExistingRegions) ? $data[$key] = $country . " [" . $key . "]" :null;
+            }
+        } else {
+            foreach ($countries as $key => $country) {
+                $data[$key] = $country . " [" . $key . "]";
+            }
+        }
+
+        return [
+            'data' => $data,
+            'value' => $country_code,
+            'name' => $attribute,
+            'attribute' => $attribute,
+            'language' => Yii::$app->language,
+            'options' => ['id' => $html_id, 'placeholder' => $placeholder],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ];
+    }
+   
 }

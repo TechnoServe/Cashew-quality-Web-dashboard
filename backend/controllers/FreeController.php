@@ -9,6 +9,7 @@ use backend\models\FreeSite;
 use backend\models\FreeUser;
 use backend\models\User;
 use common\helpers\CashewAppHelper;
+use common\helpers\CashewAppHtmlHelper;
 use backend\models\FreeQar;
 use common\models\FreeQarResult;
 use common\models\FreeSites;
@@ -67,8 +68,11 @@ class FreeController extends Controller
 
         list($startDate, $endDate)  = CashewAppHelper::calculateStartDateAndEndDateForAnalytics($startDate, $endDate, $predefinedPeriod);
 
+        // Users
         $freeUsers = FreeUsers::find()->count();
+        //QARs
         $freeQar = FreeQar::find()->count();
+        //Sites
         $freeSites = FreeSites::find()->count();
 
 
@@ -79,13 +83,17 @@ class FreeController extends Controller
         if(empty($datesPeriod))
             return $this->redirect(["free/index"]);
 
+        $categories = array_map( function ($date){ return $date["generic"];}, $datesPeriod);
+        $regions = FreeQarResult::getRegionsByCountry($country_code);
+        $tableSeries = FreeVersionDataHelper::getKorTableHeatMap($datesPeriod, $regions);
+
         if(!$country_code && Yii::$app->language == "pt") {
             $country_code = "MZ";
         } else if(!$country_code) {
             $country_code = Yii::$app->params['DEFAULT_COUNTRY_CODE'];
         }
 
-        $kor_locations = FreeQar::getKorsAndLocations($startDate, $endDate);
+        $kor_locations = FreeVersionDataHelper::getKorLocations($startDate, $endDate, $country_code);
 
         return $this->render("index", [
             'lastSync' => Settings::findOne(FirestoreHelper::SYNC_TIME_SETTING),
@@ -95,7 +103,7 @@ class FreeController extends Controller
             'startDate' => $startDate,
             'endDate' => $endDate,
             'predefinedPeriod' => $predefinedPeriod,
-            'categories' => array_map( function ($date){ return $date["generic"];}, $datesPeriod),
+            'categories' => $categories,
             'qarSeries' => FreeVersionDataHelper::getQarChartData($datesPeriod),
             'qarPieSeries' => FreeVersionDataHelper::getQarPieChartData($datesPeriod),
             'userSeries' => FreeVersionDataHelper::getUsersChartData($datesPeriod),
@@ -106,7 +114,9 @@ class FreeController extends Controller
             'totalQar' => FreeQar::countByPeriod($startDate, $endDate),
             'siteKorMarkers' =>FreeQar::getKorsAndSiteLocations($startDate, $endDate),
             'country_code' => $country_code,
-            'kor_locations' => $kor_locations
+            'kor_locations' => $kor_locations,
+            'regions' => $regions,
+            'tableSeries' => $tableSeries
         ]);
     }
 
