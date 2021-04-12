@@ -11,7 +11,6 @@ use api\models\User;
 use backend\models\UserEquipment;
 use Yii;
 use yii\filters\AccessControl;
-use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
 use yii\validators\EmailValidator;
@@ -19,28 +18,15 @@ use yii\web\UnauthorizedHttpException;
 
 class PublicController extends Controller
 {
-
+    const SEND_EMAIL_ACTION_KEY = "SYfLk8tf9GqvEz3R4DjRP9SG9SNz4hssk99F7mVv";
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-        $behaviors["authenticator"] = [
-            'class' => HttpBasicAuth::class,
-            'auth' => function ($username, $password) {
-                $user = User::findByUsername($username);
-                if ($user && $user->validatePassword($password)) {
-                    return $user;
-                }
-                return null;
-            }
-        ];
-        return array_merge(
-            $behaviors,
-            [
+        return [
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['login'],
+                            // 'actions' => ['login'],
                             'allow' => true,
                             'roles' => ['?'],
                         ],
@@ -53,9 +39,9 @@ class PublicController extends Controller
                         'send-email' => ['POST'],
                     ],
                 ],
-            ]
-        );
+            ];
     }
+
 
     public function actionLogin(){
 
@@ -97,6 +83,14 @@ class PublicController extends Controller
     }
 
     public function actionSendEmail(){
+
+        $key = Yii::$app->request->getHeaders();
+
+        if(!isset($key["x-key"]) || $key["x-key"] != self::SEND_EMAIL_ACTION_KEY){
+            Yii::$app->response->statusCode = 403;
+            return new ApiResponse("Unauthorized", null, false);
+        }
+
         $subject = Yii::$app->request->post("subject");
         $body = Yii::$app->request->post("body");
         $recipients = Yii::$app->request->post("recipients");
