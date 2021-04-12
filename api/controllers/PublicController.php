@@ -26,7 +26,7 @@ class PublicController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            //'actions' => ['login'],
+                            'actions' => ['login'],
                             'allow' => true,
                             'roles' => ['?'],
                         ],
