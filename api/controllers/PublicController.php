@@ -11,6 +11,7 @@ use api\models\User;
 use backend\models\UserEquipment;
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\auth\HttpBasicAuth;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
 use yii\validators\EmailValidator;
@@ -21,7 +22,20 @@ class PublicController extends Controller
 
     public function behaviors()
     {
-        return [
+        $behaviors = parent::behaviors();
+        $behaviors["authenticator"] = [
+            'class' => HttpBasicAuth::class,
+            'auth' => function ($username, $password) {
+                $user = User::findByUsername($username);
+                if ($user && $user->validatePassword($password)) {
+                    return $user;
+                }
+                return null;
+            }
+        ];
+        return array_merge(
+            $behaviors,
+            [
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
@@ -39,9 +53,9 @@ class PublicController extends Controller
                         'send-email' => ['POST'],
                     ],
                 ],
-            ];
+            ]
+        );
     }
-
 
     public function actionLogin(){
 
