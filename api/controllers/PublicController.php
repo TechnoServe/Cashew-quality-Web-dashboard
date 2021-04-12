@@ -13,6 +13,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
+use yii\validators\EmailValidator;
 use yii\web\UnauthorizedHttpException;
 
 class PublicController extends Controller
@@ -25,7 +26,7 @@ class PublicController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['login'],
+                            //'actions' => ['login'],
                             'allow' => true,
                             'roles' => ['?'],
                         ],
@@ -35,6 +36,7 @@ class PublicController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'login' => ['POST'],
+                        'send-email' => ['POST'],
                     ],
                 ],
             ];
@@ -80,4 +82,45 @@ class PublicController extends Controller
         return isset($array[$key]) && !empty($array[$key]);
     }
 
+    public function actionSendEmail(){
+        $subject = Yii::$app->request->post("subject");
+        $body = Yii::$app->request->post("body");
+        $recipients = Yii::$app->request->post("recipients");
+
+        if(!$subject){
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse("Subject can not be empty", null, false);
+        }
+
+        if(!$body){
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse("Body can not be empty", null, false);
+        }
+
+        if(!$recipients | !is_array($recipients)){
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse("Recipients can not be empty and has to be an array", null, false);
+        }
+
+        $validator = new EmailValidator;
+        foreach ($recipients as $recipient) {
+            if (!$validator->validate($recipient)) {
+                Yii::$app->response->statusCode = 400;
+                return new ApiResponse("Recipient " . $recipient . " Is not a valid email", null, false);
+            }
+        }
+
+        try {
+            Yii::$app->mailer->compose()
+                ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+                ->setTo($recipients)
+                ->setSubject($subject)
+                ->setTextBody($body)
+                ->send();
+            return new ApiResponse("Email sent successfully", null, true);
+        }catch (\Exception $e){
+            Yii::$app->response->statusCode = 500;
+            return new ApiResponse("Email could not be sent. Error: ". $e->getMessage(), null, false);
+        }
+    }
 }
