@@ -71,8 +71,8 @@ class FileController extends Controller
         return Yii::$app->response->sendFile($termsAndConditionsFile, "Terms and conditions", ['inline'=>true]);
     }
 
-    public function actionDeleteTerms(){
-        $termsAndConditionsFile = Yii::getAlias("@backend/web/uploads/") . "cnqa_terms_and_conditions.pdf";
+    public function actionDeleteTerms($locale){
+        $termsAndConditionsFile = Yii::getAlias("@backend/web/uploads/") . "cnqa_terms_and_conditions_".$locale.".pdf";
         if(!file_exists($termsAndConditionsFile)) {
             throw new NotFoundHttpException("Terms and conditions have not been uploaded yet");
         }

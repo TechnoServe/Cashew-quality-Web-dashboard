@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?=Html::a("English", ['file/terms', 'locale' => 'en'], ['class'=>'btn-link', 'target'=>'_blank'])?>
                             <?php if($terms_en): ?>
                                 <div class="label label-success"><?=Yii::t("app", "Available")?></div>
-                            <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms'],['class'=>'btn-link text-danger',
+                            <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms', 'locale' => 'en'],['class'=>'btn-link text-danger',
                                     'data' => [
                                             'method'=> 'post',
                                             'confirm' => Yii::t("app", "Are you sure you want to delete this file")
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?=Html::a("Français", ['file/terms', 'locale' => 'fr'], ['class'=>'btn-link', 'target'=>'_blank'])?>
                             <?php if($terms_fr): ?>
                                 <div class="label label-success"><?=Yii::t("app", "Available")?></div>
-                                <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms'],['class'=>'btn-link text-danger',
+                                <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms', 'locale' => 'fr'],['class'=>'btn-link text-danger',
                                     'data' => [
                                         'method'=> 'post',
                                         'confirm' => Yii::t("app", "Are you sure you want to delete this file")
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?=Html::a("Português", ['file/terms', 'locale' => 'pt'], ['class'=>'btn-link', 'target'=>'_blank'])?>
                             <?php if($terms_pt): ?>
                                 <div class="label label-success"><?=Yii::t("app", "Available")?></div>
-                                <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms'],['class'=>'btn-link text-danger',
+                                <?=Html::a(Yii::t("app", "Delete"),['/file/delete-terms', 'locale' => 'pt'],['class'=>'btn-link text-danger',
                                     'data' => [
                                         'method'=> 'post',
                                         'confirm' => Yii::t("app", "Are you sure you want to delete this file")
