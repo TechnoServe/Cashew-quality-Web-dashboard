@@ -55,7 +55,7 @@ class CashewAppHtmlHelper
         return $li .
             Html::a(Html::tag('i', '', ['class' => $icon_class]) .
                 Html::tag('span', '<strong>' . $text . '</strong>', ['class' => 'menu-title'])
-                , '/' . $url
+                ,  [ '/'.$url]
             ) . "</li>";
 
     }

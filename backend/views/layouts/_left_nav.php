@@ -161,6 +161,7 @@ use yii\helpers\Url;
                         <?php if (Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN || Yii::$app->user->getIdentity()->role == \common\models\User::ROLE_ADMIN_VIEW) : ?>
 
                             <?= CashewAppHtmlHelper::showMenuContent('company', 'pli-building', Yii::t('app', 'Companies')) ?>
+                            <?= CashewAppHtmlHelper::showMenuContent('file', 'pli-file', Yii::t('app', 'Files')) ?>
 
                             <!-- <?= CashewAppHtmlHelper::showMenuContent('province', 'pli-location-2', Yii::t('app', 'Provinces')) ?> -->
 
