@@ -18,10 +18,10 @@ class FileUploadForm extends Model
         ];
     }
 
-    public function upload($language)
+    public function upload($language, $fileType = "terms_and_conditions")
     {
         if ($this->file) {
-            $this->file->saveAs('uploads/cnqa_terms_and_conditions_'.$language.'.pdf');
+            $this->file->saveAs('uploads/cnqa_'.$fileType.'_'.$language.'.pdf');
             return true;
         } else {
             return false;
