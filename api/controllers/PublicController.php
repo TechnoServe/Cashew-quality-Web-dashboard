@@ -131,4 +131,26 @@ class PublicController extends Controller
             return new ApiResponse("Email could not be sent. Error: ". $e->getMessage(), null, false);
         }
     }
+
+    public function actionSendOtp()
+    {
+        $phone = Yii::$app->request->post("phone");
+ 
+        if(!$phone) {
+            Yii::$app->response->statusCode = 400;
+            return new ApiResponse("Invalid Phone Number", null, false);
+        } else {
+ 
+            try {
+                $otp = rand(100000, 999999);
+                Yii::$app->cache->set($phone, $otp, 300);
+                Yii::$app->response->statusCode = 200;
+                return new ApiResponse("OTP Request received successfully", null, true);
+            } catch (\Exception $e) {
+                Yii::$app->response->statusCode = 500;
+                return new ApiResponse("Unable to send OTP", $e->getMessage(), null, false);
+            }
+        }
+    }
+        
 }
