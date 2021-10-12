@@ -134,6 +134,13 @@ class PublicController extends Controller
 
     public function actionSendOtp()
     {
+        $key = Yii::$app->request->getHeaders();
+
+        if(!isset($key["x-key"]) || $key["x-key"] != self::SEND_EMAIL_ACTION_KEY){
+            Yii::$app->response->statusCode = 403;
+            return new ApiResponse("Unauthorized", null, false);
+        }
+        
         $phone = Yii::$app->request->post("phone");
  
         if(!$phone) {
@@ -152,5 +159,5 @@ class PublicController extends Controller
             }
         }
     }
-        
+
 }
