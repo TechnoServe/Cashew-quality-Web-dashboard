@@ -153,7 +153,9 @@ class PublicController extends Controller
                 $otp = rand(100000, 999999);
                 Yii::$app->cache->set($phone, $otp, 300);
 
-                $msg = 'Your One Time Passowrd(OTP) is ' . $otp;
+                $five_minutes = time() + (5 * 60);
+
+                $msg = 'Your OTP is ' . $otp . ' and expires in 5 minutes ' . (date('Y-m-d H:i:s', $five_minutes));
                 $sid = Yii::$app->params['twilioSid'];
                 $token = Yii::$app->params['twilioToken'];
                 $client = new Client($sid, $token);
@@ -163,7 +165,7 @@ class PublicController extends Controller
                 ]);
 
                 Yii::$app->response->statusCode = 200;
-                return new ApiResponse("OTP Request received successfully $otp", null, true);
+                return new ApiResponse("OTP Request received successfully", null, true);
             } catch (\Exception $e) {
                 Yii::$app->response->statusCode = 500;
                 return new ApiResponse("Unable to send OTP", $e->getMessage(), null, false);
@@ -197,14 +199,14 @@ class PublicController extends Controller
         try {
             if($otp == $cache_otp) {
                 Yii::$app->response->statusCode = 200;
-                return new ApiResponse("Valid OTP", null, true);
+                return new ApiResponse(['phone_number' => $phone] , null, true);
             } else {
                 Yii::$app->response->statusCode = 404;
-                return new ApiResponse("Invalid OTP", null, true);
+                return new ApiResponse(null, ['Invalid OTP'], false);
             }
         } catch (\Exception $e) {
             Yii::$app->response->statusCode = 500;
-            return new ApiResponse("Unable to verify OTP", $e->getMessage(), null, false);
+            return new ApiResponse(null, ['Unable to verify OTP'], false);
         }
     }
 
