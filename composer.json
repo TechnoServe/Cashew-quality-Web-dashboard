@@ -28,7 +28,8 @@
         "2amigos/yii2-google-maps-library": "^1.1",
         "kartik-v/yii2-widget-datepicker": "^1.4",
         "kartik-v/yii2-widget-select2": "^2.1",
-        "light/yii2-swagger": "^3.0"
+        "light/yii2-swagger": "^3.0",
+        "twilio/sdk": "^6.29"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
