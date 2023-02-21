@@ -1,0 +1,26 @@
+table, td, th {
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+
+table th {
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #25476a;
+}
+
+table td {
+    color: black;
+    font-size: 12px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 5px 10px 5px 10px;
+}
