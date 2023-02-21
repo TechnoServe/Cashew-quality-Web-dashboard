@@ -1,60 +1,61 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
-</p>
+# This is CNQA Web Dashboard
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+## Development Environment
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+This application is based on Yii2 Framework, advanced template.[Click here to know more about the framework](https://github.com/yiisoft/yii2-app-advanced) 
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+### Requirements
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.com/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.com/yiisoft/yii2-app-advanced)
+- Docker & Docker Compose
 
-DIRECTORY STRUCTURE
--------------------
+### Steps
 
+- Clone this repo
+- Go to the root directory of this repo and start all docker services by `docker-compose up --build -d`. This will start frontend, backend and db cservices
+
+### Make sure vendor folder is populated
+
+- After services have been started make sure you have a folder `vendor` present in the root directory. if not, ssh into either frontend or backend container and run `composer update`, this will pull down all dependencies needed.
+
+### Initiate project dependencies 
+
+- Occasionaly ssh into the backend container and run `./init`, this will initiate the development mode within the application
+
+
+### Application configurations
+
+- Go to `common/config/main-local.php` and add/replace database and mailer configurations. Sample is shared below
+
+```php
+'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host={insert_db_host};dbname={insert_db_name}',
+            'username' => '{insert_mysql_username}',
+            'password' => '{insert_mysql_password}',
+            'charset' => 'utf8',
+        ],
+		'mailer' => [
+			'class' => \yii\symfonymailer\Mailer::class,
+			'viewPath' => '@common/mail',
+			'useFileTransport' => false,
+			'transport' => [
+				'scheme' => 'smtp',
+				'class' => 'Swift_SmtpTransport',
+				'host' => "{insert_mailer_host}",
+				'username' => "{insert_mailer_username}",
+				'password' => "{insert_mailer_password}",
+				'port' => "{insert_mailer_port}",
+				'encryption' => "tls",
+			],
+		],
+    ],
 ```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-```
+
+
+### Open the application in the browser
+
+- Open `localhost:24081` to confirm that back office can be accessed.
+
+<span style="color: green; font-weight: bold "> DONE! </span>
