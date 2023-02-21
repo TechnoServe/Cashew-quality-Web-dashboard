@@ -56,6 +56,13 @@ This application is based on Yii2 Framework, advanced template.[Click here to kn
     ],
 ```
 
+- Go to `common/config/params-local.php` and make sure you have forebase parameter there.
+
+```text
+'FIREBASE_PROJECT_ID' => '{insert_firebase_project_id}',
+'FIREBASE_API_KEY' => '{insert_firebase_api_key}'
+```
+
 
 ### Open the application in the browser
 
